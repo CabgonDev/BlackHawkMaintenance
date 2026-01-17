@@ -1,0 +1,35 @@
+<resources>
+    <color name="primary">#0B4F6C</color>
+    <color name="primaryVariant">#083C52</color>
+    <color name="secondary">#2D8631</color>
+    <color name="background">#FFFFFF</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="teal_700">#00796B</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="orange">#FF9800</color>
+    <color name="purple">#9C27B0</color>
+    <color name="pink">#E91E63</color>
+    <color name="blue">#2196F3</color>
+    <color name="brown">#795548</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="black">#000000</color>
+    <color name="enruta_green">#4CAF50</color>
+    <color name="enruta_yellow">#F9A825</color>
+    <color name="enruta_red">#FF0000</color>
+    <color name="preflight_warning_yellow">#FFEB3B</color>
+    <color name="preflight_warning_stroke">#666666</color>
+    <color name="sheet_bg">#FFFFFF</color>
+    <color name="sheet_text">#111827</color>
+    <color name="sheet_text_secondary">#374151</color>
+    <color name="badge_bg">#F3F4F6</color>
+    <color name="badge_stroke">#D1D5DB</color>
+    <color name="badge_text">#111827</color>
+    <color name="frequency_blue">#1E88E5</color>
+    <color name="emergency_red">#C62828</color>
+    <color name="icao_badge_bg">#263238</color>
+    <color name="icao_badge_border">#455A64</color>
+    <color name="icao_badge_text">#FFFFFF</color>
+
+</resources>

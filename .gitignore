@@ -1,0 +1,20 @@
+# Project exclude paths
+/.gradle/
+/app/build/
+/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/
+
+# Signing (NO subir jamás)
+keystore.properties
+*.jks
+*.keystore
+
+# Android/Gradle generated
+.gradle/
+build/
+**/build/
+
+# Local IDE files
+.idea/
+*.iml
+local.properties

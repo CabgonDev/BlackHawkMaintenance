@@ -1,0 +1,72 @@
+[versions]
+agp = "9.0.0"
+
+firebaseAuthKtx = "23.2.1"
+firebaseFirestoreKtx = "25.1.4"
+firebaseStorageKtx = "21.0.2"
+firebaseRemoteConfigKtx = "22.1.2"
+
+kotlin = "2.2.21"
+ksp = "2.3.2"
+lottie = "6.7.1"
+material = "1.13.0"
+appcompat = "1.7.1"
+constraintlayout = "2.2.1"
+pdfboxAndroid = "2.0.27.0"
+recyclerview = "1.4.0"
+coreKtx = "1.17.0"
+fragmentKtx = "1.8.9"
+room = "2.8.4"
+pdfViewer = "3.2.0-beta.3"
+sqliteAndroid = "3.49.0"
+
+mlkitTranslate = "17.0.3"
+retrofit = "3.0.0"
+okhttp = "5.3.2"
+moshi = "1.15.2"
+
+jsoup = "1.21.2"
+swiperefreshlayout = "1.2.0"
+volley = "1.2.1"
+activity = "1.12.2"
+
+[libraries]
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
+firebase-remoteconfig-ktx = { module = "com.google.firebase:firebase-config-ktx", version.ref = "firebaseRemoteConfigKtx" }
+
+material = { module = "com.google.android.material:material", version.ref = "material" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+pdfboxAndroid = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfboxAndroid" }
+recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+fragmentKtx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+
+androidPdfViewer = { module = "com.github.mhiew:android-pdf-viewer", version.ref = "pdfViewer" }
+sqliteAndroid = { module = "com.github.requery:sqlite-android", version.ref = "sqliteAndroid" }
+
+mlkitTranslate = { module = "com.google.mlkit:translate", version.ref = "mlkitTranslate" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofitMoshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+moshiKotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+retrofitScalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
+
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp            = { id = "com.google.devtools.ksp",       version.ref = "ksp" }
+google-services = { id = "com.google.gms.google-services", version = "4.4.4" }

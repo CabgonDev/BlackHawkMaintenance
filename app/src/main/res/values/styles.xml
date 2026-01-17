@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.BlackHawk.Drawer" parent="Widget.Material3.NavigationView">
+        <item name="itemIconTint">?attr/colorOnSurface</item>
+        <item name="itemTextColor">?attr/colorOnSurface</item>
+        <item name="itemShapeAppearance">@style/ShapeAppearance.BlackHawk.DrawerItem</item>
+        <item name="itemShapeFillColor">?attr/colorSurface</item>
+        <item name="itemShapeInsetStart">12dp</item>
+        <item name="itemShapeInsetEnd">12dp</item>
+        <item name="itemShapeInsetTop">6dp</item>
+        <item name="itemShapeInsetBottom">6dp</item>
+        <item name="itemBackground">@drawable/drawer_item_bg</item>
+    </style>
+
+    <style name="ShapeAppearance.BlackHawk.DrawerItem" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
+
+    <style name="App.BottomSheetTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <!-- Fondo del sheet -->
+        <item name="bottomSheetStyle">@style/App.BottomSheetStyle</item>
+    </style>
+
+    <style name="App.BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@color/sheet_bg</item>
+    </style>
+
+
+</resources>
