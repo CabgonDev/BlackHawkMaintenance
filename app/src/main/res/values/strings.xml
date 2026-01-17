@@ -141,7 +141,7 @@
     <string name="admin_enruta_open">Abrir</string>
     <string name="admin_ai_status_module">Estado IA (Developer)</string>
     <string name="admin_generalities_module">Generalidades (Admin)</string>
-
+    <string name="blackhawk_nmaintenance">BLACKHAWK\nMAINTENANCE</string>
 
 
 </resources>
