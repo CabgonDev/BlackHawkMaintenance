@@ -40,7 +40,8 @@ class StartupActivity : AppCompatActivity() {
         R.drawable.startup_02,
         R.drawable.startup_03,
         R.drawable.startup_04,
-        R.drawable.startup_05
+        R.drawable.startup_05,
+        R.drawable.startup_06
     )
 
     // ✅ Secuencia aleatoria (shuffle) que se consume y se re-baraja al terminar
@@ -52,8 +53,8 @@ class StartupActivity : AppCompatActivity() {
         const val EXTRA_FORCE_SELECT_PKG = "force_select_pkg"
 
         // ✅ ~20% más rápido que 5200/520
-        const val SLIDE_DURATION_MS = 4800L
-        const val FADE_MS = 480L
+        const val SLIDE_DURATION_MS = 3200L
+        const val FADE_MS = 320L
     }
 
     private enum class SlideEffect {
