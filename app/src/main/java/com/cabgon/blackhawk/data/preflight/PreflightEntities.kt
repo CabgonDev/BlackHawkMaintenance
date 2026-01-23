@@ -1,6 +1,11 @@
 package com.cabgon.blackhawk.data.preflight
 
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity(tableName = "preflight_inspection")
 data class PreflightInspection(
@@ -10,11 +15,11 @@ data class PreflightInspection(
     val nombre: String,             // Técnico (nombre)
     val completed: Boolean = false,
 
-    // Campos preparados para sincronización futura
-    val syncId: String? = null,         // ID global/servidor
+    // Campos preparados para sincronización
+    val syncId: String? = null,         // ID global/servidor (Firestore docId)
     val lastModified: Long = 0L,        // último cambio (epoch millis)
     val dirty: Boolean = true,          // true = pendiente de sync
-    val originDeviceId: String? = null  // identificador del dispositivo
+    val originDeviceId: String? = null  // opcional: identificador del dispositivo
 )
 
 @Entity(
