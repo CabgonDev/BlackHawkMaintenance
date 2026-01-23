@@ -1,30 +1,29 @@
-// app/src/main/java/com/cabgon/blackhawk/ui/fragments/PartNumbersFragment.kt
 package com.cabgon.blackhawk.ui.fragments
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabgon.blackhawk.R
-import com.cabgon.blackhawk.data.PackageManager
 import com.cabgon.blackhawk.data.PartInfo
 import com.cabgon.blackhawk.data.PartRepo
-import com.cabgon.blackhawk.data.RAGIndex
+import com.cabgon.blackhawk.data.SikorskyPartHit
+import com.cabgon.blackhawk.data.SikorskyPartsIndex
 import com.cabgon.blackhawk.databinding.FragmentPartNumbersBinding
+import com.cabgon.blackhawk.ui.adapters.SikorskyPartHitAdapter
 import com.cabgon.blackhawk.ui.pdf.PdfViewerActivity
 import com.cabgon.blackhawk.ui.pdf.PdfViewerActivity.Companion.EXTRA_ASSET_PATH
 import com.cabgon.blackhawk.ui.pdf.PdfViewerActivity.Companion.EXTRA_PAGE
 import com.cabgon.blackhawk.util.NetworkGuard
-import com.cabgon.blackhawk.util.Prefs
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val EXTRA_HIGHLIGHT_QUERY = "extra_highlight_query"
 
@@ -32,58 +31,78 @@ class PartNumbersFragment : Fragment() {
 
     private var _b: FragmentPartNumbersBinding? = null
     private val b get() = _b!!
-    private lateinit var index: RAGIndex
 
-    // Guardamos el último hit local para abrirlo al tocar la card
-    private var lastLocalAsset: String? = null
-    private var lastLocalPage: Int? = null
+    private lateinit var partsIndex: SikorskyPartsIndex
+    private lateinit var localAdapter: SikorskyPartHitAdapter
 
-    private data class LocalMeta(
-        val pn: String? = null,
-        val nsn: String? = null,
-        val description: String? = null,
-    )
-
-    /** Hook opcional para futuro meta local */
-    private fun fetchLocalMeta(manual: String, page: Int): LocalMeta? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _b = FragmentPartNumbersBinding.inflate(inflater, container, false)
         return b.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Solo esta pantalla puede usar internet (WBParts)
         NetworkGuard.internetAllowedForPartsOnly = true
 
-        val pkg = PackageManager.Pkg.valueOf(Prefs.getPackage(requireContext())!!)
-        index = RAGIndex.openFromAssets(requireContext(), PackageManager.indexAssetPath(pkg))
+        // Índice local Sikorsky de números de parte (offline, DB en assets/index)
+        partsIndex = SikorskyPartsIndex.openFromAssets(requireContext())
+
+        // Lista de resultados locales (RecyclerView con scroll normal)
+        localAdapter = SikorskyPartHitAdapter { hit ->
+            openPdf(hit.assetPath, hit.page)
+        }
+
+        b.rvLocalOccurrences.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = localAdapter
+            isNestedScrollingEnabled = true
+        }
 
         b.btnSearchPart.setOnClickListener {
             val q = b.edtPart.text?.toString()?.trim().orEmpty()
             if (q.isBlank()) return@setOnClickListener
 
+            // Limpia estado anterior
+            b.layoutWBPartsCard.visibility = View.GONE
+            b.layoutLocalCard.visibility = View.GONE
+            b.txtLocalMeta.visibility = View.GONE
+            b.txtLocalBody.text = ""
+            b.rvLocalOccurrences.visibility = View.GONE
+            localAdapter.submit(emptyList())
+
             viewLifecycleOwner.lifecycleScope.launch {
-                // 1) WBParts (web) — estable, sin cambios
+                // 1) WBParts (web)
                 val info: PartInfo? = runCatching { PartRepo.searchPartInfo(q) }.getOrNull()
                 renderWBParts(info, fallbackQuery = q)
 
-                // 2) Local (FTS)
-                val local = index.searchEnglish(q, limit = 5).firstOrNull()
-                renderLocal(local?.manual, local?.page, pnFromQuery = q)
+                // 2) Local (índice Sikorsky offline) – SIN límite artificial
+                val localHits: List<SikorskyPartHit> = withContext(Dispatchers.IO) {
+                    try {
+                        partsIndex.search(q, limit = 500)
+                    } catch (e: Exception) {
+                        emptyList()
+                    }
+                }
+                renderLocal(localHits, pnQuery = q)
             }
         }
 
-        // Tap en la tarjeta Local para abrir PDF si hay hit (con highlight)
-        b.layoutLocalCard.setOnClickListener {
-            val asset = lastLocalAsset
-            val page = lastLocalPage
-            if (!asset.isNullOrBlank() && page != null) {
-                openPdf(asset, page) // manda EXTRA_HIGHLIGHT_QUERY
-            }
-        }
+        // La tarjeta Local ya no abre nada; el click es directo en cada fila del RecyclerView
+        b.layoutLocalCard.setOnClickListener(null)
     }
 
     private fun renderWBParts(info: PartInfo?, fallbackQuery: String) {
+        if (info == null && fallbackQuery.isBlank()) {
+            b.layoutWBPartsCard.visibility = View.GONE
+            return
+        }
+
         b.layoutWBPartsCard.visibility = View.VISIBLE
         b.imgWBParts.setImageResource(R.drawable.logo_wb)
         b.txtWBPartsTitle.text = "WBParts"
@@ -92,63 +111,71 @@ class PartNumbersFragment : Fragment() {
         val nsn = info?.nsn ?: "-"
         val desc = info?.description ?: "-"
 
+        // Texto plano, SIN NSN clicable
         val text = "Part Number: $pn\nNSN: $nsn\nDescription: $desc"
-        val span = SpannableString(text)
+        b.txtWBPartsBody.text = text
 
-        val nsnUrl = info?.nsnUrl
-        if (!nsnUrl.isNullOrBlank() && nsn != "-") {
-            val start = text.indexOf("NSN: ") + 5
-            val end = start + nsn.length
-            if (start in 0 until end && end <= text.length) {
-                span.setSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        runCatching { startActivity(Intent(Intent.ACTION_VIEW, nsnUrl.toUri())) }
-                    }
-                }, start, end, 0)
-                b.txtWBPartsBody.movementMethod = LinkMovementMethod.getInstance()
-            }
-        }
+        // Botón / chip "WBParts Web" para abrir en navegador
+        val goUrl = info?.pageUrl
+            ?: "https://www.wbparts.com/search.cfm?q=${Uri.encode(fallbackQuery)}"
 
-        b.txtWBPartsBody.text = span
-
-        val goUrl = info?.pageUrl ?: "https://www.wbparts.com/search.cfm?q=${Uri.encode(fallbackQuery)}"
         b.txtWBPartsGo.setOnClickListener {
             runCatching { startActivity(Intent(Intent.ACTION_VIEW, goUrl.toUri())) }
         }
     }
 
-    private fun renderLocal(manual: String?, page: Int?, pnFromQuery: String = "-") {
+    private fun renderLocal(hits: List<SikorskyPartHit>, pnQuery: String) {
         b.layoutLocalCard.visibility = View.VISIBLE
-        b.imgLocal.setImageResource(R.mipmap.ic_launcher)
-        b.txtLocalTitle.text = "Local"
+        b.imgLocal.setImageResource(R.drawable.ic_uh60_front)
 
-        val body = if (manual != null && page != null) {
-            lastLocalAsset = manual
-            lastLocalPage = page
-
-            val manualName = manual.substringAfterLast('/').substringBeforeLast('.') // solo nombre
-            val pnUpper = pnFromQuery.uppercase().ifBlank { "-" }
-
-            "Manual: $manualName\n" +
-                    "Página: $page\n" +
-                    "Part Number: $pnUpper\n" +
-                    "(Toca para abrir)"
-        } else {
-            lastLocalAsset = null
-            lastLocalPage = null
-            "Sin coincidencias locales."
+        if (hits.isEmpty()) {
+            b.txtLocalTitle.text = "Local"
+            b.txtLocalMeta.visibility = View.GONE
+            b.txtLocalBody.visibility = View.VISIBLE
+            b.txtLocalBody.text = "Sin coincidencias locales."
+            b.rvLocalOccurrences.visibility = View.GONE
+            return
         }
-        b.txtLocalBody.text = body
+
+        val effectiveHits = hits
+        val total = effectiveHits.size
+
+        b.txtLocalTitle.text = "Local ($total coincidencias)"
+
+        val first = effectiveHits.first()
+        val pn = (first.partNumber ?: pnQuery).ifBlank { pnQuery }
+        val nsn = (first.nsn ?: "-").ifBlank { "-" }
+
+        // Descripción PRINCIPAL: solo 2 palabras
+        val rawDesc = (first.description ?: "")
+            .replace('\n', ' ')
+            .trim()
+
+        val shortDesc = rawDesc
+            .split(Regex("\\s+"))
+            .take(2)
+            .joinToString(" ")
+
+        val desc = if (shortDesc.isNotBlank()) shortDesc else "-"
+
+        b.txtLocalMeta.visibility = View.VISIBLE
+        b.txtLocalMeta.text = "Part Number: $pn\nNSN: $nsn\nDesc: $desc"
+
+        b.txtLocalBody.visibility = View.GONE
+        b.txtLocalBody.text = "Toca una fila para abrir el manual."
+
+        b.rvLocalOccurrences.visibility = View.VISIBLE
+        localAdapter.submit(effectiveHits)
     }
 
-    /** Única versión de openPdf: abre y manda el query para highlight */
+    /** Abre el PDF y manda el query para highlight */
     private fun openPdf(assetPath: String, page1Based: Int) {
         val q = b.edtPart.text?.toString()?.trim().orEmpty()
         startActivity(
             Intent(requireContext(), PdfViewerActivity::class.java).apply {
                 putExtra(EXTRA_ASSET_PATH, assetPath)
                 putExtra(EXTRA_PAGE, page1Based)
-                putExtra(EXTRA_HIGHLIGHT_QUERY, q) // ← se usa en el viewer para resaltar
+                putExtra(EXTRA_HIGHLIGHT_QUERY, q)
             }
         )
     }

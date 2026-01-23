@@ -20,20 +20,25 @@
             app:titleTextColor="?attr/colorOnPrimary"
             app:navigationIconTint="?attr/colorOnPrimary"
             app:subtitleTextColor="?attr/colorOnPrimary"
-            app:popupTheme="@style/ThemeOverlay.Material3.Light"/>
+            app:popupTheme="@style/ThemeOverlay.Material3.Light" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- PDF + FLASH overlay (debajo del toolbar) -->
+    <!-- PDF + overlays (debajo del toolbar) -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.github.barteksc.pdfviewer.PDFView
             android:id="@+id/pdfView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
+
+        <!-- Highlight overlay: placeholder (el highlight real se pinta en .onDraw) -->
+        <com.cabgon.blackhawk.ui.pdf.PdfHighlightOverlay
+            android:id="@+id/highlightOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <!-- Flash overlay: se usa para "marcar" el salto a un resultado -->
         <View
@@ -42,7 +47,7 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             android:alpha="0"
-            android:background="#80FFEB3B"/>
+            android:background="#80FFEB3B" />
 
     </FrameLayout>
 

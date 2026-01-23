@@ -64,6 +64,7 @@ class EnRutaListFragment : Fragment() {
 
         binding.recyclerEnRuta.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerEnRuta.adapter = adapter
+        binding.fabAgregarEnRuta.visibility = View.GONE
 
         binding.fabAgregarEnRuta.setOnClickListener {
             showAgregarDialog()

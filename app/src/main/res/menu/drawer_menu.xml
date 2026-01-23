@@ -11,9 +11,6 @@
         android:icon="@drawable/ic_chat"
         android:title="@string/chat_ia" />
 
-    <!-- ✅ Quitado del drawer: Estado IA ahora vive en Panel Admin (solo Developer) -->
-    <!-- <item android:id="@+id/nav_ai_status" ... /> -->
-
     <item
         android:id="@+id/nav_admin_panel"
         android:icon="@drawable/ic_panel_admin2"

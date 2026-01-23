@@ -142,6 +142,9 @@
     <string name="admin_ai_status_module">Estado IA (Developer)</string>
     <string name="admin_generalities_module">Generalidades (Admin)</string>
     <string name="blackhawk_nmaintenance">BLACKHAWK\nMAINTENANCE</string>
+    <string name="parts_chunk_result_single_page">%1$s — Página %2$d</string>
+    <string name="parts_chunk_result_page_range">%1$s — Páginas %2$d–%3$d</string>
+
 
 
 </resources>

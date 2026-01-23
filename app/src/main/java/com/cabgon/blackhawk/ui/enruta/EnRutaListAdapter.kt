@@ -34,6 +34,9 @@ class EnRutaListAdapter(
         fun bind(item: EnRutaViewModel.EnRutaListItemUi) {
             currentItem = item
 
+            // Siempre ocultar el botón "Quitar" en la UI
+            binding.btnRemoveEnRuta.visibility = View.GONE
+
             binding.txtMatricula.text = "UH-60L Mat. ${item.matAeronave}"
             binding.txtCategoria.text = "Categoría: ${item.categoria}"
             binding.txtUbicacion.text = "Ubicación: ${item.ubicacion}"
@@ -126,11 +129,8 @@ class EnRutaListAdapter(
                 // 🔴 Pulso crítico
                 startRedPulse(view)
             }
-
-
         }
     }
-
 
     private fun extractFirstNumber(text: String): Double? {
         // Busca el primer número con decimales opcionales: 28.3 / 28,3 / 28
@@ -165,12 +165,10 @@ class EnRutaListAdapter(
             .start()
     }
 
-
     private fun stopPulse(view: View) {
         view.animate().cancel()
         view.scaleX = 1f
         view.scaleY = 1f
         view.alpha = 1f
     }
-
 }

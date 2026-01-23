@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,11 +33,13 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Icono de ruta con fondo tipo chip redondo -->
             <ImageView
                 android:id="@+id/imgArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_right_24" />
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_ruta"
+                app:tint="?attr/colorPrimary" />
         </LinearLayout>
 
         <!-- INFO -->
@@ -44,7 +47,6 @@
             android:id="@+id/txtCategoria"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:text="@string/categor_a_a"
             android:textSize="12sp" />
 
@@ -103,8 +105,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-
-
         <!-- META + ACTION en la misma fila -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,6 +123,7 @@
                     android:id="@+id/txtUltimaEdicion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="@string/ltima_edici_n"
                     android:textSize="12sp" />
 
@@ -145,7 +146,6 @@
                 android:text="@string/quitar_de_en_ruta" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
