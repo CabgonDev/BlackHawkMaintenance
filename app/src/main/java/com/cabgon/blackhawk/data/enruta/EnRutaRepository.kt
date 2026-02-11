@@ -9,6 +9,7 @@ import com.cabgon.blackhawk.data.remote.enruta.EnRutaRemoteConstants.SUBCOLLECTI
 import com.cabgon.blackhawk.data.remote.enruta.toEnRutaRecargaEntities
 import com.cabgon.blackhawk.data.remote.enruta.toEnRutaStatusEntity
 import com.cabgon.blackhawk.data.remote.enruta.toFirestoreMap
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
@@ -17,10 +18,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.tasks.await
-import com.google.firebase.firestore.DocumentChange
-
+import kotlinx.coroutines.withContext
 
 class EnRutaRepository(
     private val dao: EnRutaDao,
@@ -30,15 +29,16 @@ class EnRutaRepository(
 
     private var statusListener: ListenerRegistration? = null
 
-    // --------- Lado Room: flujos y lecturas ---------
+    // --------- Lado Room ---------
 
     fun observeEnRutaList(): Flow<List<EnRutaStatusEntity>> =
         dao.observeAllStatuses()
 
+    fun observeEnRutaWithRecargasByMat(matAeronave: String): Flow<EnRutaWithRecargas?> =
+        dao.observeEnRutaWithRecargasByMat(matAeronave)
+
     suspend fun getEnRutaWithRecargasByMat(matAeronave: String): EnRutaWithRecargas? =
-        withContext(ioDispatcher) {
-            dao.getEnRutaWithRecargasByMat(matAeronave)
-        }
+        withContext(ioDispatcher) { dao.getEnRutaWithRecargasByMat(matAeronave) }
 
     // --------- Guardar desde UI + subir a Firestore ---------
 
@@ -50,16 +50,14 @@ class EnRutaRepository(
 
         val updatedStatus = status.copy(
             lastEditTimestamp = now,
-            lastEditDate = status.lastEditDate, // asumes que ya viene formateado dd/MM/yyyy desde UI
+            // lastEditDate debe venir ya formateado desde UI/ViewModel (como lo haces)
             isDirty = true
         )
 
         val recargasDirty = recargas.map { it.copy(isDirty = true) }
 
-        // 1) Guardar en Room (transacción)
         dao.updateEnRutaWithRecargas(updatedStatus, recargasDirty)
 
-        // 2) Empujar a Firestore
         pushToFirestore(updatedStatus, recargasDirty)
     }
 
@@ -69,15 +67,10 @@ class EnRutaRepository(
     ) = withContext(ioDispatcher) {
         val docRef = firestore
             .collection(COLLECTION_EN_RUTA)
-            .document(status.matAeronave)
+            .document(status.matAeronave.trim())
 
-        // Status
-        val data = status.toFirestoreMap()
+        docRef.set(status.toFirestoreMap(), SetOptions.merge()).await()
 
-        // Guardar status (merge para no romper si en el futuro hay campos nuevos)
-        docRef.set(data, SetOptions.merge()).await()
-
-        // Recargas: borramos las anteriores y subimos las nuevas
         val recargasRef = docRef.collection(SUBCOLLECTION_RECARGAS)
 
         val existingRecargas = recargasRef.get().await()
@@ -86,20 +79,13 @@ class EnRutaRepository(
         }
 
         recargas.forEach { rec ->
-            val recData = rec.toFirestoreMap()
-            recargasRef.add(recData).await()
+            recargasRef.add(rec.toFirestoreMap()).await()
         }
 
-        // Marcar como sincronizado en Room
-        val local = dao.getStatusByMat(status.matAeronave)
+        val local = dao.getStatusByMat(status.matAeronave.trim())
         if (local != null) {
             val syncTime = System.currentTimeMillis()
-            dao.updateStatus(
-                local.copy(
-                    isDirty = false,
-                    lastSyncTimestamp = syncTime
-                )
-            )
+            dao.updateStatus(local.copy(isDirty = false, lastSyncTimestamp = syncTime))
             dao.markRecargasSyncedForEnRuta(local.id)
         }
     }
@@ -107,82 +93,137 @@ class EnRutaRepository(
     // --------- QUITAR DE RUTA (local + Firestore) ---------
 
     suspend fun removeFromRuta(matAeronave: String) = withContext(ioDispatcher) {
-        // 1) Borrar en Room
-        val status = dao.getStatusByMat(matAeronave)
+        val mat = matAeronave.trim()
+
+        val status = dao.getStatusByMat(mat)
         if (status != null) {
             dao.deleteRecargasForEnRutaId(status.id)
-            dao.deleteStatusByMat(matAeronave)
+            dao.deleteStatusByMat(mat)
         }
 
-        // 2) Borrar en Firestore
-        val docRef = firestore
-            .collection(COLLECTION_EN_RUTA)
-            .document(matAeronave)
+        val docRef = firestore.collection(COLLECTION_EN_RUTA).document(mat)
 
         try {
-            // borrar subcolección "recargas"
             val recargasSnap = docRef.collection(SUBCOLLECTION_RECARGAS).get().await()
-            for (doc in recargasSnap.documents) {
-                doc.reference.delete().await()
-            }
-
-            // borrar el documento principal
+            for (doc in recargasSnap.documents) doc.reference.delete().await()
             docRef.delete().await()
         } catch (_: Exception) {
-            // si falla la parte remota, al menos ya se borró en local;
-            // podrías loguear aquí si quieres
+            // ya se borró local; opcional log
         }
     }
 
+    // --------- REFRESH MANUAL (pull-to-refresh) ---------
 
-    // --------- Sincronizar pendientes (stub que puedes pulir después) ---------
+    suspend fun refreshFromFirestoreOnce() = withContext(ioDispatcher) {
+        val snap = firestore.collection(COLLECTION_EN_RUTA).get().await()
 
-    suspend fun syncAllDirtyToFirestore() = withContext(ioDispatcher) {
-        // Pendiente de implementar fino si lo necesitas
+        val remoteDocs = snap.documents
+        val remoteIds: Set<String> = remoteDocs.map { it.id.trim() }.toSet()
+        val remoteMatsField: Set<String> = remoteDocs.mapNotNull { it.getString("matAeronave")?.trim() }.toSet()
+
+        // 1) RECONCILIAR: borrar huérfanos locales que ya no existen en remoto (sin tocar dirty)
+        val locals = dao.getAllStatusesOnce()
+        for (local in locals) {
+            if (local.isDirty) continue
+            val localMat = local.matAeronave.trim()
+            val exists = remoteIds.contains(localMat) || remoteMatsField.contains(localMat)
+            if (!exists) {
+                dao.deleteRecargasForEnRutaId(local.id)
+                dao.deleteStatusByMat(localMat)
+            }
+        }
+
+        // 2) APLICAR REMOTO -> LOCAL (docId manda como llave)
+        for (doc in remoteDocs) {
+            val docIdMat = doc.id.trim()
+
+            // Buscar local por docId o por campo (por si hay histórico mal guardado)
+            val localByDocId = dao.getStatusByMat(docIdMat)
+            val fieldMat = doc.getString("matAeronave")?.trim()
+            val localByField = if (!fieldMat.isNullOrBlank() && fieldMat != docIdMat) dao.getStatusByMat(fieldMat) else null
+            val local = localByDocId ?: localByField
+
+            val remote = doc.toEnRutaStatusEntity(localId = local?.id) ?: continue
+
+            // Normalizar: guardamos SIEMPRE con matAeronave = docId
+            val toSave = remote.copy(
+                matAeronave = docIdMat,
+                isDirty = false,
+                lastSyncTimestamp = System.currentTimeMillis()
+            )
+
+            val enRutaId = dao.upsertStatusByMat(toSave)
+
+            try {
+                val recSnap = doc.reference.collection(SUBCOLLECTION_RECARGAS).get().await()
+                val recEntities = recSnap.toEnRutaRecargaEntities(enRutaId)
+                dao.deleteRecargasForEnRutaId(enRutaId)
+                dao.insertRecargas(recEntities)
+            } catch (_: Throwable) {
+                // status ya quedó
+            }
+
+            // Si existía un registro local viejo con fieldMat diferente, elimínalo (ya quedó normalizado)
+            if (localByField != null && fieldMat != null && fieldMat != docIdMat) {
+                if (!localByField.isDirty) {
+                    dao.deleteRecargasForEnRutaId(localByField.id)
+                    dao.deleteStatusByMat(fieldMat)
+                }
+            }
+        }
     }
 
     // --------- Listener en tiempo real (Firestore -> Room) ---------
 
     fun startRealtimeStatusListener(scope: CoroutineScope) {
-        if (statusListener != null) return  // ya está iniciado
+        if (statusListener != null) return
 
         statusListener = firestore
             .collection(COLLECTION_EN_RUTA)
             .addSnapshotListener { snapshots, error ->
-                if (error != null || snapshots == null) {
-                    return@addSnapshotListener
-                }
+                if (error != null || snapshots == null) return@addSnapshotListener
+
+                val remoteIdsNow = snapshots.documents.map { it.id.trim() }.toSet()
+                val remoteMatsNow = snapshots.documents.mapNotNull { it.getString("matAeronave")?.trim() }.toSet()
 
                 for (change in snapshots.documentChanges) {
                     val doc = change.document
 
                     when (change.type) {
                         DocumentChange.Type.REMOVED -> {
-                            // Documento borrado en Firestore -> lo borramos en Room
-                            val mat = doc.id
+                            // BORRADO ROBUSTO: docId + campo matAeronave
+                            val idMat = doc.id.trim()
+                            val fieldMat = doc.getString("matAeronave")?.trim()
+
                             scope.launch(ioDispatcher) {
-                                val local = dao.getStatusByMat(mat)
-                                if (local != null) {
-                                    dao.deleteRecargasForEnRutaId(local.id)
-                                    dao.deleteStatusByMat(mat)
+                                val candidates = listOfNotNull(idMat.takeIf { it.isNotBlank() }, fieldMat?.takeIf { it.isNotBlank() }).distinct()
+                                for (mat in candidates) {
+                                    val local = dao.getStatusByMat(mat)
+                                    if (local != null) {
+                                        dao.deleteRecargasForEnRutaId(local.id)
+                                        dao.deleteStatusByMat(mat)
+                                    }
                                 }
                             }
                         }
 
                         DocumentChange.Type.ADDED,
                         DocumentChange.Type.MODIFIED -> {
-                            val remote = doc.toEnRutaStatusEntity() ?: continue
-
                             scope.launch(ioDispatcher) {
-                                val local = dao.getStatusByMat(remote.matAeronave)
+                                val docIdMat = doc.id.trim()
+
+                                val local = dao.getStatusByMat(docIdMat)
+                                    ?: doc.getString("matAeronave")?.trim()?.let { if (it != docIdMat) dao.getStatusByMat(it) else null }
+
+                                val remote = doc.toEnRutaStatusEntity(localId = local?.id) ?: return@launch
+
+                                val normalizedRemote = remote.copy(matAeronave = docIdMat)
 
                                 val shouldApplyRemote =
-                                    local == null || remote.lastEditTimestamp > (local.lastEditTimestamp)
+                                    local == null || normalizedRemote.lastEditTimestamp > local.lastEditTimestamp
 
                                 if (shouldApplyRemote) {
-                                    val existingId = local?.id ?: 0L
-                                    val toSave = remote.copy(
-                                        id = existingId,
+                                    val toSave = normalizedRemote.copy(
                                         isDirty = false,
                                         lastSyncTimestamp = System.currentTimeMillis()
                                     )
@@ -190,29 +231,32 @@ class EnRutaRepository(
                                     val enRutaId = dao.upsertStatusByMat(toSave)
 
                                     try {
-                                        val recargasSnap = doc.reference
-                                            .collection(SUBCOLLECTION_RECARGAS)
-                                            .get()
-                                            .await()
-
-                                        val recargasEntities =
-                                            recargasSnap.toEnRutaRecargaEntities(enRutaId)
-
+                                        val recargasSnap = doc.reference.collection(SUBCOLLECTION_RECARGAS).get().await()
+                                        val recargasEntities = recargasSnap.toEnRutaRecargaEntities(enRutaId)
                                         dao.deleteRecargasForEnRutaId(enRutaId)
                                         dao.insertRecargas(recargasEntities)
-                                    } catch (_: Throwable) {
-                                        // si falla recargas, al menos el status ya se actualizó
-                                    }
-                                } else {
-                                    // local más reciente: se subirá en el siguiente save/sync
+                                    } catch (_: Throwable) { }
                                 }
                             }
                         }
                     }
                 }
+
+                // RECONCILIACIÓN: borra locales huérfanos que ya no existen en remoto (sin tocar dirty)
+                scope.launch(ioDispatcher) {
+                    val locals = dao.getAllStatusesOnce()
+                    for (local in locals) {
+                        if (local.isDirty) continue
+                        val localMat = local.matAeronave.trim()
+                        val exists = remoteIdsNow.contains(localMat) || remoteMatsNow.contains(localMat)
+                        if (!exists) {
+                            dao.deleteRecargasForEnRutaId(local.id)
+                            dao.deleteStatusByMat(localMat)
+                        }
+                    }
+                }
             }
     }
-
 
     fun stopRealtimeStatusListener() {
         statusListener?.remove()

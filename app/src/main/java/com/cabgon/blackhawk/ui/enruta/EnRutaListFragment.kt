@@ -35,7 +35,6 @@ class EnRutaListFragment : Fragment() {
                 firestore = FirebaseFirestore.getInstance()
             ),
             currentUserIdProvider = {
-                // Tomamos el UID del perfil guardado (si existe)
                 UserSessionStore(requireContext()).getProfile()?.uid
             }
         )
@@ -54,12 +53,8 @@ class EnRutaListFragment : Fragment() {
 
         adapter = EnRutaListAdapter(
             items = emptyList(),
-            onClick = { item ->
-                openDetalle(item.matAeronave)
-            },
-            onRemoveClick = { item ->
-                confirmRemoveFromRuta(item)
-            }
+            onClick = { item -> openDetalle(item.matAeronave) },
+            onRemoveClick = { item -> confirmRemoveFromRuta(item) }
         )
 
         binding.recyclerEnRuta.layoutManager = LinearLayoutManager(requireContext())
@@ -70,12 +65,26 @@ class EnRutaListFragment : Fragment() {
             showAgregarDialog()
         }
 
+        // ✅ Pull to refresh
+        binding.swipeRefreshEnRuta.setOnRefreshListener {
+            viewModel.refreshEnRuta()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isRefreshing.collectLatest { refreshing ->
+                binding.swipeRefreshEnRuta.isRefreshing = refreshing
+            }
+        }
+
         // Observar la lista desde el ViewModel
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.enRutaListUi.collectLatest { list ->
                 adapter.submitList(list)
             }
         }
+
+        // ✅ refresh inicial por si vienes de backstack / cache local
+        viewModel.refreshEnRuta()
     }
 
     private fun confirmRemoveFromRuta(item: EnRutaViewModel.EnRutaListItemUi) {

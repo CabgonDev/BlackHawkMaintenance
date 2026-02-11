@@ -2,12 +2,18 @@ package com.cabgon.blackhawk.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cabgon.blackhawk.R
 import com.cabgon.blackhawk.data.user.UserProfile
 import com.cabgon.blackhawk.data.user.UserSessionStore
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
@@ -24,7 +30,6 @@ class RegisterActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         session = UserSessionStore(this)
 
-        // Views
         val etEmail = findViewById<EditText>(R.id.etEmailReg)
         val etPassword = findViewById<EditText>(R.id.etPasswordReg)
         val etPasswordConfirm = findViewById<EditText>(R.id.etPasswordConfirm)
@@ -35,36 +40,15 @@ class RegisterActivity : AppCompatActivity() {
         val btnRegister = findViewById<Button>(R.id.btnRegisterConfirm)
         val tvGoLogin = findViewById<TextView>(R.id.tvGoLogin)
 
-        // ---------- Opciones de GRADO ----------
-        val grados = listOf(
-            "Cabo",
-            "Sgto. 2/o.",
-            "Sgto. 1/o.",
-            "Sbtte",
-            "Tte",
-            "Cap. 2/o.",
-            "Cap. 1/o."
-        )
+        // ✅ Cambiamos texto del botón
+        btnRegister.text = "Solicitar Registro"
 
-        spGrado.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            grados
-        )
+        val grados = listOf("Cabo", "Sgto. 2/o.", "Sgto. 1/o.", "Sbtte", "Tte", "Cap. 2/o.", "Cap. 1/o.")
+        spGrado.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, grados)
 
-        // ---------- Opciones de ESPECIALIDAD ----------
-        val especialidades = listOf(
-            "F.A.E.E.A.",
-            "F.A.E.M.A."
-        )
+        val especialidades = listOf("F.A.E.E.A.", "F.A.E.M.A.")
+        spEspecialidad.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, especialidades)
 
-        spEspecialidad.adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            especialidades
-        )
-
-        // ---------- Botón: Crear cuenta ----------
         btnRegister.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -74,7 +58,6 @@ class RegisterActivity : AppCompatActivity() {
             val matricula = etMatricula.text.toString().trim()
             val especialidad = spEspecialidad.selectedItem?.toString()?.trim().orEmpty()
 
-            // Validaciones básicas
             if (email.isEmpty() || password.isEmpty() || password2.isEmpty()) {
                 Toast.makeText(this, "Correo y contraseña son obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -100,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
                         btnRegister.isEnabled = true
                         Toast.makeText(
                             this,
-                            "Registro fallido: ${task.exception?.localizedMessage ?: "revisa los datos"}",
+                            "Solicitud fallida: ${task.exception?.localizedMessage ?: "revisa los datos"}",
                             Toast.LENGTH_LONG
                         ).show()
                         return@addOnCompleteListener
@@ -113,15 +96,19 @@ class RegisterActivity : AppCompatActivity() {
                         return@addOnCompleteListener
                     }
 
+                    // ✅ Perfil local (PENDING)
                     val profile = UserProfile(
                         uid = user.uid,
                         email = user.email ?: email,
                         grado = grado,
                         nombre = nombre,
                         matricula = matricula,
-                        especialidad = especialidad
+                        especialidad = especialidad,
+                        role = "user",
+                        status = "pending"
                     )
 
+                    // ✅ Firestore: status=PENDING
                     val data = mapOf(
                         "uid" to profile.uid,
                         "email" to profile.email,
@@ -129,37 +116,36 @@ class RegisterActivity : AppCompatActivity() {
                         "nombre" to profile.nombre,
                         "matricula" to profile.matricula,
                         "especialidad" to profile.especialidad,
-                        "createdAt" to System.currentTimeMillis()
+                        "role" to "user",
+                        "status" to "pending",
+                        "createdAt" to FieldValue.serverTimestamp(),
+                        "reviewedAt" to null,
+                        "reviewedBy" to null,
+                        "rejectionReason" to null
                     )
 
-                    db.collection("users")
-                        .document(user.uid)
+                    db.collection("users").document(user.uid)
                         .set(data)
                         .addOnSuccessListener {
+                            // Guardamos para mostrar nombre/status local si quieres
                             session.saveProfile(profile)
-                            Toast.makeText(this, "Registro exitoso.", Toast.LENGTH_SHORT).show()
-                            goToStartup()
+
+                            // ✅ Bloqueo inmediato: lo mandamos a validación
+                            startActivity(Intent(this, PendingApprovalActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            })
+                            finish()
                         }
                         .addOnFailureListener { e ->
                             btnRegister.isEnabled = true
-                            Toast.makeText(
-                                this,
-                                "Error al guardar perfil: ${e.localizedMessage}",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this, "Error al guardar perfil: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                         }
                 }
         }
 
-        // ---------- Volver al login ----------
         tvGoLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
-    }
-
-    private fun goToStartup() {
-        startActivity(Intent(this, StartupActivity::class.java))
-        finish()
     }
 }

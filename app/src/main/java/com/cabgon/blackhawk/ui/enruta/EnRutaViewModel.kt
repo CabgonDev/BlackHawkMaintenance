@@ -5,8 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.cabgon.blackhawk.data.enruta.EnRutaRepository
 import com.cabgon.blackhawk.data.local.enruta.EnRutaRecargaEntity
 import com.cabgon.blackhawk.data.local.enruta.EnRutaStatusEntity
+import com.cabgon.blackhawk.data.local.enruta.EnRutaWithRecargas
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -47,6 +58,7 @@ class EnRutaViewModel(
         val matAeronave: String = "",
         val lastEditDate: String = "",
         val lastEditorUserId: String? = null,
+        val tecnicoLabel: String = "—",
 
         val categoria: String = "A",
         val ubicacion: String = "",
@@ -115,6 +127,32 @@ class EnRutaViewModel(
         }
     }
 
+    private fun buildTecnicoLabel(uid: String?, cache: Map<String, TechInfo>): String {
+        val key = uid.orEmpty()
+        val tech = cache[key] ?: return "—"
+        return listOf(tech.grado, tech.primerApellido)
+            .filter { it.isNotBlank() }
+            .joinToString(" ")
+            .ifBlank { "—" }
+    }
+
+    // ---------- PULL TO REFRESH ----------
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    fun refreshEnRuta() {
+        viewModelScope.launch {
+            _isRefreshing.value = true
+            try {
+                repository.refreshFromFirestoreOnce()
+            } catch (e: Exception) {
+                _detailState.update { it.copy(errorMessage = "Error al refrescar En Ruta: ${e.message}") }
+            } finally {
+                _isRefreshing.value = false
+            }
+        }
+    }
+
     // ---------- LISTA "EN RUTA" ----------
     val enRutaListUi: StateFlow<List<EnRutaListItemUi>> =
         combine(repository.observeEnRutaList(), techCache) { list, cache ->
@@ -123,15 +161,7 @@ class EnRutaViewModel(
             fetchMissingTechInfo(uids)
 
             list.map { entity ->
-                val uid = entity.lastEditorUserId.orEmpty()
-                val tech = cache[uid]
-
-                val tecnicoLabel = tech?.let {
-                    listOf(it.grado, it.primerApellido)
-                        .filter { s -> s.isNotBlank() }
-                        .joinToString(" ")
-                        .ifBlank { "—" }
-                } ?: "—"
+                val tecnicoLabel = buildTecnicoLabel(entity.lastEditorUserId, cache)
 
                 val lastEdit = if (entity.lastEditTimestamp > 0L)
                     dateFormatter.format(Date(entity.lastEditTimestamp))
@@ -152,78 +182,97 @@ class EnRutaViewModel(
 
     // ---------- DETALLE "EN RUTA" ----------
     private val _detailState = MutableStateFlow(EnRutaDetailUiState())
-    val detailState: StateFlow<EnRutaDetailUiState> = _detailState.asStateFlow()
+
+    val detailState: StateFlow<EnRutaDetailUiState> =
+        combine(_detailState, techCache) { state, cache ->
+            state.copy(tecnicoLabel = buildTecnicoLabel(state.lastEditorUserId, cache))
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), EnRutaDetailUiState())
+
+    private var detailObserverJob: Job? = null
 
     init {
         repository.startRealtimeStatusListener(viewModelScope)
+        // ✅ Limpieza / reconciliación inicial al entrar al módulo
+        refreshEnRuta()
     }
 
     fun cargarDetalle(matAeronave: String) {
-        viewModelScope.launch {
-            _detailState.update { it.copy(isLoading = true, errorMessage = null, saveSuccess = null) }
+        detailObserverJob?.cancel()
 
-            val existing = repository.getEnRutaWithRecargasByMat(matAeronave)
-
-            if (existing == null) {
-                val uid = currentUserIdProvider() ?: "DESCONOCIDO"
-                val now = System.currentTimeMillis()
-
-                val newStatus = EnRutaStatusEntity(
-                    id = 0L,
-                    matAeronave = matAeronave,
-                    lastEditDate = nowString(),
-                    lastEditTimestamp = now,
-                    lastEditorUserId = uid,
-
-                    categoria = "A",
-                    ubicacion = "",
-                    tipoOps = "",
-
-                    horasVuelo = 0.0,
-                    horasTotales = 0.0,
-                    horasDisponibles = 0.0,
-                    proxInspeccion = 40,
-
-                    motor1Lcf1 = 0,
-                    motor1Lcf2 = 0,
-                    motor1Index = 0,
-                    motor1Horas = 0,
-
-                    motor2Lcf1 = 0,
-                    motor2Lcf2 = 0,
-                    motor2Index = 0,
-                    motor2Horas = 0,
-
-                    apuHoras = 0,
-                    apuEventos = 0,
-
-                    reportes = "",
-                    isDirty = true,
-                    lastSyncTimestamp = null
-                )
-
-                try {
-                    repository.saveLocalAndSync(newStatus, emptyList())
-                    val created = repository.getEnRutaWithRecargasByMat(matAeronave)
-                    applyDetailFromEntity(created)
-                } catch (e: Exception) {
-                    _detailState.update {
-                        it.copy(isLoading = false, errorMessage = "Error al crear registro En Ruta: ${e.message}")
-                    }
+        detailObserverJob = repository
+            .observeEnRutaWithRecargasByMat(matAeronave)
+            .onStart {
+                _detailState.update { it.copy(isLoading = true, errorMessage = null, saveSuccess = null) }
+            }
+            .onEach { data ->
+                if (data != null) {
+                    val uid = data.status.lastEditorUserId
+                    if (!uid.isNullOrBlank()) fetchMissingTechInfo(setOf(uid))
+                    applyDetailFromEntity(data)
                 }
-            } else {
-                applyDetailFromEntity(existing)
+            }
+            .catch { e ->
+                _detailState.update {
+                    it.copy(isLoading = false, errorMessage = "Error observando detalle: ${e.message}")
+                }
+            }
+            .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            val existing = repository.getEnRutaWithRecargasByMat(matAeronave)
+            if (existing != null) return@launch
+
+            val uid = currentUserIdProvider() ?: "DESCONOCIDO"
+            val now = System.currentTimeMillis()
+
+            val newStatus = EnRutaStatusEntity(
+                id = 0L,
+                matAeronave = matAeronave,
+                lastEditDate = nowString(),
+                lastEditTimestamp = now,
+                lastEditorUserId = uid,
+
+                categoria = "A",
+                ubicacion = "",
+                tipoOps = "",
+
+                horasVuelo = 0.0,
+                horasTotales = 0.0,
+                horasDisponibles = 0.0,
+                proxInspeccion = 40,
+
+                motor1Lcf1 = 0,
+                motor1Lcf2 = 0,
+                motor1Index = 0,
+                motor1Horas = 0,
+
+                motor2Lcf1 = 0,
+                motor2Lcf2 = 0,
+                motor2Index = 0,
+                motor2Horas = 0,
+
+                apuHoras = 0,
+                apuEventos = 0,
+
+                reportes = "",
+                isDirty = true,
+                lastSyncTimestamp = null
+            )
+
+            try {
+                repository.saveLocalAndSync(newStatus, emptyList())
+                fetchMissingTechInfo(setOf(uid))
+            } catch (e: Exception) {
+                _detailState.update {
+                    it.copy(isLoading = false, errorMessage = "Error al crear registro En Ruta: ${e.message}")
+                }
             }
         }
     }
 
-    private fun applyDetailFromEntity(data: com.cabgon.blackhawk.data.local.enruta.EnRutaWithRecargas?) {
-        if (data == null) {
-            _detailState.update { it.copy(isLoading = false, errorMessage = "No se encontró información En Ruta para esta aeronave") }
-            return
-        }
-
+    private fun applyDetailFromEntity(data: EnRutaWithRecargas) {
         val status = data.status
+
         val recargasUi = data.recargas.map { rec ->
             RecargaUi(
                 localId = rec.id,
@@ -233,6 +282,10 @@ class EnRutaViewModel(
             )
         }
 
+        val lastEdit = if (status.lastEditTimestamp > 0L)
+            dateFormatter.format(Date(status.lastEditTimestamp))
+        else status.lastEditDate
+
         _detailState.update {
             it.copy(
                 isLoading = false,
@@ -240,7 +293,7 @@ class EnRutaViewModel(
                 saveSuccess = null,
 
                 matAeronave = status.matAeronave,
-                lastEditDate = status.lastEditDate,
+                lastEditDate = lastEdit,
                 lastEditorUserId = status.lastEditorUserId,
 
                 categoria = status.categoria,
@@ -404,9 +457,24 @@ class EnRutaViewModel(
 
                 repository.saveLocalAndSync(status, recargasEntities)
 
-                _detailState.update { it.copy(isSaving = false, saveSuccess = true, lastEditDate = nowString()) }
+                fetchMissingTechInfo(setOf(uid))
+
+                _detailState.update {
+                    it.copy(
+                        isSaving = false,
+                        saveSuccess = true,
+                        lastEditDate = nowString(),
+                        lastEditorUserId = uid
+                    )
+                }
             } catch (e: Exception) {
-                _detailState.update { it.copy(isSaving = false, saveSuccess = false, errorMessage = "Error al guardar cambios: ${e.message}") }
+                _detailState.update {
+                    it.copy(
+                        isSaving = false,
+                        saveSuccess = false,
+                        errorMessage = "Error al guardar cambios: ${e.message}"
+                    )
+                }
             }
         }
     }
@@ -419,6 +487,8 @@ class EnRutaViewModel(
         viewModelScope.launch {
             try {
                 repository.removeFromRuta(matAeronave)
+                // ayuda a limpiar “fantasmas” si algo no llegó por listener
+                refreshEnRuta()
             } catch (e: Exception) {
                 _detailState.update { it.copy(errorMessage = "Error al quitar de En Ruta: ${e.message}") }
             }

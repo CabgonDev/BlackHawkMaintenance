@@ -1,5 +1,6 @@
 package com.cabgon.blackhawk.content.frequencies
 
+import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
@@ -7,6 +8,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +47,7 @@ class FrequenciesAdapter(
             return v
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: FrequencyItem, query: String) {
             b.card.setOnClickListener { onItemClick(item) }
 
@@ -54,18 +57,34 @@ class FrequenciesAdapter(
             if (isEmer) {
                 b.txtTypePill.text = "EMER"
                 b.txtTypePill.setBackgroundResource(R.drawable.bg_pill_emergency)
-                // Si quieres que el icono también cambie, descomenta:
-                // b.ivType.setImageResource(R.drawable.ic_type_emergency)
-                // b.ivType.imageTintList = ColorStateList.valueOf(0xFFC62828.toInt())
+                b.txtTypePill.setTextColor(
+                    ContextCompat.getColor(b.root.context, android.R.color.white)
+                )
             } else {
                 val type = item.safeType()
                 b.txtTypePill.text = type.ifBlank { "—" }
                 b.txtTypePill.setBackgroundResource(R.drawable.bg_pill)
+                b.txtTypePill.setTextColor(b.txtTop.currentTextColor)
             }
 
-            // Icono por tipo (solo si no es emergencia, para no “confundir” semántica)
+            // --- COLORES (EMER vs normal) ---
+            val freqColor = ContextCompat.getColor(
+                b.root.context,
+                if (isEmer) R.color.emergency_red else R.color.frequency_blue
+            )
+            b.txtFreq.setTextColor(freqColor)
+
+            // --- ICONO POR TIPO + FIX TINT EMER ---
             val typeForIcon = item.safeType()
-            b.ivType.setImageResource(typeToIcon(typeForIcon))
+            val iconRes = typeToIcon(typeForIcon)
+            b.ivType.setImageResource(iconRes)
+
+            // Si tu ImageView tiene tint por tema/layout, esto evita que "se pinte todo"
+            // y respeta el rojo/blanco del vector ic_type_emergency.xml
+            if (iconRes == R.drawable.ic_type_emergency) {
+                b.ivType.imageTintList = null
+            }
+            // (Para los demás íconos no tocamos tint: si tu tema/row_frequency.xml aplica tint, seguirá igual)
 
             // Top: ICAO · Airport
             val top = buildString {
@@ -165,6 +184,7 @@ class FrequenciesAdapter(
                 t.contains("TWR") || t.contains("TORRE") -> R.drawable.ic_type_twr
                 t.contains("APP") || t.contains("APROX") || t.contains("APPROACH") -> R.drawable.ic_type_app
                 t.contains("GND") || t.contains("GROUND") || t.contains("TIERRA") -> R.drawable.ic_type_gnd
+                t.contains("EMER") || t.contains("EMERGENCY") || t.contains("EMERGENCIA") -> R.drawable.ic_type_emergency
                 t.contains("ATIS") -> R.drawable.ic_type_atis
                 else -> R.drawable.ic_radiofreq
             }
@@ -177,7 +197,10 @@ class FrequenciesAdapter(
                 return oldItem.icao == newItem.icao &&
                         oldItem.type == newItem.type &&
                         oldItem.freqMHz == newItem.freqMHz &&
-                        oldItem.freqKhz == newItem.freqKhz
+                        oldItem.freqKhz == newItem.freqKhz &&
+                        oldItem.ident == newItem.ident &&
+                        oldItem.remarks == newItem.remarks &&
+                        oldItem.isEmergency == newItem.isEmergency
             }
 
             override fun areContentsTheSame(oldItem: FrequencyItem, newItem: FrequencyItem): Boolean {

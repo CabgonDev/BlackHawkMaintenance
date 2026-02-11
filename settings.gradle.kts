@@ -17,9 +17,11 @@ pluginManagement {
 
 plugins {
     id("com.android.application") version "9.0.0" apply false
-    id("org.jetbrains.kotlin.android") version "2.2.21" apply false
 
-    // 👇 agrega ESTA línea (y SOLO esta) para google services
+    // ✅ Kotlin: usa 2.3.0 (misma que tu libs.versions.toml)
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+
+    // Google services
     id("com.google.gms.google-services") version "4.4.4" apply false
 }
 

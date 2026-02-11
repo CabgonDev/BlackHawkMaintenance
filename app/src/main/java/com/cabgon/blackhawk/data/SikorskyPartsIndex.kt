@@ -1,11 +1,12 @@
 package com.cabgon.blackhawk.data
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import io.requery.android.database.sqlite.SQLiteDatabase
 import java.io.Closeable
 import java.io.File
 
-/** Resultado de búsqueda del índice Sikorsky de Números de Parte. */
 data class SikorskyPartHit(
     val manualKey: String,
     val assetPath: String,
@@ -24,20 +25,21 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
         val raw = query.trim()
         if (raw.isBlank()) return emptyList()
 
+        // ✅ Regla establecida: mínimo 3 alfanuméricos
+        val alphaNumCount = raw.count { it.isLetterOrDigit() }
+        if (alphaNumCount < 3) return emptyList()
+
         val norm = normalizePn(raw)
         val upper = raw.uppercase()
 
-        // 1) Exact match por PN normalizado
         if (norm.isNotBlank()) {
             val exact = queryExact(norm, limit)
             if (exact.isNotEmpty()) return exact
         }
 
-        // 2) Contains / LIKE robusto (cubre variantes y entrada parcial)
         val like = queryLike(norm, upper, limit)
         if (like.isNotEmpty()) return like
 
-        // 3) FTS (fallback): pn_raw/nsn/desc
         return queryFts(raw, norm, limit)
     }
 
@@ -72,18 +74,29 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
     }
 
     private fun queryLike(pnNorm: String, rawUpper: String, limit: Int): List<SikorskyPartHit> {
-        val sql = """
-            SELECT manual, page, fig, cagec, pn_raw, nsn, desc
-            FROM parts
-            WHERE (pn_norm LIKE '%' || ? || '%')
-               OR (pn_raw  LIKE '%' || ? || '%')
-               OR (nsn     LIKE '%' || ? || '%')
-            ORDER BY manual, page
-            LIMIT ?
-        """.trimIndent()
+        val (sql, args) = if (pnNorm.isNotBlank()) {
+            """
+                SELECT manual, page, fig, cagec, pn_raw, nsn, desc
+                FROM parts
+                WHERE (pn_norm LIKE '%' || ? || '%')
+                   OR (pn_raw  LIKE '%' || ? || '%')
+                   OR (nsn     LIKE '%' || ? || '%')
+                ORDER BY manual, page
+                LIMIT ?
+            """.trimIndent() to arrayOf(pnNorm, rawUpper, rawUpper, limit.toString())
+        } else {
+            """
+                SELECT manual, page, fig, cagec, pn_raw, nsn, desc
+                FROM parts
+                WHERE (pn_raw  LIKE '%' || ? || '%')
+                   OR (nsn     LIKE '%' || ? || '%')
+                ORDER BY manual, page
+                LIMIT ?
+            """.trimIndent() to arrayOf(rawUpper, rawUpper, limit.toString())
+        }
 
         val hits = mutableListOf<SikorskyPartHit>()
-        db.rawQuery(sql, arrayOf(pnNorm, rawUpper, rawUpper, limit.toString())).use { c ->
+        db.rawQuery(sql, args).use { c ->
             while (c.moveToNext()) {
                 val manualKey = c.getString(0)
                 val asset = manualKeyToAssetPath(manualKey) ?: continue
@@ -119,16 +132,8 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
         val esc = { s: String -> s.replace("\"", "\"\"") }
 
         val queries = mutableListOf<String>()
-
-        // Intento 1: PN normalizado como frase
-        if (norm.isNotBlank()) {
-            queries += "\"${esc(norm)}\""
-        }
-
-        // Intento 2: AND tokens
-        if (tokens.isNotEmpty()) {
-            queries += tokens.take(6).joinToString(" AND ") { "\"${esc(it)}\"" }
-        }
+        if (norm.isNotBlank()) queries += "\"${esc(norm)}\""
+        if (tokens.isNotEmpty()) queries += tokens.take(6).joinToString(" AND ") { "\"${esc(it)}\"" }
 
         val sql = """
             SELECT p.manual,
@@ -167,7 +172,6 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
                     }
                 }
             } catch (_: Exception) {
-                // Si la query rompe la sintaxis FTS, ignoramos y probamos la siguiente.
             }
             if (hits.isNotEmpty()) return hits
         }
@@ -183,12 +187,26 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
         private const val ASSET_DB_PATH = "sikorsky/index/sikorsky_parts_index.db"
         private const val TARGET_FILE_NAME = "sikorsky_parts_index.db"
 
+        private const val PREFS_NAME = "sikorsky_parts_index_prefs"
+        private const val KEY_LAST_VERSION_CODE = "last_version_code"
+
         fun openFromAssets(ctx: Context): SikorskyPartsIndex {
             val target = File(ctx.filesDir, TARGET_FILE_NAME)
-            if (!target.exists()) {
+
+            val prefs: SharedPreferences =
+                ctx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+            val currentVersionCode = getVersionCode(ctx)
+            val lastVersionCode = prefs.getLong(KEY_LAST_VERSION_CODE, -1L)
+
+            val shouldRefresh = (lastVersionCode != currentVersionCode)
+
+            if (!target.exists() || shouldRefresh) {
+                runCatching { target.delete() }
                 ctx.assets.open(ASSET_DB_PATH).use { input ->
                     target.outputStream().use { output -> input.copyTo(output) }
                 }
+                prefs.edit().putLong(KEY_LAST_VERSION_CODE, currentVersionCode).apply()
             }
 
             val db = SQLiteDatabase.openDatabase(
@@ -199,7 +217,6 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
             return SikorskyPartsIndex(db)
         }
 
-        /** Normaliza un PN eliminando separadores: solo A-Z y 0-9, en mayúsculas. */
         fun normalizePn(input: String): String {
             val t = input.trim().uppercase()
             val sb = StringBuilder(t.length)
@@ -217,6 +234,13 @@ class SikorskyPartsIndex(private val db: SQLiteDatabase) : Closeable {
                     "sikorsky/manuals/AVIONICS REPAIR PARTS AND SPECIAL.pdf"
                 else -> null
             }
+        }
+
+        private fun getVersionCode(ctx: Context): Long {
+            val pm = ctx.packageManager
+            val pkg = ctx.packageName
+            val pi = pm.getPackageInfo(pkg, 0)
+            return if (Build.VERSION.SDK_INT >= 28) pi.longVersionCode else pi.versionCode.toLong()
         }
     }
 }

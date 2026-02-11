@@ -2,6 +2,8 @@ package com.cabgon.blackhawk.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cabgon.blackhawk.data.SikorskyPartHit
 import com.cabgon.blackhawk.databinding.ItemManualHeaderBinding
@@ -9,78 +11,101 @@ import com.cabgon.blackhawk.databinding.ItemPartHitBinding
 
 class SikorskyPartHitAdapter(
     private val onClick: (SikorskyPartHit) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<SikorskyPartHitAdapter.Row, RecyclerView.ViewHolder>(RowDiff) {
 
-    // Tipos de vista: Header de manual y fila de hit
     private companion object {
         private const val VIEW_TYPE_HEADER = 1
         private const val VIEW_TYPE_HIT = 2
+
+        private val RowDiff = object : DiffUtil.ItemCallback<Row>() {
+            override fun areItemsTheSame(oldItem: Row, newItem: Row): Boolean =
+                oldItem.stableId == newItem.stableId
+
+            override fun areContentsTheSame(oldItem: Row, newItem: Row): Boolean =
+                oldItem == newItem
+        }
     }
 
-    // Grupo por manual
-    private data class ManualGroup(
-        val manualKey: String,
-        val manualTitle: String,
-        val hits: List<SikorskyPartHit>,
-        var expanded: Boolean = true
-    )
+    // Estado expand/collapse por manual
+    private val expandedState = LinkedHashMap<String, Boolean>()
 
-    // Filas planas que se pintan en el RecyclerView
-    private sealed class Row {
-        data class Header(val groupIndex: Int) : Row()
-        data class HitRow(val groupIndex: Int, val hit: SikorskyPartHit) : Row()
+    // ✅ Fuente de verdad para reconstruir rows al expand/collapse
+    private var lastHits: List<SikorskyPartHit> = emptyList()
+
+    /** Filas planas para pintar en RecyclerView */
+    sealed class Row {
+        abstract val stableId: Long
+
+        data class Header(
+            val manualShort: String,
+            val count: Int,
+            val expanded: Boolean
+        ) : Row() {
+            override val stableId: Long = stableIdFor("H:$manualShort")
+        }
+
+        data class HitRow(
+            val manualShort: String,
+            val hit: SikorskyPartHit
+        ) : Row() {
+            override val stableId: Long =
+                stableIdFor("R:$manualShort:${hit.assetPath}:${hit.page}:${hit.partNumber ?: ""}:${hit.nsn ?: ""}:${hit.fig ?: -1}")
+        }
     }
-
-    private val groups = ArrayList<ManualGroup>()
-    private val rows = ArrayList<Row>()
 
     /**
-     * Recibe la lista de hits y la agrupa por manual.
-     * El API hacia afuera no cambia: sigues llamando submit(hits).
+     * API igual que tu adapter original:
+     * recibe lista plana y la agrupa internamente.
      */
     fun submit(list: List<SikorskyPartHit>) {
-        groups.clear()
+        lastHits = list
+        val groups = buildGroups(lastHits)
+        submitList(buildRows(groups))
+    }
 
-        // Agrupamos por "manualShort" = nombre de archivo sin ruta ni extensión
+    private data class ManualGroup(
+        val manualShort: String,
+        val hits: List<SikorskyPartHit>,
+        val expanded: Boolean
+    )
+
+    private fun buildGroups(list: List<SikorskyPartHit>): List<ManualGroup> {
         val grouped = list.groupBy { hit ->
             hit.assetPath.substringAfterLast('/').substringBeforeLast('.')
         }
 
-        // Creamos los grupos ordenados por título de manual
-        grouped.toSortedMap().forEach { (manualShort, hitsForManual) ->
-            groups.add(
-                ManualGroup(
-                    manualKey = manualShort,
-                    manualTitle = manualShort,
-                    hits = hitsForManual.sortedWith(
-                        compareBy<SikorskyPartHit> { it.page }
-                            .thenBy { it.fig ?: Int.MAX_VALUE }
-                    ),
-                    expanded = false // por defecto todos expandidos
-                )
+        return grouped.toSortedMap().map { (manualShort, hitsForManual) ->
+            // Default: expandido (si prefieres colapsado, cambia a false)
+            val expanded = expandedState[manualShort] ?: false
+
+            val sortedHits = hitsForManual.sortedWith(
+                compareBy<SikorskyPartHit> { it.page }
+                    .thenBy { it.fig ?: Int.MAX_VALUE }
+            )
+
+            ManualGroup(
+                manualShort = manualShort,
+                hits = sortedHits,
+                expanded = expanded
             )
         }
-
-        rebuildRows()
     }
 
-    private fun rebuildRows() {
-        rows.clear()
-        groups.forEachIndexed { index, group ->
-            // Siempre ponemos el header
-            rows.add(Row.Header(index))
-            // Y si está expandido, sus filas
-            if (group.expanded) {
-                group.hits.forEach { hit ->
-                    rows.add(Row.HitRow(index, hit))
+    private fun buildRows(groups: List<ManualGroup>): List<Row> {
+        val rows = ArrayList<Row>(groups.size * 2)
+        for (g in groups) {
+            rows.add(Row.Header(g.manualShort, g.hits.size, g.expanded))
+            if (g.expanded) {
+                for (hit in g.hits) {
+                    rows.add(Row.HitRow(g.manualShort, hit))
                 }
             }
         }
-        notifyDataSetChanged()
+        return rows
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (rows[position]) {
+        return when (getItem(position)) {
             is Row.Header -> VIEW_TYPE_HEADER
             is Row.HitRow -> VIEW_TYPE_HIT
         }
@@ -91,9 +116,7 @@ class SikorskyPartHitAdapter(
         return when (viewType) {
             VIEW_TYPE_HEADER -> {
                 val b = ItemManualHeaderBinding.inflate(inflater, parent, false)
-                HeaderVH(b) { groupIndex ->
-                    toggleGroup(groupIndex)
-                }
+                HeaderVH(b) { manualShort -> toggleManual(manualShort) }
             }
             VIEW_TYPE_HIT -> {
                 val b = ItemPartHitBinding.inflate(inflater, parent, false)
@@ -104,59 +127,45 @@ class SikorskyPartHitAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val row = rows[position]) {
-            is Row.Header -> {
-                val group = groups[row.groupIndex]
-                (holder as HeaderVH).bind(group, row.groupIndex)
-            }
-            is Row.HitRow -> {
-                (holder as HitVH).bind(row.hit)
-            }
+        when (val row = getItem(position)) {
+            is Row.Header -> (holder as HeaderVH).bind(row)
+            is Row.HitRow -> (holder as HitVH).bind(row.hit, row.manualShort)
         }
     }
 
-    override fun getItemCount(): Int = rows.size
+    private fun toggleManual(manualShort: String) {
+        val current = expandedState[manualShort] ?: true
+        expandedState[manualShort] = !current
 
-    private fun toggleGroup(groupIndex: Int) {
-        if (groupIndex !in groups.indices) return
-        val group = groups[groupIndex]
-        group.expanded = !group.expanded
-        rebuildRows()
+        val groups = buildGroups(lastHits)
+        submitList(buildRows(groups))
     }
 
-    // ViewHolder para el header de manual
     private class HeaderVH(
         private val b: ItemManualHeaderBinding,
-        private val onHeaderClick: (Int) -> Unit
+        private val onHeaderClick: (String) -> Unit
     ) : RecyclerView.ViewHolder(b.root) {
 
-        fun bind(group: ManualGroup, groupIndex: Int) {
-            b.txtManualTitle.text = group.manualTitle
-            b.txtManualCount.text = "(${group.hits.size})"
-            b.txtManualArrow.text = if (group.expanded) "▼" else "▶"
-
-            b.root.setOnClickListener {
-                onHeaderClick(groupIndex)
-            }
+        fun bind(header: Row.Header) {
+            b.txtManualTitle.text = header.manualShort
+            b.txtManualCount.text = "(${header.count})"
+            b.txtManualArrow.text = if (header.expanded) "▼" else "▶"
+            b.root.setOnClickListener { onHeaderClick(header.manualShort) }
         }
     }
 
-    // ViewHolder para cada hit (fila clicable)
     private class HitVH(
         private val b: ItemPartHitBinding,
         private val onClick: (SikorskyPartHit) -> Unit
     ) : RecyclerView.ViewHolder(b.root) {
 
-        fun bind(h: SikorskyPartHit) {
-            val manualShort = h.assetPath.substringAfterLast('/').substringBeforeLast('.')
+        fun bind(h: SikorskyPartHit, manualShort: String) {
             val pn = h.partNumber ?: "-"
             val fig = h.fig?.toString() ?: "-"
             val nsn = h.nsn ?: "-"
 
-            // Línea principal: solo PN
             b.txtLine1.text = pn
 
-            // Línea secundaria: Página, NSN, FIG, manual
             b.txtLine2.text = buildString {
                 append("Pág ${h.page}")
                 if (nsn.isNotBlank() && nsn != "-") {
@@ -169,4 +178,11 @@ class SikorskyPartHitAdapter(
             b.root.setOnClickListener { onClick(h) }
         }
     }
+}
+
+/** Hash estable sencillo para DiffUtil IDs */
+private fun stableIdFor(s: String): Long {
+    var h = 1125899906842597L
+    for (ch in s) h = 31L * h + ch.code
+    return h
 }

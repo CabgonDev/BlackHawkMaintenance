@@ -2,13 +2,11 @@
 package com.cabgon.blackhawk.data
 
 import android.net.Uri
-import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.jsoup.Jsoup
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -19,7 +17,7 @@ data class PartInfo(
     val nsn: String?,
     val nsnUrl: String?,
     val description: String?,
-    val pageUrl: String?      // ← para "Ir al sitio web"
+    val pageUrl: String?      // para "Ir al sitio web"
 )
 
 interface PartApi {
@@ -37,29 +35,54 @@ object PartRepo {
         chain.proceed(req)
     }
 
-    private fun api(): PartApi {
-        val moshi = Moshi.Builder().build()
-        val ok = OkHttpClient.Builder()
+    /**
+     * OkHttp/Retrofit SINGLETON (P0):
+     * - Reutiliza conexiones
+     * - Evita reconstruir clientes por request
+     * - Timeouts duros para campo
+     */
+    private val okHttp: OkHttpClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        OkHttpClient.Builder()
             .addInterceptor(ua)
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .callTimeout(20, TimeUnit.SECONDS) // límite total duro
             .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(ok)
-            .build()
-
-        return retrofit.create(PartApi::class.java)
     }
 
+    private val api: PartApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .client(okHttp)
+            .build()
+            .create(PartApi::class.java)
+    }
+
+    /**
+     * Regresa info parseada del HTML de WBParts.
+     * - Nunca lanza excepción: en fallo retorna null.
+     */
     suspend fun searchPartInfo(q: String): PartInfo? {
-        val resp = api().search(q)
+        val query = q.trim()
+        if (query.isBlank()) return null
+
+        val resp = try {
+            api.search(query)
+        } catch (_: Exception) {
+            return null
+        }
+
         if (!resp.isSuccessful) return null
         val html = resp.body().orEmpty()
-        val doc = Jsoup.parse(html, BASE_URL)
+        if (html.isBlank()) return null
+
+        val doc = try {
+            Jsoup.parse(html, BASE_URL)
+        } catch (_: Exception) {
+            return null
+        }
 
         // ── 1) Ubicar tabla con encabezado "Part Number" (WBParts)
         val table = doc.selectFirst("table:has(th:matchesOwn((?i)^\\s*Part\\s*Number\\s*$))")
@@ -67,9 +90,8 @@ object PartRepo {
                 t.select("th").any { it.text().trim().equals("Part Number", true) }
             }
 
-        // Si no se encontró, fallback genérico anterior
+        // Si no se encontró, fallback genérico
         if (table == null) {
-            // Fallback: tomar primer "resultado" visible
             val row = doc.selectFirst("table:has(tr td), table.results")?.selectFirst("tr:has(td)")
             val firstCell = row?.selectFirst("td")
                 ?: doc.selectFirst("ul li, ol li, div.result, article, div.search-results div")
@@ -88,14 +110,7 @@ object PartRepo {
                         t.contains("NSN", true)
             }
             val nsnRaw = nsnAnchor?.text()?.trim()
-            val nsn = nsnRaw?.let {
-                val digits = it.replace(Regex("[^0-9]"), "")
-                when {
-                    it.matches(Regex("\\b\\d{4}-\\d{2}-\\d{3}-\\d{4}\\b")) -> it
-                    digits.length == 13 -> "${digits.take(4)}-${digits.substring(4,6)}-${digits.substring(6,9)}-${digits.substring(9)}"
-                    else -> it
-                }
-            }
+            val nsn = nsnRaw?.let { formatNsn(it) }
             val nsnUrl = nsnAnchor?.absUrl("href")?.takeIf { it.isNotBlank() }
             val description = firstCell.ownText().ifBlank { firstCell.text() }.take(300)
 
@@ -104,13 +119,16 @@ object PartRepo {
                 nsn = nsn,
                 nsnUrl = nsnUrl,
                 description = description.ifBlank { null },
-                pageUrl = pageUrl ?: "${BASE_URL}search.cfm?q=${Uri.encode(q)}"
+                pageUrl = pageUrl ?: "${BASE_URL}search.cfm?q=${Uri.encode(query)}"
             )
         }
 
         // ── 2) Determinar índices de columnas por encabezado
         val headers = table.select("th")
-        var iPN = 0; var iNSN = 1; var iDesc = 2
+        var iPN = 0
+        var iNSN = 1
+        var iDesc = 2
+
         headers.forEachIndexed { idx, th ->
             when (th.text().trim().lowercase()) {
                 "part number" -> iPN = idx
@@ -119,44 +137,33 @@ object PartRepo {
             }
         }
 
-        // ── 3) Tomar PRIMERA FILA de datos y sus 3 celdas
+        // ── 3) Tomar PRIMERA FILA de datos
         val firstRow = table.selectFirst("tbody tr:has(td)") ?: table.selectFirst("tr:has(td)")
         ?: return null
+
         val tds = firstRow.select("td")
         val pnCell = tds.getOrNull(iPN)
         val nsnCell = tds.getOrNull(iNSN)
         val descCell = tds.getOrNull(iDesc)
 
-        // PN (preferir <a>, luego <strong>/<b>, luego texto)
         val pn = pnCell?.selectFirst("a, strong, b")?.text()?.trim()
             ?: pnCell?.ownText()?.trim()?.takeIf { it.isNotBlank() }
             ?: pnCell?.text()?.trim()
-            ?: q
+            ?: query
 
-        // NSN (texto y URL del <a> si existe)
         val nsnAnchor = nsnCell?.selectFirst("a[href]")
         val nsnRaw = nsnAnchor?.text()?.trim()
             ?: nsnCell?.ownText()?.trim()?.takeIf { it.isNotBlank() }
             ?: nsnCell?.text()?.trim()
-        val nsn = nsnRaw?.let {
-            val digits = it.replace(Regex("[^0-9]"), "")
-            when {
-                it.matches(Regex("\\b\\d{4}-\\d{2}-\\d{3}-\\d{4}\\b")) -> it
-                digits.length == 13 -> "${digits.take(4)}-${digits.substring(4,6)}-${digits.substring(6,9)}-${digits.substring(9)}"
-                else -> it
-            }
-        }
+        val nsn = nsnRaw?.let { formatNsn(it) }
         val nsnUrl = nsnAnchor?.absUrl("href")?.takeIf { it.isNotBlank() }
 
-        // Descripción
         val description = descCell?.ownText()?.ifBlank { descCell.text() }?.trim()
 
-        // URL de detalle (anchor en el PN)
         val pageUrl = pnCell?.selectFirst("a[href]")?.absUrl("href")
-            ?: "${BASE_URL}search.cfm?q=${Uri.encode(q)}"
+            ?: "${BASE_URL}search.cfm?q=${Uri.encode(query)}"
 
-        // Si está vacío todo, devolver null
-        if (pn.isBlank() && (nsn.isNullOrBlank()) && (description.isNullOrBlank())) return null
+        if (pn.isBlank() && nsn.isNullOrBlank() && description.isNullOrBlank()) return null
 
         return PartInfo(
             partNumber = pn,
@@ -167,4 +174,13 @@ object PartRepo {
         )
     }
 
+    private fun formatNsn(raw: String): String {
+        val t = raw.trim()
+        val digits = t.replace(Regex("[^0-9]"), "")
+        return when {
+            t.matches(Regex("\\b\\d{4}-\\d{2}-\\d{3}-\\d{4}\\b")) -> t
+            digits.length == 13 -> "${digits.take(4)}-${digits.substring(4, 6)}-${digits.substring(6, 9)}-${digits.substring(9)}"
+            else -> t
+        }
+    }
 }

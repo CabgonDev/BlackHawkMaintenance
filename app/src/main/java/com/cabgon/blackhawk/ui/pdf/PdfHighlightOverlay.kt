@@ -16,7 +16,7 @@ class PdfHighlightOverlay @JvmOverloads constructor(
     private val paint = Paint().apply {
         style = Paint.Style.FILL
         // Amarillo neón brillante, 35% opacidad
-        color = 0x59FFFF00.toInt() // #59 = 35% alpha
+        color = 0x59FFFF00 // #59 = 35% alpha
         isAntiAlias = true
         // Halo suave para dar efecto de marcador
         setShadowLayer(4f, 0f, 0f, 0x80FFFF00.toInt())

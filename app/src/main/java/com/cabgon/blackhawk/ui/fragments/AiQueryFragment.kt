@@ -18,6 +18,7 @@ import com.cabgon.blackhawk.data.RAGIndex
 import com.cabgon.blackhawk.databinding.FragmentAiQueryBinding
 import com.cabgon.blackhawk.util.NetworkGuard
 import com.cabgon.blackhawk.util.Prefs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,6 +39,8 @@ class AiQueryFragment : Fragment() {
 
     private val prefsName = "ia_prefs"
     private val keyMode = "answer_mode"
+    private val keyExperimentalWarningSeen = "ai_query_experimental_warning_seen"
+
     private var answerMode: Mode = Mode.PRO
 
     private var allHits: List<RAGIndex.Hit> = emptyList()
@@ -51,6 +54,9 @@ class AiQueryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         NetworkGuard.internetAllowedForPartsOnly = false
+
+        // ✅ Popup SOLO 1 vez (el banner queda permanente en la UI)
+        showExperimentalPopupOnce()
 
         val pkg = PackageManager.Pkg.valueOf(Prefs.getPackage(requireContext())!!)
         index = RAGIndex.openFromAssets(requireContext(), PackageManager.indexAssetPath(pkg))
@@ -84,8 +90,8 @@ class AiQueryFragment : Fragment() {
             itemAnimator = null
         }
 
-        b.switchMode?.isChecked = (answerMode == Mode.PRO)
-        b.switchMode?.setOnCheckedChangeListener { _, isChecked ->
+        b.switchMode.isChecked = (answerMode == Mode.PRO)
+        b.switchMode.setOnCheckedChangeListener { _, isChecked ->
             answerMode = if (isChecked) Mode.PRO else Mode.CONCISE
             saveMode()
 
@@ -106,6 +112,21 @@ class AiQueryFragment : Fragment() {
         b.edtQuery.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) { doQuery(); true } else false
         }
+    }
+
+    private fun showExperimentalPopupOnce() {
+        val sp = requireContext().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
+        if (sp.getBoolean(keyExperimentalWarningSeen, false)) return
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Función experimental")
+            .setMessage("Esta función es experimental. Consulta la sección “Manuales” para mayores referencias antes de tomar decisiones de mantenimiento.")
+            .setCancelable(true)
+            .setPositiveButton("Aceptar") { d, _ ->
+                sp.edit().putBoolean(keyExperimentalWarningSeen, true).apply()
+                d.dismiss()
+            }
+            .show()
     }
 
     private fun doQuery() {

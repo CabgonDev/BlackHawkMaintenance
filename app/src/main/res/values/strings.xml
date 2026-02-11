@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BlackHawk Maintenance</string>
     <string name="exportar_pdf">Exportar PDF</string>
     <string name="nombre">Nombre</string>
@@ -35,10 +35,10 @@
     <string name="iniciar_sesi_n">Iniciar sesión</string>
     <string name="datos_del_t_cnico">Datos del técnico</string>
     <string name="login">Login</string>
-    <string name="correo">Correo</string>
-    <string name="contrase_a">Contraseña</string>
+    <string name="correo">tecnico@tucorreo.com</string>
+    <string name="contrase_a">Contraseña1234</string>
     <string name="crear_cuenta_nueva">Crear cuenta nueva</string>
-    <string name="acceso_de_t_cnicos_uh_60l">Acceso de Técnicos UH-60L</string>
+    <string name="acceso_de_t_cnicos_uh_60l">Acceso de  Técnicos UH-60L</string>
     <string name="registro_de_t_cnico_uh_60l">Registro de Técnico UH-60L</string>
     <string name="confirmar_contrase_a">Confirmar contraseña</string>
     <string name="crear_cuenta">Crear cuenta</string>
@@ -90,11 +90,11 @@
     <string name="esta_secci_n_estar_disponible_en_la_v2_0">Esta sección estará disponible en las sigueintes versiones</string>
     <string name="comprobando_actualizaciones">Comprobando actualizaciones…</string>
     <string name="nota_android_te_pedir_confirmar_la_instalaci_n_distribuci_n_fuera_de_play_store">Nota: Android te pedirá confirmar la instalación (distribución fuera de Play Store).</string>
-    <string name="descargar_e_instalar_apk">Descargar e instalar APK</string>
+    <string name="descargar_e_instalar_apk">Actualizar</string>
     <string name="notas">Notas:</string>
     <string name="tu_versi_n_es_antigua_debes_actualizar">Tu versión es antigua. Debes actualizar.</string>
     <string name="actualizaci_n_requerida">Actualización requerida</string>
-    <string name="cargando">Cargando...</string>
+    <string name="cargando" tools:ignore="TypographyEllipsis">Cargando...</string>
     <string name="estado_ia">Estado IA</string>
     <string name="copiar_reporte">Copiar reporte</string>
     <string name="analizando_informaci_n_t_cnica">Analizando información técnica…</string>
@@ -144,7 +144,16 @@
     <string name="blackhawk_nmaintenance">BLACKHAWK\nMAINTENANCE</string>
     <string name="parts_chunk_result_single_page">%1$s — Página %2$d</string>
     <string name="parts_chunk_result_page_range">%1$s — Páginas %2$d–%3$d</string>
-
+    <string name="tu_versi_n_actual_es_menor_que_la_m_nima_requerida_debes_actualizar_para_continuar_utilizando_la_aplicaci_n">Tu versión actual es menor que la mínima requerida. Debes actualizar para continuar utilizando la aplicación.</string>
+    <string name="notas_de_la_versi_n">Notas de la versión:</string>
+    <string name="preparando_descarga" tools:ignore="TypographyEllipsis">Preparando descarga...</string>
+    <string name="nota_android_te_pedir_confirmar_la_instalaci_n_porque_la_distribuci_n_es_fuera_de_play_store">Nota: Android te pedirá confirmar la instalación porque la distribución es fuera de Play Store.</string>
+    <string name="logo_de_la_aplicaci_n">Logo de la aplicación</string>
+    <string name="advertencia">Advertencia</string>
+    <string name="admin_users_module">Usuarios</string>
+    <string name="funci_n_experimental_consulta_la_secci_n_manuales_para_mayores_referencias_antes_de_tomar_decisiones_de_mantenimiento">Función experimental. Consulta la sección “Manuales” para mayores referencias antes de tomar decisiones de mantenimiento.</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="solicitud_en_validaci_n">Solicitud en validación</string>
 
 
 </resources>

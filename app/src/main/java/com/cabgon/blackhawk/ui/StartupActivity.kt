@@ -1,11 +1,14 @@
 package com.cabgon.blackhawk.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.lifecycleScope
 import com.cabgon.blackhawk.R
 import com.cabgon.blackhawk.ai.update.AiUpdateManager
@@ -16,6 +19,7 @@ import com.cabgon.blackhawk.databinding.ActivityStartupBinding
 import com.cabgon.blackhawk.util.Prefs
 import com.cabgon.blackhawk.util.Roles
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -33,8 +37,11 @@ class StartupActivity : AppCompatActivity() {
     // Slideshow
     private var slideJob: Job? = null
     private var showingA = true
+    private var lastEffect: SlideEffect? = null
 
-    // ✅ Imágenes base (res/drawable)
+    private val db by lazy { FirebaseFirestore.getInstance() }
+
+    // Imágenes base
     private val startupSlides = intArrayOf(
         R.drawable.startup_01,
         R.drawable.startup_02,
@@ -44,17 +51,14 @@ class StartupActivity : AppCompatActivity() {
         R.drawable.startup_06
     )
 
-    // ✅ Secuencia aleatoria (shuffle) que se consume y se re-baraja al terminar
     private var shuffledSlides: MutableList<Int> = mutableListOf()
     private var shuffledIndex: Int = 0
     private var lastSlideRes: Int? = null
 
     companion object {
         const val EXTRA_FORCE_SELECT_PKG = "force_select_pkg"
-
-        // ✅ ~20% más rápido que 5200/520
-        const val SLIDE_DURATION_MS = 3200L
-        const val FADE_MS = 320L
+        const val SLIDE_DURATION_MS = 3000L
+        const val FADE_MS = 300L
     }
 
     private enum class SlideEffect {
@@ -77,9 +81,59 @@ class StartupActivity : AppCompatActivity() {
         b = ActivityStartupBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        startBackgroundSlideshow()
+        // ✅ IMPORTANTÍSIMO: arrancar slideshow cuando YA hay medidas reales
+        b.root.doOnPreDraw {
+            startBackgroundSlideshow()
+        }
 
         showSelectionUi()
+
+        // Mientras validamos, bloquea botones
+        b.btnIads.isEnabled = false
+        b.btnSikorsky.isEnabled = false
+        b.btnEnter.isEnabled = false
+
+        // Gate estricto (sin tocar animaciones)
+        verifyAccessThenContinue(currentUser.uid, savedInstanceState)
+    }
+
+    private fun verifyAccessThenContinue(uid: String, savedInstanceState: Bundle?) {
+        db.collection("users").document(uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    UserSessionStore(this).saveProfileFromDocument(doc)
+                }
+
+                val status = (doc.getString("status") ?: "approved").lowercase()
+
+                when (status) {
+                    "approved" -> continueApprovedFlow(savedInstanceState)
+                    "rejected" -> {
+                        startActivity(Intent(this, RejectedActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                        finish()
+                    }
+                    else -> { // pending
+                        startActivity(Intent(this, PendingApprovalActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                        finish()
+                    }
+                }
+            }
+            .addOnFailureListener {
+                startActivity(Intent(this, PendingApprovalActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+                finish()
+            }
+    }
+
+    private fun continueApprovedFlow(savedInstanceState: Bundle?) {
+        b.btnIads.isEnabled = true
+        b.btnSikorsky.isEnabled = true
 
         b.btnEnter.setOnClickListener {
             if (!readyToEnter) return@setOnClickListener
@@ -108,7 +162,18 @@ class StartupActivity : AppCompatActivity() {
 
     private fun goMain() {
         startActivity(Intent(this@StartupActivity, MainActivity::class.java))
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(
+                OVERRIDE_TRANSITION_OPEN,
+                R.anim.fade_in,
+                R.anim.fade_out
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
         finish()
     }
 
@@ -117,9 +182,6 @@ class StartupActivity : AppCompatActivity() {
 
         b.selectionBlock.visibility = View.VISIBLE
         b.centerBlock.visibility = View.GONE
-
-        b.btnIads.isEnabled = true
-        b.btnSikorsky.isEnabled = true
 
         b.pbOta.visibility = View.GONE
         b.txtOtaStatus.visibility = View.GONE
@@ -132,8 +194,6 @@ class StartupActivity : AppCompatActivity() {
 
         b.selectionBlock.visibility = View.GONE
         b.centerBlock.visibility = View.VISIBLE
-        //b.imgBrandIcon.visibility = View.GONE
-
 
         b.pbOta.visibility = View.VISIBLE
         b.txtOtaStatus.visibility = View.VISIBLE
@@ -145,15 +205,6 @@ class StartupActivity : AppCompatActivity() {
 
     private fun showEnterUi() {
         readyToEnter = true
-        /*
-        b.imgBrandIcon.visibility = View.VISIBLE
-        b.imgBrandIcon.alpha = 0f
-
-        b.imgBrandIcon.animate()
-            .alpha(1f)
-            .setDuration(220)
-            .start()
-        */
 
         b.selectionBlock.visibility = View.GONE
         b.centerBlock.visibility = View.VISIBLE
@@ -179,7 +230,6 @@ class StartupActivity : AppCompatActivity() {
             val appCheck = AppUpdateManager.check(applicationContext)
             if (appCheck.updateRequired) {
                 startActivity(Intent(this@StartupActivity, UpdateRequiredActivity::class.java))
-                finish()
                 return@launch
             }
 
@@ -215,6 +265,7 @@ class StartupActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun startWithPkg(pkg: PackageManager.Pkg) {
         Prefs.setPackage(this, pkg.name)
 
@@ -227,7 +278,6 @@ class StartupActivity : AppCompatActivity() {
             val appCheck = AppUpdateManager.check(applicationContext)
             if (appCheck.updateRequired) {
                 startActivity(Intent(this@StartupActivity, UpdateRequiredActivity::class.java))
-                finish()
                 return@launch
             }
 
@@ -257,7 +307,6 @@ class StartupActivity : AppCompatActivity() {
                 showSelectionUi()
                 b.centerBlock.visibility = View.VISIBLE
                 b.txtOtaStatus.visibility = View.VISIBLE
-                //b.imgBrandIcon.visibility = View.GONE
                 b.txtOtaStatus.text = "Actualización obligatoria fallida. Verifica conexión y reintenta."
                 return@launch
             }
@@ -278,6 +327,8 @@ class StartupActivity : AppCompatActivity() {
             is AiUpdateManager.Event.Error -> "Error en ${ev.what}: ${ev.message}"
         }
     }
+
+    // ---------- Slideshow ----------
 
     private fun nextSlideRes(): Int {
         if (startupSlides.isEmpty()) return 0
@@ -310,12 +361,15 @@ class StartupActivity : AppCompatActivity() {
         b.imgBgB.alpha = 0f
         showingA = true
 
-        applyEffect(b.imgBgA, pickEffect(), durationMs = SLIDE_DURATION_MS)
+        val firstDuration = randomSlideDuration()
+        applyEffect(b.imgBgA, pickEffect(), durationMs = firstDuration)
 
         slideJob?.cancel()
         slideJob = lifecycleScope.launch {
             while (isActive) {
-                delay(SLIDE_DURATION_MS - FADE_MS)
+                val duration = randomSlideDuration()
+                val delayMs = (duration - FADE_MS).coerceAtLeast(FADE_MS)
+                delay(delayMs)
 
                 val nextRes = nextSlideRes()
 
@@ -326,7 +380,7 @@ class StartupActivity : AppCompatActivity() {
                 resetTransform(incoming)
                 incoming.alpha = 0f
 
-                applyEffect(incoming, pickEffect(), durationMs = SLIDE_DURATION_MS)
+                applyEffect(incoming, pickEffect(), durationMs = duration)
 
                 incoming.animate()
                     .alpha(1f)
@@ -347,6 +401,8 @@ class StartupActivity : AppCompatActivity() {
 
     private fun resetTransform(v: View) {
         v.animate().cancel()
+        v.pivotX = v.width / 2f
+        v.pivotY = v.height / 2f
         v.scaleX = 1f
         v.scaleY = 1f
         v.translationX = 0f
@@ -355,18 +411,33 @@ class StartupActivity : AppCompatActivity() {
     }
 
     private fun pickEffect(): SlideEffect {
-        val r = Random.nextInt(100)
-        return when {
-            r < 40 -> SlideEffect.ZOOM
-            r < 60 -> SlideEffect.PAN_DIAGONAL_LR
-            r < 80 -> SlideEffect.PAN_RL
-            else -> SlideEffect.PAN_LR
+        val available = SlideEffect.entries.toMutableList()
+        if (available.size > 1) lastEffect?.let { available.remove(it) }
+
+        val pool = mutableListOf<SlideEffect>()
+        for (effect in available) {
+            val weight = when (effect) {
+                SlideEffect.ZOOM -> 4
+                else -> 1
+            }
+            repeat(weight) { pool.add(effect) }
         }
+
+        val chosen = pool.random()
+        lastEffect = chosen
+        return chosen
+    }
+
+    private fun randomSlideDuration(): Long {
+        val base = SLIDE_DURATION_MS.toDouble()
+        val factor = Random.nextDouble(0.85, 1.25)
+        return (base * factor).toLong()
     }
 
     private fun applyEffect(v: View, effect: SlideEffect, durationMs: Long) {
-        val w = (v.rootView.width.takeIf { it > 0 } ?: 1080)
-        val h = (v.rootView.height.takeIf { it > 0 } ?: 1920)
+        // ✅ usar medidas reales del ImageView (ya está medido por doOnPreDraw)
+        val w = (v.width.takeIf { it > 0 } ?: 1080)
+        val h = (v.height.takeIf { it > 0 } ?: 1920)
 
         val dxMax = (w * Random.nextDouble(0.03, 0.06)).roundToInt().toFloat()
         val dyMax = (h * Random.nextDouble(0.02, 0.05)).roundToInt().toFloat()
@@ -381,6 +452,9 @@ class StartupActivity : AppCompatActivity() {
 
                 val dx = dxMax * 0.35f * (if (Random.nextBoolean()) 1f else -1f)
                 val dy = dyMax * 0.35f * (if (Random.nextBoolean()) 1f else -1f)
+
+                v.pivotX = w / 2f
+                v.pivotY = h / 2f
 
                 v.scaleX = startScale
                 v.scaleY = startScale
@@ -400,9 +474,11 @@ class StartupActivity : AppCompatActivity() {
             SlideEffect.PAN_DIAGONAL_LR -> {
                 val dyDir = if (Random.nextBoolean()) 1f else -1f
                 val startX = -dxMax
-                val endX = dxMax
                 val startY = -dyMax * dyDir
                 val endY = dyMax * dyDir
+
+                v.pivotX = w / 2f
+                v.pivotY = h / 2f
 
                 v.scaleX = 1.16f
                 v.scaleY = 1.16f
@@ -410,7 +486,7 @@ class StartupActivity : AppCompatActivity() {
                 v.translationY = startY
 
                 v.animate()
-                    .translationX(endX)
+                    .translationX(dxMax)
                     .translationY(endY)
                     .setDuration(durationMs)
                     .setInterpolator(interp)
@@ -418,32 +494,32 @@ class StartupActivity : AppCompatActivity() {
             }
 
             SlideEffect.PAN_RL -> {
-                val startX = dxMax
-                val endX = -dxMax
+                v.pivotX = w / 2f
+                v.pivotY = h / 2f
 
                 v.scaleX = 1.14f
                 v.scaleY = 1.14f
-                v.translationX = startX
+                v.translationX = dxMax
                 v.translationY = 0f
 
                 v.animate()
-                    .translationX(endX)
+                    .translationX(-dxMax)
                     .setDuration(durationMs)
                     .setInterpolator(interp)
                     .start()
             }
 
             SlideEffect.PAN_LR -> {
-                val startX = -dxMax
-                val endX = dxMax
+                v.pivotX = w / 2f
+                v.pivotY = h / 2f
 
                 v.scaleX = 1.14f
                 v.scaleY = 1.14f
-                v.translationX = startX
+                v.translationX = -dxMax
                 v.translationY = 0f
 
                 v.animate()
-                    .translationX(endX)
+                    .translationX(dxMax)
                     .setDuration(durationMs)
                     .setInterpolator(interp)
                     .start()

@@ -19,7 +19,8 @@ class UserSessionStore(context: Context) {
             .putString(KEY_NOMBRE, profile.nombre)
             .putString(KEY_MATRICULA, profile.matricula)
             .putString(KEY_ESPECIALIDAD, profile.especialidad)
-            .putString(KEY_ROLE, profile.role) // ✅ nuevo
+            .putString(KEY_ROLE, profile.role)
+            .putString(KEY_STATUS, profile.status)
             .apply()
     }
 
@@ -31,8 +32,8 @@ class UserSessionStore(context: Context) {
         val matricula = prefs.getString(KEY_MATRICULA, null) ?: return null
         val especialidad = prefs.getString(KEY_ESPECIALIDAD, null) ?: return null
 
-        // ✅ default seguro: "user"
         val role = prefs.getString(KEY_ROLE, "user") ?: "user"
+        val status = prefs.getString(KEY_STATUS, "approved") ?: "approved"
 
         return UserProfile(
             uid = uid,
@@ -41,7 +42,8 @@ class UserSessionStore(context: Context) {
             nombre = nombre,
             matricula = matricula,
             especialidad = especialidad,
-            role = role
+            role = role,
+            status = status
         )
     }
 
@@ -53,8 +55,8 @@ class UserSessionStore(context: Context) {
         val matricula = doc.getString("matricula") ?: ""
         val especialidad = doc.getString("especialidad") ?: ""
 
-        // ✅ nuevo: role (si no existe, cae a "user")
         val role = doc.getString("role") ?: "user"
+        val status = doc.getString("status") ?: "approved" // compat: si no existe, aprobado
 
         val profile = UserProfile(
             uid = uid,
@@ -63,7 +65,8 @@ class UserSessionStore(context: Context) {
             nombre = nombre,
             matricula = matricula,
             especialidad = especialidad,
-            role = role
+            role = role,
+            status = status
         )
 
         saveProfile(profile)
@@ -80,6 +83,7 @@ class UserSessionStore(context: Context) {
         private const val KEY_NOMBRE = "nombre"
         private const val KEY_MATRICULA = "matricula"
         private const val KEY_ESPECIALIDAD = "especialidad"
-        private const val KEY_ROLE = "role" // ✅ nuevo
+        private const val KEY_ROLE = "role"
+        private const val KEY_STATUS = "status"
     }
 }

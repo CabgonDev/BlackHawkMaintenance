@@ -81,7 +81,7 @@ class PreflightRemoteSync(
                     collection.document()
                 } else {
                     // Actualización de inspección ya sincronizada
-                    collection.document(ins.syncId!!)
+                    collection.document(ins.syncId)
                 }
 
                 if (ins.syncId.isNullOrBlank()) {

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cabgon.blackhawk.R
 import com.cabgon.blackhawk.data.preflight.ChecklistItem
-import com.cabgon.blackhawk.data.preflight.PreflightChecklist
 import com.cabgon.blackhawk.data.preflight.PreflightRepository
 import com.cabgon.blackhawk.databinding.ItemPreflightChecklistBinding
 
@@ -31,7 +30,8 @@ class PreflightChecklistAdapter(
             oldItem == newItem
     }
 
-    inner class VH(val b: ItemPreflightChecklistBinding) : RecyclerView.ViewHolder(b.root)
+    // inner era redundante: VH no usa miembros de la clase externa
+    class VH(val b: ItemPreflightChecklistBinding) : RecyclerView.ViewHolder(b.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val b = ItemPreflightChecklistBinding.inflate(
@@ -87,7 +87,10 @@ class PreflightChecklistAdapter(
             holder.b.tvWarning.setOnClickListener {
                 if (!warningText.isNullOrBlank()) {
                     AlertDialog.Builder(ctx)
-                        .setTitle(spec?.title ?: "Advertencia")
+                        // Si viene vacío, usamos "Advertencia"
+                        .setTitle(
+                            spec.title.takeIf { it.isNotBlank() } ?: "Advertencia"
+                        )
                         .setMessage(warningText)
                         .setPositiveButton("Enterado") { dlg, _ ->
                             dlg.dismiss()

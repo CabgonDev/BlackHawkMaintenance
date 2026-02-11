@@ -67,8 +67,9 @@ class FrequencyDetailBottomSheet : BottomSheetDialogFragment() {
 
         // -------- Chips (SOLO contexto geográfico) --------
         b.chipGroupMeta.removeAllViews()
-        addMetaChip("Estado: ${state.trim()}", showIfBlank = false)
-        addMetaChip("Ciudad: ${city.trim()}", showIfBlank = false)
+        addMetaChip("Estado: ${state.trim()}")
+        addMetaChip("Ciudad: ${city.trim()}")
+
 
         val cleanType = type.trim().takeIf { it.isNotBlank() && !it.equals("null", true) }
         val cleanCallsign = callsign?.trim()?.takeIf { it.isNotBlank() && !it.equals("null", true) }
@@ -225,23 +226,35 @@ class FrequencyDetailBottomSheet : BottomSheetDialogFragment() {
         b.cardFrequency.radius = dp(14f)
     }
 
-    private fun addMetaChip(text: String, showIfBlank: Boolean) {
+    private fun addMetaChip(text: String) {
         val clean = text.trim()
-        if (!showIfBlank && clean.endsWith(":")) return
+        // Si acaba en ":" es que venía vacío el valor -> no armamos chip
+        if (clean.endsWith(":")) return
 
         val chip = Chip(requireContext()).apply {
             this.text = clean
             isClickable = false
             isCheckable = false
+
+            // Fondo transparente + borde gris
             chipBackgroundColor = ColorStateList.valueOf(0x00FFFFFF)
             chipStrokeWidth = dp(1f)
             chipStrokeColor = ColorStateList.valueOf(0xFFB0B0B0.toInt())
-            chipCornerRadius = dp(18f)
+
+            // Radio de esquina sin usar la propiedad deprecated chipCornerRadius
+            val radius = dp(18f)
+            shapeAppearanceModel = shapeAppearanceModel
+                .toBuilder()
+                .setAllCornerSizes(radius)
+                .build()
+
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             minHeight = dpInt(36f)
         }
         b.chipGroupMeta.addView(chip)
     }
+
+
 
     private fun dp(value: Float): Float = value * resources.displayMetrics.density
     private fun dpInt(value: Float): Int = (value * resources.displayMetrics.density).toInt()

@@ -3,6 +3,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <application
         android:name=".App"
@@ -10,12 +13,23 @@
         android:icon="@mipmap/ic_launcher"
         android:label="BlackHawk Maintenance"
         android:theme="@style/Theme.BlackHawk">
+        <activity android:name=".ui.PendingApprovalActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.RejectedActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.AiStatusActivity"
             android:exported="false" />
         <activity
             android:name=".ui.UpdateRequiredActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.BlackHawk.UpdateDialog" />
+
+        <service
+            android:name=".ui.UpdateDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

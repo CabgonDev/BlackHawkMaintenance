@@ -95,7 +95,7 @@ data class AdminGeneralitySectionDoc(
         fun fromSnapshot(d: DocumentSnapshot): AdminGeneralitySectionDoc? {
             val data = d.data ?: return null
             @Suppress("UNCHECKED_CAST")
-            return fromFirestore(d.id, data as Map<String, Any?>)
+            return fromFirestore(d.id, data)
         }
     }
 }

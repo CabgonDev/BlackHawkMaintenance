@@ -30,6 +30,9 @@ object FrequenciesJson {
             val ident = o.optStringOrNull("ident")
             val remarks = o.optStringOrNull("remarks")
 
+            // emergencia
+            val isEmergency = o.optBoolean("isEmergency", false)
+
             // freqs
             val freqMHz = o.optDoubleOrNull("freqMHz")
             val freqKhz = o.optDoubleOrNull("freqKhz")
@@ -45,7 +48,8 @@ object FrequenciesJson {
                 freqMHz = freqMHz,
                 freqKhz = freqKhz,
                 ident = ident,
-                remarks = remarks
+                remarks = remarks,
+                isEmergency = isEmergency
             )
         }
 

@@ -30,6 +30,8 @@ class PdfViewerActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ASSET_PATH = "assetPath"
         const val EXTRA_PAGE = "page"
+        // Lo dejamos por compatibilidad con intents viejos, pero no lo usamos
+        const val EXTRA_HIGHLIGHT_QUERY = "extra_highlight_query"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +49,6 @@ class PdfViewerActivity : AppCompatActivity() {
         b.toolbar.title = assetPath.substringAfterLast('/').substringBeforeLast('.')
 
         // Página inicial:
-        // - si viene extra úsala
-        // - si no, retoma la última guardada
         val extraPage1 = intent.getIntExtra(EXTRA_PAGE, -1)
         startPage1 = if (extraPage1 >= 1) extraPage1 else Prefs.getManualLastPage1(this, assetPath)
 
@@ -66,14 +66,26 @@ class PdfViewerActivity : AppCompatActivity() {
             .scrollHandle(DefaultScrollHandle(this))
             .spacing(8)
 
-            // ✅ Asegura que al terminar de cargar se vaya a la página guardada
             .onLoad { _ ->
+                // Asegura ir a la página guardada
                 b.pdfView.jumpTo(startPage0, false)
             }
 
-            // ✅ Guarda la última página mientras navegas
             .onPageChange { page0, _ ->
                 Prefs.setManualLastPage1(this, assetPath, page0 + 1)
+            }
+
+            .onError { t ->
+                Toast.makeText(this, t?.message ?: "Error cargando PDF", Toast.LENGTH_LONG).show()
+                finish()
+            }
+
+            .onPageError { page, t ->
+                Toast.makeText(
+                    this,
+                    "Error en página ${page + 1}: ${t?.message ?: "desconocido"}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
             .load()
@@ -87,11 +99,10 @@ class PdfViewerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // ✅ Backup: por si cierran rápido y no alcanzó onPageChange
-        try {
+        // Backup por si cierran rápido y no alcanzó onPageChange
+        runCatching {
             val currentPage0 = b.pdfView.currentPage
             Prefs.setManualLastPage1(this, assetPath, currentPage0 + 1)
-        } catch (_: Exception) {
         }
     }
 
@@ -188,7 +199,8 @@ class PdfViewerActivity : AppCompatActivity() {
 
             io.execute {
                 try {
-                    val hits = PdfBoxManualTools.searchText(this, assetPath, q)
+                    // Para PN: usa smart (mejor con guiones/cortes). Si prefieres literal: searchText(...)
+                    val hits = PdfBoxManualTools.searchPartNumberSmart(this, assetPath, q)
                     runOnUiThread {
                         progress.visibility = android.view.View.GONE
                         btn.isEnabled = true

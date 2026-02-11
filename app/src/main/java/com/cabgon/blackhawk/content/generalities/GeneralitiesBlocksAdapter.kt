@@ -111,7 +111,6 @@ class GeneralitiesBlocksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(
                             }
                         }
                     }
-                    else -> Unit
                 }
             }
 

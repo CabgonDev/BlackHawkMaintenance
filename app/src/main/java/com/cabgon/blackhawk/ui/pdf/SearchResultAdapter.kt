@@ -30,12 +30,8 @@ class SearchResultAdapter(
         holder.snippet.maxLines = 10
         holder.snippet.isSingleLine = false
 
-
-        holder.itemView.setOnClickListener {
-            onClick(model)
-        }
+        holder.itemView.setOnClickListener { onClick(model) }
     }
-
 
     fun submitList(newItems: List<SearchHit>) {
         items = newItems

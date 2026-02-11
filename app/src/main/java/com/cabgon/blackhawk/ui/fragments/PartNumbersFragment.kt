@@ -22,6 +22,7 @@ import com.cabgon.blackhawk.ui.pdf.PdfViewerActivity.Companion.EXTRA_ASSET_PATH
 import com.cabgon.blackhawk.ui.pdf.PdfViewerActivity.Companion.EXTRA_PAGE
 import com.cabgon.blackhawk.util.NetworkGuard
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,8 +33,10 @@ class PartNumbersFragment : Fragment() {
     private var _b: FragmentPartNumbersBinding? = null
     private val b get() = _b!!
 
-    private lateinit var partsIndex: SikorskyPartsIndex
+    private var partsIndex: SikorskyPartsIndex? = null
     private lateinit var localAdapter: SikorskyPartHitAdapter
+
+    private var initJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,10 +53,6 @@ class PartNumbersFragment : Fragment() {
         // Solo esta pantalla puede usar internet (WBParts)
         NetworkGuard.internetAllowedForPartsOnly = true
 
-        // Índice local Sikorsky de números de parte (offline, DB en assets/index)
-        partsIndex = SikorskyPartsIndex.openFromAssets(requireContext())
-
-        // Lista de resultados locales (RecyclerView con scroll normal)
         localAdapter = SikorskyPartHitAdapter { hit ->
             openPdf(hit.assetPath, hit.page)
         }
@@ -64,37 +63,99 @@ class PartNumbersFragment : Fragment() {
             isNestedScrollingEnabled = true
         }
 
+        // Estado inicial
+        b.btnSearchPart.isEnabled = false
+        b.layoutWBPartsCard.visibility = View.GONE
+        b.layoutLocalCard.visibility = View.GONE
+        b.txtLocalMeta.visibility = View.GONE
+        b.txtLocalBody.visibility = View.VISIBLE
+        b.txtLocalBody.text = "Cargando índice local…"
+        b.rvLocalOccurrences.visibility = View.GONE
+
+        // Abrir índice local en IO (copia DB desde assets si aplica)
+        initJob?.cancel()
+        initJob = viewLifecycleOwner.lifecycleScope.launch {
+            val idx = withContext(Dispatchers.IO) {
+                SikorskyPartsIndex.openFromAssets(requireContext())
+            }
+            partsIndex = idx
+            b.btnSearchPart.isEnabled = true
+            b.txtLocalBody.text = "Ingresa un N/P y presiona Buscar."
+        }
+
         b.btnSearchPart.setOnClickListener {
-            val q = b.edtPart.text?.toString()?.trim().orEmpty()
-            if (q.isBlank()) return@setOnClickListener
+            val raw = b.edtPart.text?.toString().orEmpty()
+            val q = raw.trim()
+
+            // ✅ Validación operativa: mínimo 3 alfanuméricos
+            val validationMsg = validatePartQuery(q)
+            if (validationMsg != null) {
+                // Limpia UI y muestra mensaje
+                b.layoutWBPartsCard.visibility = View.GONE
+                b.layoutLocalCard.visibility = View.VISIBLE
+                b.imgLocal.setImageResource(R.drawable.ic_uh60_front)
+                b.txtLocalTitle.text = "Local"
+                b.txtLocalMeta.visibility = View.GONE
+                b.txtLocalBody.visibility = View.VISIBLE
+                b.txtLocalBody.text = validationMsg
+                b.rvLocalOccurrences.visibility = View.GONE
+                localAdapter.submit(emptyList())
+                return@setOnClickListener
+            }
+
+            val idx = partsIndex
+            if (idx == null) {
+                b.txtLocalBody.visibility = View.VISIBLE
+                b.txtLocalBody.text = "El índice local aún está cargando…"
+                return@setOnClickListener
+            }
+
+            // Evita doble ejecución
+            b.btnSearchPart.isEnabled = false
 
             // Limpia estado anterior
             b.layoutWBPartsCard.visibility = View.GONE
             b.layoutLocalCard.visibility = View.GONE
             b.txtLocalMeta.visibility = View.GONE
+            b.txtLocalBody.visibility = View.GONE
             b.txtLocalBody.text = ""
             b.rvLocalOccurrences.visibility = View.GONE
             localAdapter.submit(emptyList())
 
             viewLifecycleOwner.lifecycleScope.launch {
-                // 1) WBParts (web)
-                val info: PartInfo? = runCatching { PartRepo.searchPartInfo(q) }.getOrNull()
+                // 1) WBParts (web) -> IO
+                val info: PartInfo? = withContext(Dispatchers.IO) {
+                    runCatching { PartRepo.searchPartInfo(q) }.getOrNull()
+                }
                 renderWBParts(info, fallbackQuery = q)
 
-                // 2) Local (índice Sikorsky offline) – SIN límite artificial
+                // 2) Local -> IO
                 val localHits: List<SikorskyPartHit> = withContext(Dispatchers.IO) {
-                    try {
-                        partsIndex.search(q, limit = 500)
-                    } catch (e: Exception) {
-                        emptyList()
-                    }
+                    runCatching { idx.search(q, limit = 500) }.getOrElse { emptyList() }
                 }
                 renderLocal(localHits, pnQuery = q)
+
+                b.btnSearchPart.isEnabled = true
             }
         }
 
-        // La tarjeta Local ya no abre nada; el click es directo en cada fila del RecyclerView
         b.layoutLocalCard.setOnClickListener(null)
+    }
+
+    /**
+     * Regla:
+     * - Si no hay alfanuméricos: inválido
+     * - Si hay 1 o 2 alfanuméricos: muy corto
+     */
+    private fun validatePartQuery(q: String): String? {
+        if (q.isBlank()) return "Ingresa un N/P."
+
+        val alphaNumCount = q.count { it.isLetterOrDigit() }
+        return when {
+            alphaNumCount == 0 -> "Formato de N/P inválido."
+            alphaNumCount in 1..2 -> "N/P muy corto. Ingresa al menos 3 caracteres."
+            else -> null
+        }
     }
 
     private fun renderWBParts(info: PartInfo?, fallbackQuery: String) {
@@ -111,11 +172,8 @@ class PartNumbersFragment : Fragment() {
         val nsn = info?.nsn ?: "-"
         val desc = info?.description ?: "-"
 
-        // Texto plano, SIN NSN clicable
-        val text = "Part Number: $pn\nNSN: $nsn\nDescription: $desc"
-        b.txtWBPartsBody.text = text
+        b.txtWBPartsBody.text = "Part Number: $pn\nNSN: $nsn\nDescription: $desc"
 
-        // Botón / chip "WBParts Web" para abrir en navegador
         val goUrl = info?.pageUrl
             ?: "https://www.wbparts.com/search.cfm?q=${Uri.encode(fallbackQuery)}"
 
@@ -137,16 +195,13 @@ class PartNumbersFragment : Fragment() {
             return
         }
 
-        val effectiveHits = hits
-        val total = effectiveHits.size
-
+        val total = hits.size
         b.txtLocalTitle.text = "Local ($total coincidencias)"
 
-        val first = effectiveHits.first()
+        val first = hits.first()
         val pn = (first.partNumber ?: pnQuery).ifBlank { pnQuery }
         val nsn = (first.nsn ?: "-").ifBlank { "-" }
 
-        // Descripción PRINCIPAL: solo 2 palabras
         val rawDesc = (first.description ?: "")
             .replace('\n', ' ')
             .trim()
@@ -161,14 +216,13 @@ class PartNumbersFragment : Fragment() {
         b.txtLocalMeta.visibility = View.VISIBLE
         b.txtLocalMeta.text = "Part Number: $pn\nNSN: $nsn\nDesc: $desc"
 
-        b.txtLocalBody.visibility = View.GONE
-        b.txtLocalBody.text = "Toca una fila para abrir el manual."
+        b.txtLocalBody.visibility = View.VISIBLE
+        b.txtLocalBody.text = "Toca una fila para abrir el manual. Mostrando $total filas."
 
         b.rvLocalOccurrences.visibility = View.VISIBLE
-        localAdapter.submit(effectiveHits)
+        localAdapter.submit(hits)
     }
 
-    /** Abre el PDF y manda el query para highlight */
     private fun openPdf(assetPath: String, page1Based: Int) {
         val q = b.edtPart.text?.toString()?.trim().orEmpty()
         startActivity(
@@ -182,6 +236,12 @@ class PartNumbersFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        initJob?.cancel()
+        initJob = null
+
+        runCatching { partsIndex?.close() }
+        partsIndex = null
+
         _b = null
     }
 }

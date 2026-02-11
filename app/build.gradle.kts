@@ -1,18 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
-}
-
-kotlin {
-    jvmToolchain(17)
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-        // freeCompilerArgs.add("-Xjvm-default=all") // opcional
-    }
 }
 
 val keystorePropsFile = rootProject.file("keystore.properties")
@@ -25,6 +17,22 @@ val keystoreProps = Properties().apply {
 android {
     namespace = "com.cabgon.blackhawk"
     compileSdk = 36
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        named("debug") {
+            kotlin.directories.add("build/generated/ksp/debug/kotlin")
+            kotlin.directories.add("build/generated/ksp/debug/java")
+        }
+        named("release") {
+            kotlin.directories.add("build/generated/ksp/release/kotlin")
+            kotlin.directories.add("build/generated/ksp/release/java")
+        }
+    }
 
     externalNativeBuild {
         cmake {
@@ -39,8 +47,8 @@ android {
         targetSdk = 36
 
         //Control de version
-        versionCode = 211
-        versionName = "2.1.1 (Hawk)"
+        versionCode = 237
+        versionName = "2.3.7 (Hawk)"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -110,6 +118,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
     }
 
     packaging {
@@ -118,6 +127,12 @@ android {
             "okhttp3/**",
             "kotlin/**"
         )
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -162,4 +177,5 @@ dependencies {
     implementation(libs.firebase.remoteconfig.ktx)
 
     implementation(libs.swiperefreshlayout)
+    implementation(libs.localbroadcastmanager)
 }

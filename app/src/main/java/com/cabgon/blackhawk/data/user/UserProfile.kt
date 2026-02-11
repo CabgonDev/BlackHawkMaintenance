@@ -7,7 +7,8 @@ data class UserProfile(
     val nombre: String,
     val matricula: String,
     val especialidad: String,
-    val role: String = "user"   // ✅ nuevo
+    val role: String = "user",
+    val status: String = "approved"
 ) {
     val iniciales: String
         get() {

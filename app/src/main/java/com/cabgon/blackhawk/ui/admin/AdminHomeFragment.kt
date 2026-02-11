@@ -1,5 +1,6 @@
 package com.cabgon.blackhawk.ui.admin
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,16 @@ class AdminHomeFragment : Fragment() {
     private var _b: FragmentAdminHomeBinding? = null
     private val b get() = _b!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _b = FragmentAdminHomeBinding.inflate(inflater, container, false)
         return b.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val profile = UserSessionStore(requireContext()).getProfile()
         val role = Roles.normalize(profile?.role)
@@ -43,6 +49,16 @@ class AdminHomeFragment : Fragment() {
         if (!Roles.isAtLeast(role, Roles.MODERATOR)) return emptyList()
 
         val list = mutableListOf<AdminModule>()
+
+        list += AdminModule(
+            key = "users_admin",
+            titleRes = R.string.admin_users_module,
+            desc = "Aprobar solicitudes, cambiar roles y gestionar usuarios",
+            fragmentClassCandidates = listOf(
+                "com.cabgon.blackhawk.ui.admin.users.UsersAdminFragment"
+            )
+        )
+
 
         if (Roles.normalize(role) == Roles.DEVELOPER) {
             list += AdminModule(
@@ -97,22 +113,27 @@ class AdminHomeFragment : Fragment() {
     private fun openModule(module: AdminModule) {
         val f = instantiateFirstAvailableFragment(module.fragmentClassCandidates)
         if (f == null) {
-            Toast.makeText(requireContext(), "Módulo no disponible en el build actual.", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Módulo no disponible en el build actual.",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
-        // ✅ Fix 3 correcto: navega al fragment seleccionado (NO hardcode)
         navigateRoot(f)
     }
 
     private fun instantiateFirstAvailableFragment(candidates: List<String>): Fragment? {
         for (name in candidates) {
             try {
-                val clazz = Class.forName(name)
-                val inst = clazz.newInstance()
-                if (inst is Fragment) return inst
+                // Forma moderna: obtener el constructor sin usar Class.newInstance()
+                val clazz = Class.forName(name).asSubclass(Fragment::class.java)
+                val ctor = clazz.getDeclaredConstructor()
+                ctor.isAccessible = true
+                return ctor.newInstance()
             } catch (_: Throwable) {
-                // try next
+                // Intentamos con el siguiente candidato
             }
         }
         return null
