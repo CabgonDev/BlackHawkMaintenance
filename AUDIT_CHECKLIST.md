@@ -2,6 +2,12 @@
 
 Esta checklist está ordenada por dependencia. No debe generarse una nueva versión de producción hasta cerrar los puntos P0 y P1.
 
+## Contexto de distribución
+
+- La app no se distribuye por Play Store; se instala localmente o desde canales de nube controlados.
+- La actualización OTA de APK ya existe: `AppUpdateManager` obtiene `appApkVersionCode`, `appApkPath`, `appApkSha256` y `appApkBytes` desde Firestore `ai_ota/channels`, descarga desde Firebase Storage bajo `ai/stable/apk/` y valida el APK antes de abrir el instalador. Mejorar y probar este flujo; no crear un actualizador paralelo.
+- El APK firmado es el artefacto distribuible. La instalación desde Firebase Storage termina en el instalador del sistema Android y requiere las autorizaciones del canal de origen que correspondan.
+
 ## Fase 0 — Preparación y control
 
 - [ ] Trabajar únicamente en `C:\Users\t-he-\AndroidStudioProjects\BlackHawkMaintenance`.
@@ -12,14 +18,14 @@ Esta checklist está ordenada por dependencia. No debe generarse una nueva versi
 
 ## P0 — Firma y secretos
 
-- [ ] Rotar la clave y las credenciales de firma si el árbol o sus respaldos fueron compartidos.
-- [ ] Confirmar antes de revocar la clave si se usa Google Play App Signing.
+- [ ] Rotar contraseñas y credenciales expuestas si el árbol o sus respaldos fueron compartidos; conservar la clave de firma privada que mantiene las actualizaciones existentes.
+- [ ] Definir custodia, acceso y respaldo cifrado de la clave de firma; no rotarla sin un plan compatible para actualizar instalaciones ya firmadas.
 - [ ] Retirar las credenciales de `C:\Users\t-he-\AndroidStudioProjects\BlackHawkMaintenance\keystore.properties`.
 - [ ] Retirar `C:\Users\t-he-\AndroidStudioProjects\BlackHawkMaintenance\app\keystore\bhm.jks` del árbol y de artefactos compartidos.
 - [ ] Migrar la firma a secretos protegidos de CI o un gestor de secretos.
 - [ ] Hacer fallar el build release si faltan secretos; nunca usar valores vacíos.
 - [ ] Auditar backups, artefactos y, cuando exista, historial Git.
-- [ ] Verificar que el nuevo APK conserva el certificado correcto y actualiza una instalación existente.
+- [ ] Verificar que el APK conserva el certificado correcto y actualiza una instalación 5.0.1 existente mediante el OTA Firebase Storage, conservando sus datos.
 
 ## P1 — Persistencia y aislamiento de datos
 
@@ -59,6 +65,12 @@ Las reglas remotas deben obtenerse desde Firebase Console; su ausencia local no 
 
 ## P1 — Actualizaciones OTA de contenido
 
+El OTA de APK indicado en “Contexto de distribución” ya está implementado y utiliza Firebase Storage. Esta sección cubre la fiabilidad de los OTA de contenido y las pruebas de regresión del actualizador de APK.
+
+- [ ] Añadir pruebas para metadatos de APK ausentes o inválidos, path traversal, tamaño/hash incorrectos, paquete/versión/certificado distintos, APK truncado, revalidación de descarga pendiente, cancelación y error del instalador.
+- [ ] Proteger quién puede modificar el documento `ai_ota/channels` y subir APKs al prefijo estable `ai/stable/apk/`; verificar la autorización con evidencia de Firebase Console o Emulator Suite según el entorno disponible.
+- [ ] Cubrir con pruebas de regresión la validación existente de `AppUpdateManager` para package name, versionCode, certificado, tamaño, SHA-256 y prefijo de Firebase Storage.
+
 - [ ] Exigir SHA-256 y tamaño para AI, manuales, generalities y frequencies.
 - [ ] Permitir únicamente prefijos Storage aprobados.
 - [ ] Rechazar `..`, separadores inesperados y rutas arbitrarias.
@@ -91,7 +103,7 @@ Las reglas remotas deben obtenerse desde Firebase Console; su ausencia local no 
 - [ ] Evaluar `FLAG_SECURE` para login, Main, checklists y visor PDF si los datos son sensibles.
 - [ ] Evaluar cifrado de Room para amenazas de root/forense.
 - [ ] Restringir la API key Firebase por paquete y SHA-1/SHA-256.
-- [ ] Activar App Check/Play Integrity y `enforceAppCheck` en Functions.
+- [ ] Elegir y probar un proveedor de App Check compatible con instalaciones locales y desde Firebase Storage; validar APK sideload antes de activar `enforceAppCheck` en Functions. Usar Play Integrity solo si el flujo sideload satisface las pruebas y la política.
 - [ ] Cambiar desafíos ECDSA a nonce aleatorio de un solo uso con TTL.
 - [ ] Validar URLs externas en `app/src/main/java/com/cabgon/blackhawk/data/PartRepo.kt` mediante allowlist.
 - [ ] Evitar que `pingAuth` exponga información innecesaria.
@@ -219,7 +231,7 @@ Estos puntos complementan la checklist anterior. Los hallazgos ya cubiertos —f
 ### P3 — Tamaño del APK y assets
 
 - [ ] Medir el peso real de manuales, índices y checklists por variante.
-- [ ] Publicar Android App Bundle y evaluar entrega bajo demanda para manuales grandes.
+- [ ] Generar APK firmado para instalación local y publicación en Firebase Storage mediante el OTA actual; considerar APK divididos solo si el instalador existente puede procesarlos y se valida el flujo completo.
 - [ ] Mantener disponibles los manuales necesarios offline y probar instalación limpia, actualización y acceso sin red.
 - [ ] Verificar que la reducción de assets no rompa índices FTS ni enlaces de PDF.
 

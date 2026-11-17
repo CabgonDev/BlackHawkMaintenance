@@ -7,10 +7,11 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - Cada entrega termina con un commit. Crear un tag `v5.x.y` solo cuando el artefacto de la app de esa versión pase sus gates; los cambios exclusivamente documentales o de CI no requieren incrementar la versión de la app.
 - La versión actual de producto es `5.0.1` (`versionCode` `501`). La siguiente versión de producto propuesta es `5.0.2`; nunca reutilizar ni disminuir `versionCode`.
 - La secuencia `v0.0.1` del tag Git existente es únicamente el bootstrap del repositorio y no representa una versión de la app.
+- La app se distribuye por instalación local o por canales de nube controlados; no se publica en Play Store. El artefacto de producto es un APK firmado y verificable.
 - No se abre la siguiente versión hasta cumplir el gate de la anterior.
 - Cada casilla cerrada debe registrar archivo y líneas afectadas, comando ejecutado, resultado, versión probada, artefacto generado y procedimiento de rollback.
 - Las pruebas de Android se ejecutan con `.\gradlew.bat check lint test --no-daemon` y el build release se repite con secretos válidos en un entorno protegido.
-- Las decisiones de política (Play App Signing, biometría offline, `FLAG_SECURE`, cifrado de Room, certificate pinning, Crashlytics y Performance Monitoring) se documentan en un ADR antes de marcar su implementación.
+- Las decisiones de política (continuidad y recuperación de la clave de firma, proveedor de App Check compatible con sideload, biometría offline, `FLAG_SECURE`, cifrado de Room, certificate pinning, Crashlytics y Performance Monitoring) se documentan en un ADR antes de marcar su implementación.
 - Las reglas de Firestore y Storage son producción administrada en Firebase Console. La ausencia de `firestore.rules` o `storage.rules` en este árbol no demuestra que producción esté abierta. Solo se incorpora un snapshot fechado si existe acceso explícito a la consola; ese snapshot se etiqueta como evidencia, no como fuente de despliegue.
 - Las rutas se corrigieron a la estructura real del proyecto. Los archivos que aún no existen se marcan como creación.
 
@@ -24,6 +25,7 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 | `minSdk` / `targetSdk` / `compileSdk` | `28` / `37` / `37` |
 | Java / Kotlin | JVM 17 / Kotlin 2.4.20 |
 | Firebase project | `blackhawk-maintenance` (`.firebaserc`) |
+| Distribución / OTA de APK | Fuera de Play Store; `AppUpdateManager` obtiene metadatos desde Firestore `ai_ota/channels` y descarga desde Firebase Storage bajo `ai/stable/apk/` |
 | Estado Git inicial | Sin `.git` local antes de esta preparación; ahora versionado en `master` |
 | Remoto | `https://github.com/CabgonDev/BlackHawkMaintenance.git` |
 | Rama remota | `master`, con 22 commits históricos y el árbol final vacío |
@@ -50,17 +52,19 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 ## App v5.0.2 — Contención de firma y secretos
 
-**Esfuerzo estimado:** 1–3 días más coordinación con Play Console. **Commit sugerido:** `security(v5.0.2): move release signing to protected secrets`. **Gate:** release firmada con el certificado correcto y sin credenciales en árbol, historial, backups compartidos ni artefactos.
+**Esfuerzo estimado:** 1–3 días más coordinación de la distribución y recuperación. **Commit sugerido:** `security(v5.0.2): move release signing to protected secrets`. **Gate:** APK firmado con la clave/certificado de continuidad, instalable sobre la versión 5.0.1 y sin credenciales en árbol, historial, nube pública ni artefactos.
 
-- [ ] Confirmar si Google Play App Signing está activo antes de revocar o rotar la clave.
-- [ ] Inventariar y sanear `keystore.properties`, `app/keystore/bhm.jks`, backups, APK, mapping, símbolos y el historial remoto; revocar solo después de confirmar el plan de recuperación.
-- [ ] Rotar credenciales si el árbol o sus respaldos estuvieron expuestos; conservar la continuidad del certificado de Play.
+- [ ] Definir quién custodia la clave privada de firma, quién puede generar releases y cómo se recupera desde un respaldo cifrado fuera del repositorio.
+- [ ] Inventariar y sanear `keystore.properties`, `app/keystore/bhm.jks`, backups, APK, mapping, símbolos y el historial remoto; no publicar una clave privada en el canal local ni en la nube.
+- [ ] Mantener el mismo certificado de firma para que Android acepte actualizaciones instaladas localmente o desde la nube.
+- [ ] Si la clave está comprometida, documentar antes de rotarla un camino compatible de migración de firma y recuperación para las instalaciones existentes; no asumir que una nueva clave puede actualizar la instalación actual.
+- [ ] Rotar contraseñas o credenciales expuestas y conservar protegida la clave que mantiene la continuidad de instalación.
 - [ ] Migrar firma release a secretos protegidos de CI o un gestor de secretos.
 - [ ] Hacer fallar el release si faltan `storeFile`, `storePassword`, `keyAlias` o `keyPassword`; nunca sustituirlos por valores vacíos.
-- [ ] Verificar el certificado del APK/AAB con `apksigner` y probar actualización sobre una instalación existente.
+- [ ] Verificar el certificado del APK con `apksigner` y probar instalación limpia y actualización directa desde 5.0.1 conservando datos.
 - [ ] Auditar que ningún secreto vuelva a aparecer en la historia Git, artefactos, logs o respaldos publicados.
 
-**Evidencia:** fingerprint antes/después, build release protegido y prueba de actualización. **Rollback:** usar la clave de recuperación de Play y revertir solo la configuración de CI, nunca publicar una firma distinta.
+**Evidencia:** fingerprint SHA-256 del certificado, build release protegido, procedencia del APK y prueba de instalación/actualización. **Rollback:** recuperar la clave y contraseña desde el respaldo cifrado; si no se puede conservar la firma, detener la distribución hasta aprobar un plan de migración que no pierda datos.
 
 ## App v5.0.3 — Artefactos y reproducibilidad
 
@@ -138,6 +142,10 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Esfuerzo estimado:** 4–7 días. **Commit sugerido:** `security(v5.4.0): make content updates atomic and verifiable`. **Gate:** una descarga truncada, con hash incorrecto, ruta inválida, downgrade o red perdida no deja contenido corrupto ni borra datos válidos.
 
+- Esta entrega cubre actualizaciones OTA de contenido y pruebas de regresión del OTA de APK ya existente; no crear un segundo servicio o mecanismo de actualización de la aplicación.
+- [ ] Documentar el contrato actual de `app/src/main/java/com/cabgon/blackhawk/ai/update/AppUpdateManager.kt`: Firestore `ai_ota/channels`, campos `appApkVersionCode`, `appApkPath`, `appApkSha256`, `appApkBytes`, y prefijo Storage `ai/stable/apk/`.
+- [ ] Añadir pruebas para metadatos ausentes o inválidos, path traversal, tamaño/hash incorrectos, APK truncado, package/version/certificado distintos, revalidación de descarga pendiente, cancelación y error del instalador.
+- [ ] Confirmar que el cliente rechaza cualquier origen externo que evite el prefijo Storage estable; si `appApkUrl` se conserva como contrato, exigir HTTPS y allowlist explícita o retirarlo.
 - [ ] Exigir SHA-256 y tamaño para AI, manuales, generalidades y frecuencias.
 - [ ] Permitir únicamente prefijos Storage aprobados y rechazar `..`, separadores inesperados y rutas arbitrarias.
 - [ ] Firmar o proteger los metadatos de actualización y aplicar anti-downgrade monotónico.
@@ -161,7 +169,8 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - [ ] Escuchar cambios de `role` y `status`, invalidar cache y actualizar la UI de MainActivity.
 - [ ] Evaluar `FLAG_SECURE` para login, Main, checklists y visor PDF, y cifrado de Room frente a root/forense.
 - [ ] Restringir la API key Firebase por paquete y SHA-1/SHA-256.
-- [ ] Activar App Check/Play Integrity y `enforceAppCheck` en Functions.
+- [ ] Elegir y probar un proveedor de App Check que acepte las instalaciones locales y desde nube; validar la atestación con APK instalado por cada canal antes de activar `enforceAppCheck` en Functions.
+- [ ] Usar Play Integrity solo si las pruebas de APK sideload confirman que satisface la política; si no, seleccionar otro proveedor compatible y documentar su modelo de amenaza.
 - [ ] Cambiar desafíos ECDSA a nonce aleatorio de un solo uso con TTL.
 - [ ] Validar URLs externas en `app/src/main/java/com/cabgon/blackhawk/data/PartRepo.kt` mediante allowlist y limitar `pingAuth` a diagnóstico no sensible.
 - [ ] Añadir pruebas unitarias para `DeviceBindingVerifier.kt`, `BiometricCredentialStore.kt`, `UserSessionStore.kt`, UID/status y rotación/invalidez de claves.
@@ -250,15 +259,19 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - [ ] Fijar dependencias de Functions y añadir tests, lint y predeploy.
 - [ ] Crear CI con `check`, lint, tests, build release y validación de firma.
 - [ ] Ejecutar matriz de API mínima (28) y API actual, incluyendo smoke test de login, sesión, inspecciones, sincronización, OTA y permisos.
-- [ ] Publicar Android App Bundle y evaluar entrega bajo demanda para manuales grandes sin romper acceso offline.
+- [ ] Generar un APK universal firmado para instalación local y publicación en el prefijo Firebase Storage consumido por el OTA existente; si el tamaño exige APK divididos, documentar el conjunto y verificar que el flujo actual pueda instalarlos antes de adoptarlos.
 - [ ] Mantener manuales necesarios offline y probar instalación limpia, actualización y acceso sin red.
+- [ ] Definir responsables y permisos para publicar el APK en `ai/stable/apk/` y editar el documento Firestore `ai_ota/channels`; registrar publicación, checksum SHA-256 y procedimiento de revocación del artefacto.
+- [ ] Incluir en el gate del APK release pruebas que confirmen la validación ya implementada en `AppUpdateManager`: versión y tamaño esperados, SHA-256, package name y certificado coincidente con la app instalada antes de abrir el instalador.
+- [ ] Probar el flujo OTA existente de extremo a extremo desde Firebase Storage, además de la instalación local manual: actualización sobre 5.0.1, autorización del instalador del sistema para la app de origen, cancelación y recuperación sin pérdida de datos.
+- [ ] Si se conserva un canal externo mediante `appApkUrl`, exigir HTTPS, allowlist, timeout y validación equivalente; no permitir que omita los controles del flujo Storage.
 - [ ] Subir mapping/symbols a un almacén protegido y limitar acceso al equipo autorizado.
 - [ ] Evaluar Crashlytics y Performance Monitoring con redacción de PII, separación dev/staging/prod, retención y consentimiento documentados.
 - [ ] Corregir todos los errores de lint antes de suprimir reglas.
 - [ ] Revisar logs antes de publicarlos y documentar el entorno exacto de compilación.
 - [ ] Registrar fecha, comando, versión, artefacto, certificado, plan de rollback y responsable de cada release.
 
-**Evidencia:** pipeline verde, AAB firmado, smoke tests API 28/actual, reportes de lint/tests/check, mapping protegido y plan de rollback probado.
+**Evidencia:** pipeline verde, APK firmado y verificable, smoke tests API 28/actual y por canal de distribución, reportes de lint/tests/check, mapping protegido y plan de rollback probado.
 
 ## Cierre obligatorio de cada versión
 
@@ -280,7 +293,7 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - [ ] OTA exige hash/tamaño, rutas permitidas, anti-downgrade y rollback.
 - [ ] `lint`, tests, `check` y release build están verdes.
 - [ ] Smoke test en API 28 y Android actual completado.
-- [ ] APK/AAB firmado con el certificado esperado.
+- [ ] APK firmado con el certificado esperado, hash validado y origen de distribución autorizado.
 - [ ] Plan de rollback y recuperación documentado y probado.
 
 ## Mapa de cobertura del documento fuente
