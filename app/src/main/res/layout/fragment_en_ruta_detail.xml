@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/enruta_surface"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarEnRutaDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_enruta_header_gradient"
+        android:minHeight="56dp"
+        android:navigationIcon="@drawable/ic_arrow_back_24"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp"
+        app:navigationIconTint="@color/enruta_header_on"
+        app:title="En Ruta detalle"
+        app:titleTextColor="@color/enruta_header_on" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/enruta_surface">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/enruta_surface"
+            app:elevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp"
+                app:layout_scrollFlags="scroll">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/enruta_card"
+                    app:cardCornerRadius="26dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/enruta_border"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_enruta_soft_pill"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="Seguimiento operativo"
+                            android:textAllCaps="true"
+                            android:textColor="@color/enruta_text_secondary"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtMatriculaDetalle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="UH-60L Mat. 1091"
+                            android:textColor="@color/enruta_text_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            tools:text="UH-60L Mat. 1091" />
+
+                        <TextView
+                            android:id="@+id/txtFechaDetalle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="07/04/2026 12:41"
+                            android:textColor="@color/enruta_text_secondary"
+                            android:textSize="14sp"
+                            tools:text="07/04/2026 12:41" />
+
+                        <TextView
+                            android:id="@+id/txtCategoriaDetalle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_enruta_soft_pill"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="Categoría: A"
+                            android:textColor="@color/enruta_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            tools:text="Categoría: A" />
+
+                        <TextView
+                            android:id="@+id/txtUbicacionDetalle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Ubicación: B.A.M. No. 2 Ixtepec"
+                            android:textColor="@color/enruta_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:text="Ubicación: B.A.M. No. 2 Ixtepec" />
+
+                        <TextView
+                            android:id="@+id/txtTipoOpsDetalle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Horas disponibles: 0.0 hs"
+                            android:textColor="@color/enruta_text_secondary"
+                            android:textSize="13sp"
+                            tools:text="Horas disponibles: 11.2 hs" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="0dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/enruta_card"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/enruta_border"
+                    app:strokeWidth="1dp">
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayoutEnRuta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        app:tabGravity="fill"
+                        app:tabIndicatorAnimationMode="elastic"
+                        app:tabIndicatorColor="@color/primary"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabMode="fixed"
+                        app:tabRippleColor="@android:color/transparent"
+                        app:tabSelectedTextColor="@color/enruta_text_primary"
+                        app:tabTextColor="@color/enruta_text_secondary" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrollVisualizar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fillViewport="true"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_enruta_soft_pill"
+                        android:paddingStart="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="6dp"
+                        android:text="Visualización"
+                        android:textColor="@color/enruta_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Horas y margen"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtHorasDetalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Horas de vuelo: 0.0 hs&#10;Horas totales: 0.0 hs&#10;Horas disponibles: 0.0 hs"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="14sp"
+                                tools:text="Horas de vuelo: 2.8 hs&#10;Horas totales: 3848.8 hs&#10;Horas disponibles: 11.2 hs" />
+
+                            <TextView
+                                android:id="@+id/txtProxInspeccionDetalle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:background="@drawable/bg_enruta_soft_pill"
+                                android:paddingStart="12dp"
+                                android:paddingTop="6dp"
+                                android:paddingEnd="12dp"
+                                android:paddingBottom="6dp"
+                                android:text="Para inspección: 120 hrs"
+                                android:textColor="@color/enruta_text_secondary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                tools:text="Para inspección: 120 hrs" />
+
+                            <TextView
+                                android:id="@+id/txtTecnicoDetalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Técnico: —"
+                                android:textColor="@color/enruta_text_secondary"
+                                android:textSize="13sp"
+                                android:visibility="gone"
+                                tools:text="Técnico: Tte. Pérez" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Motor 1"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtMotor1Detalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="14sp"
+                                tools:text="LCF1: 00001&#10;LCF2: 00002&#10;Index: 00003&#10;Horas: 00004" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Motor 2"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtMotor2Detalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="14sp"
+                                tools:text="LCF1: 00001&#10;LCF2: 00002&#10;Index: 00003&#10;Horas: 00004" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="APU"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtApuDetalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="14sp"
+                                tools:text="Horas: 45&#10;Eventos: 12" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Recargas"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtRecargasDetalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Sin recargas"
+                                android:textColor="@color/enruta_text_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        app:cardBackgroundColor="@color/enruta_card"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/enruta_border"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reportes y observaciones"
+                                android:textColor="@color/enruta_text_primary"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtReportesDetalle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="Sin reportes"
+                                android:textColor="@color/enruta_text_secondary"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:id="@+id/layoutActualizarRoot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"
+                    android:fillViewport="true"
+                    android:paddingStart="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_enruta_soft_pill"
+                            android:paddingStart="12dp"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="6dp"
+                            android:text="Actualización"
+                            android:textColor="@color/enruta_text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Datos generales"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="Categoría"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtCategoria"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:clickable="true"
+                                        android:focusable="false"
+                                        android:inputType="none"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Ubicación"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtUbicacion"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="textCapSentences"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Tipo de operación"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtTipoOps"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="textCapSentences"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Horas"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="Horas de vuelo"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtHorasVuelo"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Horas totales"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtHorasTotales"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Horas disponibles"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtHorasDisponibles"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="numberDecimal"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Próxima inspección"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtProxInspeccion"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:clickable="true"
+                                        android:focusable="false"
+                                        android:inputType="none"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Motor 1"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="LCF1"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor1Lcf1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="LCF2"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor1Lcf2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Index"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor1Index"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Horas"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor1Horas"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Motor 2"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="LCF1"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor2Lcf1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="LCF2"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor2Lcf2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Index"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor2Index"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Horas"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtMotor2Horas"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="APU"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="Horas"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtApuHoras"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:hint="Eventos"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtApuEventos"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:imeOptions="actionNext"
+                                        android:inputType="number"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Recargas"
+                                        android:textColor="@color/enruta_text_primary"
+                                        android:textSize="17sp"
+                                        android:textStyle="bold" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btnAgregarRecarga"
+                                        style="?attr/materialButtonOutlinedStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Agregar"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/enruta_text_primary"
+                                        app:cornerRadius="16dp"
+                                        app:strokeColor="@color/enruta_border" />
+                                </LinearLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/recyclerRecargas"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:nestedScrollingEnabled="false"
+                                    tools:itemCount="2"
+                                    tools:listitem="@layout/item_en_ruta_recarga" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            app:cardBackgroundColor="@color/enruta_card"
+                            app:cardCornerRadius="22dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/enruta_border"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Reportes y observaciones"
+                                    android:textColor="@color/enruta_text_primary"
+                                    android:textSize="17sp"
+                                    android:textStyle="bold" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="14dp"
+                                    android:hint="Reportes"
+                                    app:boxBackgroundColor="@color/enruta_surface"
+                                    app:boxBackgroundMode="filled"
+                                    app:boxCornerRadiusBottomEnd="18dp"
+                                    app:boxCornerRadiusBottomStart="18dp"
+                                    app:boxCornerRadiusTopEnd="18dp"
+                                    app:boxCornerRadiusTopStart="18dp"
+                                    app:boxStrokeColor="@color/enruta_border">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edtReportes"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="top|start"
+                                        android:inputType="textMultiLine"
+                                        android:minLines="4"
+                                        android:textColor="@color/enruta_text_primary" />
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarCambios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Guardar cambios"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    app:cornerRadius="18dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>

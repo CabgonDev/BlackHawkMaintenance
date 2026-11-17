@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101719">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/startup_04" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/update_cinematic_scrim"
+        android:importantForAccessibility="no" />
+
+    <ScrollView
+        android:id="@+id/updateScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls"
+        android:paddingStart="20dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="28dp"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/updateContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintWidth_max="560dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/uh60_header" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0"
+                        android:text="@string/update_brand"
+                        android:textColor="#F7FAF9"
+                        android:textSize="21sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvUpdateBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/update_required_badge"
+                    app:drawableStartCompat="@drawable/ic_warning_24"
+                    android:drawablePadding="6dp"
+                    app:drawableTint="#F4CC7B"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0"
+                    android:paddingStart="10dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/update_badge_required"
+                    android:textColor="#F4CC7B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvUpdateTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:accessibilityHeading="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0"
+                    android:text="@string/update_title"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp" />
+
+                <TextView
+                    android:id="@+id/tvUpdateBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:letterSpacing="0"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/update_body"
+                    android:textColor="#D8E0DE"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="#40FFFFFF"
+                    android:importantForAccessibility="no" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:baselineAligned="false"
+                    android:gravity="top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:letterSpacing="0"
+                        android:text="@string/update_current_version_label"
+                        android:textColor="#CAD3D0"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvCurrentVersion"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="end"
+                        android:letterSpacing="0"
+                        android:text="@string/update_value_pending"
+                        android:textColor="#F7FAF9"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:baselineAligned="false"
+                    android:gravity="top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:letterSpacing="0"
+                        android:text="@string/update_available_version_label"
+                        android:textColor="#CAD3D0"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvAvailableVersion"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="end"
+                        android:letterSpacing="0"
+                        android:text="@string/update_value_pending"
+                        android:textColor="#94DDD0"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:baselineAligned="false"
+                    android:gravity="top"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:letterSpacing="0"
+                        android:text="@string/update_package_size_label"
+                        android:textColor="#CAD3D0"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvPackageSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="end"
+                        android:letterSpacing="0"
+                        android:text="@string/update_size_unknown"
+                        android:textColor="#F7FAF9"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReleaseNotes"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="start|center_vertical"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:letterSpacing="0"
+                    android:minHeight="48dp"
+                    android:paddingStart="0dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/update_show_notes"
+                    android:textAllCaps="false"
+                    android:textColor="#94DDD0"
+                    android:textSize="14sp"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="4dp"
+                    app:icon="@drawable/ic_chevron_right_24"
+                    app:iconGravity="end"
+                    app:iconPadding="8dp"
+                    app:iconTint="#94DDD0"
+                    app:rippleColor="#2494DDD0" />
+
+                <TextView
+                    android:id="@+id/tvUpdateNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="12dp"
+                    android:letterSpacing="0"
+                    android:lineSpacingExtra="4dp"
+                    android:text="@string/update_notes_empty"
+                    android:textColor="#D8E0DE"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#40FFFFFF"
+                    android:importantForAccessibility="no" />
+
+                <LinearLayout
+                    android:id="@+id/updateProgressPanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/updateStepDownload"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="start"
+                            android:letterSpacing="0"
+                            android:text="@string/update_step_download"
+                            android:textColor="#F4CC7B"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/updateStepVerify"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:letterSpacing="0"
+                            android:text="@string/update_step_verify"
+                            android:textColor="#B7C4BF"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/updateStepInstall"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="end"
+                            android:letterSpacing="0"
+                            android:text="@string/update_step_install"
+                            android:textColor="#B7C4BF"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/pbUpdate"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="12dp"
+                        android:contentDescription="@string/update_progress_description"
+                        android:importantForAccessibility="no"
+                        android:indeterminate="false"
+                        android:indeterminateTint="#73CDBB"
+                        android:max="100"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/update_progress_track" />
+
+                    <TextView
+                        android:id="@+id/tvUpdateStage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:accessibilityLiveRegion="polite"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0"
+                        android:text="@string/update_stage_checking"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvUpdateProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:accessibilityLiveRegion="none"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0"
+                        android:text="@string/update_percent_zero"
+                        android:textColor="#94DDD0"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvUpdateDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:letterSpacing="0"
+                        android:lineSpacingExtra="3dp"
+                        android:text="@string/update_detail_checking"
+                        android:textColor="#D8E0DE"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDownloadInstall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:enabled="false"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:letterSpacing="0"
+                    android:minHeight="56dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="14dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="14dp"
+                    android:text="@string/update_action_download"
+                    android:textAllCaps="false"
+                    android:textColor="#08241E"
+                    android:textSize="16sp"
+                    app:backgroundTint="#83D8C3"
+                    app:cornerRadius="8dp"
+                    app:icon="@drawable/ic_arrow_right_24"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="12dp"
+                    app:iconTint="#08241E"
+                    app:rippleColor="#3308241E" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancelDownload"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:letterSpacing="0"
+                    android:minHeight="48dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/update_action_cancel"
+                    android:textAllCaps="false"
+                    android:textColor="#E1E8E5"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="8dp"
+                    app:rippleColor="#26FFFFFF" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    app:drawableStartCompat="@drawable/ic_check_circle"
+                    android:drawablePadding="8dp"
+                    app:drawableTint="#B7C4BF"
+                    android:gravity="center_vertical"
+                    android:letterSpacing="0"
+                    android:lineSpacingExtra="2dp"
+                    android:text="@string/update_install_notice"
+                    android:textColor="#CAD3D0"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</FrameLayout>

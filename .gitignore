@@ -1,0 +1,48 @@
+# Project exclude paths
+/.gradle/
+/app/build/
+/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/
+/build/
+
+# Release outputs and signing artifacts
+/app/release/
+**/*.apk
+**/*.aab
+**/mapping.txt
+**/native-debug-symbols.zip
+**/output-metadata.json
+
+# Signing (NO subir jamás)
+keystore.properties
+*.jks
+*.keystore
+
+# Firebase (NO subir)
+app/google-services.json
+**/google-services.json
+
+# Android/Gradle generated
+.gradle/
+.kotlin/
+build/
+**/build/
+**/.cxx/
+**/.externalNativeBuild/
+
+# Generated diagnostics, dependency dumps and indexes
+hs_err_pid*.log
+replay_pid*.log
+deps_*.txt
+project_tree.txt
+gradle_projects.txt
+/package-lock.json
+
+# Firebase tooling dependencies
+functions/node_modules/
+
+app/src/main/assets/**/*.pdf
+
+# Local IDE files
+.idea/
+*.iml
+local.properties

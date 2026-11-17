@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/admin_card"
+    app:cardCornerRadius="22dp"
+    app:cardElevation="1dp"
+    app:rippleColor="@color/admin_badge_bg"
+    app:strokeColor="@color/admin_border"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="92dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imgModuleIcon"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_admin_module_icon"
+            android:contentDescription="@null"
+            android:padding="11dp"
+            android:src="@drawable/ic_admin_panel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:id="@+id/txtModuleBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_admin_module_badge"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="CORE"
+            android:textColor="@color/admin_badge_text"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtModuleTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="—"
+            android:textColor="@color/admin_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/txtModuleBadge"
+            app:layout_constraintStart_toEndOf="@id/imgModuleIcon"
+            app:layout_constraintTop_toTopOf="@id/imgModuleIcon" />
+
+        <TextView
+            android:id="@+id/txtModuleDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:lineSpacingExtra="2dp"
+            android:text="—"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@id/imgModuleArrow"
+            app:layout_constraintStart_toEndOf="@id/imgModuleIcon"
+            app:layout_constraintTop_toBottomOf="@id/txtModuleTitle" />
+
+        <ImageView
+            android:id="@+id/imgModuleArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/admin_text_secondary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

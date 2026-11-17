@@ -1,0 +1,2543 @@
+{
+  "title": "Inspección 40 horas UH-60L",
+  "sections": [
+    {
+      "title": "Sección 1 - Carlinga",
+      "items": [
+        {
+          "code": "1.1",
+          "title": "Inspeccione la compuerta de nariz (FLIR si está instalado) y el compartimiento de aviónica de nariz como sigue:",
+          "short": "Inspeccionar compuerta de nariz y aviónica.",
+          "subitems": [
+            {
+              "title": "Abra la compuerta de nariz.",
+              "short": "Abrir compuerta de nariz.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la compuerta de nariz y la computadora Doppler/GPS estén libres de obstrucciones.",
+              "short": "Inspeccionar compuerta de nariz y Doppler/GPS.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la compuerta de nariz no presente daños y que el sello cuente con correcta adhesión, limpieza y esté libre de deterioro.",
+              "short": "Comprobar compuerta de nariz y sello.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione la seguridad de los sensores EOMS y verifique que no presenten grietas, roturas o lente sucio.",
+              "short": "Inspeccionar sensores EOMS.",
+			  "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las bisagras de la compuerta de nariz no presenten grietas.",
+              "short": "Inspeccionar bisagras de compuerta de nariz.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la compuerta de acceso del compartimiento de aviónica, componentes, conectores eléctricos y cableado no presenten desgaste excesivo ni daños, y que estén asegurados.",
+              "short": "Inspeccionar compuerta, componentes, conectores y cableado.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la envoltura espiral de los arneses de los sensores AN/AAR-57 no esté desenrollada y que los arneses se encuentren asegurados.",
+              "short": "Inspeccionar envoltura espiral y arneses AN/AAR-57.",
+			  "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los soportes amortiguadores no estén tocando fondo, no presenten corrosión y se encuentren asegurados.",
+              "short": "Inspeccionar soportes amortiguadores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los ductos y líneas interiores se encuentren asegurados.",
+              "short": "Inspeccionar ductos y líneas interiores.",
+              "required": true
+            },
+            {
+              "title": "(FLIR) Remueva el carenado del FLIR.",
+              "short": "Remover carenado FLIR.",
+			  "applicable": false,
+              "required": true
+            },
+            {
+              "title": "(FLIR) Compruebe la condición del FLIR y carenados. Compruebe que no presenten abolladuras, grietas, equipo faltante, corrosión ni daños. Inspeccione que el cableado presente conexión adecuada, no tenga quemaduras ni rozaduras, y se encuentre asegurado.",
+              "short": "Comprobar condición de FLIR y carenados.",
+			  "applicable": false,
+              "required": true
+            },
+            {
+              "title": "(FLIR) Instale el FLIR.",
+              "short": "Instalar FLIR.",
+			  "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Cierre la compuerta y compruebe el enganche positivo. Asegure ambos pestillos.",
+              "short": "Cerrar compuerta y asegurar pestillos.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.2",
+          "title": "Inspeccione el exterior de la carlinga como sigue:",
+          "short": "Inspeccionar exterior de carlinga.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los agujeros de drene de la carlinga no estén bloqueados.",
+              "short": "Inspeccionar agujeros de drene.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el revestimiento exterior de la carlinga no presente corrosión, abolladuras, grietas ni remaches faltantes.",
+              "short": "Inspeccionar revestimiento exterior.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.3",
+          "title": "Inspeccione que todas las antenas del Área No. 1 no presenten grietas, abolladuras, rayones ni piezas de fijación faltantes, y que se encuentren limpias.",
+          "short": "Inspeccionar antenas Área No. 1.",
+          "required": true
+        },
+        {
+          "title": "¡Nota!",
+          "warning": true,
+          "text": "La evidencia por impacto de rayo aparecerá como una superficie ennegrecida, un hoyo o un agujero con borde quemado."
+        },
+        {
+          "code": "1.4",
+          "title": "Compruebe que los ensambles de posa pie del piloto y copiloto no presenten grietas, corrosión ni piezas faltantes. Compruebe evidencia de impacto de rayo.",
+          "short": "Comprobar ensambles posa pie.",
+          "required": true
+        },
+        {
+          "code": "1.5",
+          "title": "Inspeccione el interior de la carlinga como sigue:",
+          "short": "Inspeccionar interior de carlinga.",
+          "subitems": [
+            {
+              "title": "Compruebe la limpieza general de todo el interior de la carlinga, que no presente corrosión, daños, evidencia de fuga de aceite desde el cielo, grietas estructurales, y verifique la seguridad de los sujetadores.",
+              "short": "Comprobar interior de carlinga.",
+              "required": true
+            },
+            {
+              "title": "Compruebe el funcionamiento adecuado de las puertas de tripulación y que no presenten daños. Inspeccione que los sellos no presenten deterioro, aflojamiento de las uniones ni señales de fuga.",
+              "short": "Comprobar puertas de tripulación.",
+              "required": true
+            },
+            {
+              "title": "Compruebe la condición y seguridad de los pestillos y bisagras.",
+              "short": "Comprobar pestillos y bisagras.",
+              "required": true
+            },
+            {
+              "title": "Compruebe la instalación adecuada del sello de las ventanas y que no esté deteriorado.",
+              "short": "Comprobar sello de ventanas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el mecanismo de eyección de la puerta de la carlinga esté asegurado.",
+              "short": "Comprobar mecanismo de eyección de puerta.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.6",
+          "title": "Inspeccione los asientos de piloto y copiloto como sigue:",
+          "short": "Inspeccionar asientos de pilotos.",
+          "subitems": [
+            {
+              "title": "Compruebe que no presenten daños, que estén asegurados, tengan movimiento positivo y bloqueo en todas las posiciones.",
+              "short": "Comprobar asientos por daños y bloqueo.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los paneles de blindaje, tubos deslizantes y bujes estén asegurados, no presenten daños, estén limpios y presenten facilidad de operación.",
+              "short": "Comprobar paneles de blindaje.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los rieles de los asientos, soportes resilientes y rodamientos esféricos se encuentren en buenas condiciones y asegurados.",
+              "short": "Inspeccionar rieles y soportes de asiento.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los cinturones de regazo no presenten corrosión, cortes, deshilamiento y se encuentren asegurados.",
+              "short": "Comprobar cinturones de regazo.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los cinturones de entrepierna no presenten corrosión, cortes, deshilamiento y se encuentren asegurados.",
+              "short": "Comprobar cinturón de entrepierna.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los arneses de hombros no presenten corrosión, cortes, deshilamiento y se encuentren asegurados.",
+              "short": "Comprobar arneses de hombros.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el carrete de inercia no presente daños, se encuentre asegurado y que el bloqueo y desbloqueo sean positivos.",
+              "short": "Comprobar carrete de inercia.",
+              "required": true
+            },
+            {
+              "title": "Compruebe el detalle de seguridad de la marca de torque en los pernos del soporte giratorio de todos los asientos Simula (P/N 100900-1, 100900-3, 100900-5). Si la marca indica deslizamiento, refiérase a WP 0661 para acción correctiva. Si la marca no está aplicada, refiérase a WP 0661 para la instalación de marca de torque en los pernos del soporte giratorio. Recline los asientos.",
+              "short": "Comprobar marca de torque de pernos Simula.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.7",
+          "title": "Inspeccione el cuadrante de control de motores por condición general.",
+          "short": "Inspeccionar cuadrante de control de motores.",
+          "subitems": [
+            {
+              "title": "Inspeccione que las placas de información del cuadrante de control de motores no presenten deformaciones y se encuentren aseguradas.",
+              "short": "Inspeccionar placas de información.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Compruebe que las palancas de control de potencia del motor #1 y #2 (ENG POWER CONTROL) y las palancas selectoras de combustible #1 y #2 (ENG FUEL SYS) estén cortadas, y que las manijas T para apagado de emergencia del motor #1 y #2 (ENG EMER OFF) estén completamente hacia adelante."
+            }
+          ]
+        },
+        {
+          "code": "1.8",
+          "title": "Inspeccione los bastones colectivos del piloto y copiloto, bastones cíclicos y pedales de control yaw como sigue:",
+          "short": "Inspeccionar colectivos, cíclicos y pedales.",
+          "subitems": [
+            {
+              "title": "Inspeccione la condición general.",
+              "short": "Inspeccionar condición general.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las cubiertas en la base de los bastones no presenten ajuste holgado, grietas, divisiones o daños. Asegúrese de que no haya aberturas por las que puedan entrar objetos extraños al área de varillaje de control de vuelo situada debajo.",
+              "short": "Comprobar cubiertas de bastones.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las empuñaduras no presenten grietas ni interruptores sueltos y compruebe que todos los rótulos sean legibles.",
+              "short": "Inspeccionar empuñaduras.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los pedales de control yaw no presenten acumulación de suciedad o lodo.",
+              "short": "Inspeccionar pedales de control yaw.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las cubiertas en la base de los pedales no presenten ajuste holgado, grietas, divisiones o daños. Asegúrese de que no haya aberturas por las que puedan entrar objetos extraños al área de varillaje de control de vuelo situada debajo.",
+              "short": "Comprobar cubiertas de pedales.",
+              "required": true
+            },
+            {
+              "title": "Abra las cubiertas. Compruebe que los cilindros maestros de freno no presenten fugas. Cierre las cubiertas.",
+              "short": "Comprobar cilindros maestros de freno.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.9",
+          "title": "Inspeccione los huecos de ambos asientos de piloto y copiloto como sigue:",
+          "short": "Inspeccionar huecos de asientos.",
+          "subitems": [
+            {
+              "title": "Recline los asientos.",
+              "short": "Reclinar asientos.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los componentes instalados, conectores eléctricos y cableado no presenten desgaste excesivo, daños y se encuentren asegurados.",
+              "short": "Inspeccionar componentes, conectores y cableado.",
+              "required": true
+            },
+            {
+              "title": "Regrese los asientos a posición vertical y asegúrelos.",
+              "short": "Regresar y asegurar asientos.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "1.10",
+          "title": "(FLIR) Inspeccione la Unidad de Torreta FLIR (TFU), cavidad de escaneo (indicación BIT/FIT).",
+          "short": "Inspeccionar unidad de torreta FLIR.",
+		  "applicable": false,
+          "required": true
+        },
+        {
+          "code": "1.11",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 2 - Cabina",
+      "items": [
+        {
+          "code": "2.1",
+          "title": "Inspeccione las puertas de carga/tropas como sigue:",
+          "short": "Inspeccionar puertas de carga/tropas.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los exteriores no presenten corrosión, distorsión, grietas ni sujetadores sueltos o faltantes.",
+              "short": "Inspeccionar exteriores.",
+              "required": true
+            },
+            {
+              "title": "Abra las puertas. Compruebe que funcionen en todo su recorrido sin atascamiento y que permanezcan aseguradas en los rieles.",
+              "short": "Abrir puertas y comprobar operación.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los mecanismos de eyección no presenten daños y estén en la posición correcta.",
+              "short": "Comprobar mecanismos de eyección.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los soportes de los rodillos superiores e inferiores no presenten desgaste.",
+              "short": "Comprobar soportes de rodillos.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los pestillos delanteros y traseros de las puertas tengan enganche positivo.",
+              "short": "Comprobar pestillos de puertas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las pistas inferiores cuenten con ocho tiras de desgaste en cada una. Compruebe visualmente que no presenten desgaste, grietas, corrosión ni daños.",
+              "short": "Inspeccionar pistas inferiores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las pistas superiores no presenten desgaste, grietas, corrosión ni daños.",
+              "short": "Inspeccionar pistas superiores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los sellos de las puertas no presenten separación, daños ni deterioro.",
+              "short": "Inspeccionar sellos de puertas.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.2",
+          "title": "Inspeccione las ventanas de artilleros como sigue:",
+          "short": "Inspeccionar ventanas de artilleros.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los marcos exteriores, paneles transparentes y pistas no presenten daños.",
+              "short": "Inspeccionar marcos, paneles y pistas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el exterior no cuente con sujetadores sueltos o faltantes ni separación en los sellos.",
+              "short": "Inspeccionar exterior y sellos.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las porciones visibles de las pistas superior e inferior no presenten grietas, desgaste ni corrosión.",
+              "short": "Inspeccionar pistas superior e inferior.",
+              "required": true
+            },
+            {
+              "title": "Abra y cierre las ventanas. Compruebe que funcionen suavemente y cierren de forma segura.",
+              "short": "Abrir y cerrar ventanas.",
+              "required": true
+            },
+            {
+              "title": "Si los montajes de armamento y cajas de munición están instalados, inspeccione seguridad, daños y correcta estiba.",
+              "short": "Inspeccionar armamento y munición si aplica.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.3",
+          "title": "(IMMSS) Si está instalado, inspeccione como sigue:",
+          "short": "Inspeccionar IMMSS si está instalado.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Remueva la cubierta del convertidor.",
+              "short": "Remover cubierta del convertidor.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el conector eléctrico se encuentre en buenas condiciones y asegurado.",
+              "short": "Comprobar conector eléctrico.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Instale la cubierta del convertidor.",
+              "short": "Instalar cubierta del convertidor.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.4",
+          "title": "Inspeccione el cielo de la cabina como sigue:",
+          "short": "Inspeccionar cielo de cabina.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los paneles de aislamiento acústico de la cabina no presenten daños y que los sujetadores estén asegurados.",
+              "short": "Inspeccionar paneles acústicos.",
+              "required": true
+            },
+            {
+              "title": "Baje los paneles de aislamiento acústico del cielo.",
+              "short": "Bajar paneles acústicos.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el panel acanalado no presente pandeo ni grietas.",
+              "short": "Inspeccionar panel acanalado.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el cielo de la cabina no presente grietas, daños o remaches sueltos. Inspeccione visualmente que la viga de soporte en STA 308 no presente grietas.",
+              "short": "Comprobar cielo de cabina y viga STA 308.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la bisagra y los sujetadores de la tapa de acceso al indicador del acumulador de la APU no presenten daños y estén asegurados.",
+              "short": "Comprobar tapa del indicador del acumulador APU.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.5",
+          "title": "Inspeccione el gancho de carga como sigue:",
+          "short": "Inspeccionar gancho de carga.",
+          "subitems": [
+            {
+              "title": "Compruebe que el gancho de carga tenga enganche positivo.",
+              "short": "Comprobar enganche positivo.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el gancho pivotee libremente de lado a lado.",
+              "short": "Comprobar pivoteo del gancho.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los conectores eléctricos del gancho de carga estén asegurados y no presenten daños.",
+              "short": "Comprobar conectores eléctricos.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Asegúrese de que el cable circular esté correctamente colocado debajo del cable en forma de \"L\" y fijado de forma segura a la manija de liberación."
+            },
+            {
+              "title": "Compruebe que el resorte de la palanca de liberación manual del gancho de carga esté correctamente instalado y no esté deformado. Asegúrese de que el resorte ejerza presión positiva sobre la palanca de liberación manual.",
+              "short": "Comprobar palanca de liberación manual.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.6",
+          "title": "Compruebe la estructura de soporte del gancho de carga como sigue:",
+          "short": "Comprobar estructura soporte gancho.",
+          "subitems": [
+            {
+              "title": "Compruebe que no presente daños, corrosión ni grietas.",
+              "short": "Comprobar daños, corrosión y grietas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente que el brazo de carga del gancho de carga no presente grietas.",
+              "short": "Inspeccionar brazo de carga.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.7",
+          "title": "Inspeccione los cables y poleas de control del rotor de cola como sigue:",
+          "short": "Inspeccionar cables y poleas rotor de cola.",
+          "subitems": [
+            {
+              "title": "Compruebe que los cables no presenten desgaste, deshiladuras, corrosión ni recubrimiento plástico suelto o faltante, particularmente en el área de poleas.",
+              "short": "Comprobar cables.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los pasadores de protección del cable no presenten desgaste. Compruebe que los cables estén montados apropiadamente en las poleas y que los pasadores de protección del cable estén instalados.",
+              "short": "Inspeccionar pasadores de protección.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las poleas no presenten daños y estén aseguradas.",
+              "short": "Inspeccionar poleas.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.8",
+          "title": "(ESSS) Inspeccione el Sistema de Soporte de Depósitos Externos como sigue:",
+          "short": "Inspeccionar ESSS.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Compruebe que las líneas de combustible en cabina estén aseguradas, no presenten rozaduras, daños ni señales de fuga.",
+              "short": "Comprobar líneas de combustible en cabina.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe la seguridad de los puentes de unión, receptáculos falsos, tapas y cordones.",
+              "short": "Comprobar puentes, receptáculos, tapas y cordones.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los arneses eléctricos en cabina presenten conexión adecuada, no tengan rozaduras y se encuentren asegurados. Compruebe que las cubiertas traseras de los conectores no presenten daños.",
+              "short": "Comprobar arneses y conectores.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el panel de control de manejo de combustible en la consola central no presente daños, esté limpio y asegurado.",
+              "short": "Comprobar panel de manejo de combustible.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.9",
+          "title": "Inspeccione el acumulador de la APU como sigue:",
+          "short": "Inspeccionar acumulador APU.",
+          "subitems": [
+            {
+              "title": "Compruebe que el acumulador tenga presión adecuada.",
+              "short": "Comprobar presión del acumulador.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la bomba hidráulica manual esté asegurada y no presente fugas.",
+              "short": "Inspeccionar bomba hidráulica manual.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la cinta del acumulador indique el porcentaje correcto del volumen de fluido.",
+              "short": "Comprobar cinta del acumulador.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.10",
+          "title": "Asegure los paneles de aislamiento acústico de la cabina en el cielo.",
+          "short": "Asegurar paneles acústicos del cielo.",
+          "required": true
+        },
+        {
+          "code": "2.11",
+          "title": "Inspeccione la batería como sigue:",
+          "short": "Inspeccionar batería.",
+          "subitems": [
+            {
+              "title": "Remueva la cubierta de la batería.",
+              "short": "Remover cubierta de batería.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el conector eléctrico, abrazaderas de montaje de la caja y cubiertas no presenten daños, estén en posición correcta y asegurados.",
+              "short": "Comprobar conector, abrazaderas y cubiertas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las líneas de ventilación no presenten daños, suciedad, corrosión ni obstrucciones.",
+              "short": "Comprobar líneas de ventilación.",
+              "required": true
+            },
+            {
+              "title": "Instale la cubierta de la batería.",
+              "short": "Instalar cubierta de batería.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.12",
+          "title": "Inspeccione el calefactor auxiliar de cabina, si está instalado, como sigue:",
+          "short": "Inspeccionar calefactor auxiliar.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Inspeccione que el controlador de temperatura no presente daños y esté asegurado.",
+              "short": "Inspeccionar controlador de temperatura.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el arnés presente conexión adecuada, no tenga rozaduras, esté asegurado y que la cubierta trasera no presente daños.",
+              "short": "Inspeccionar arnés del calefactor.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.13",
+          "title": "Inspeccione los amortiguadores del tren de aterrizaje principal, drag beam y frenos como sigue:",
+          "short": "Inspeccionar tren principal, puntos de carga y frenos.",
+          "subitems": [
+            {
+              "title": "Remueva el carenado superior del tren de aterrizaje principal.",
+              "short": "Remover carenado superior del tren principal.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las etapas superior e inferior de los amortiguadores no presenten suciedad ni corrosión y que presenten un inflado correcto.",
+              "short": "Inspeccionar amortiguadores.",
+              "required": true
+            },
+            {
+              "title": "Limpie y lubrique las porciones expuestas de los pistones del amortiguador.",
+              "short": "Limpiar y lubricar pistones.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los puntos de unión del amortiguador no presenten distorsión ni desgaste.",
+              "short": "Inspeccionar puntos de unión.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los corta-cables estén asegurados, no presenten daños ni corrosión.",
+              "short": "Comprobar corta-cables.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los cables de tierra estén asegurados y hagan contacto con tierra.",
+              "short": "Comprobar cables de tierra.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los interruptores del drag beam estén asegurados y no presenten daños.",
+              "short": "Comprobar interruptores del drag beam.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las líneas de drene no presenten obstrucción.",
+              "short": "Comprobar líneas de drene.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los pines indicadores de desgaste de freno tengan longitud mínima.",
+              "short": "Comprobar indicadores de desgaste de freno.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los frenos y líneas de freno no presenten daños ni fugas.",
+              "short": "Comprobar frenos y líneas.",
+              "required": true
+            },
+            {
+              "title": "Instale el carenado superior del tren de aterrizaje principal.",
+              "short": "Instalar carenado superior del tren principal.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.14",
+          "title": "Inspeccione el exterior de la cabina como sigue:",
+          "short": "Inspeccionar exterior de cabina.",
+          "subitems": [
+            {
+              "title": "Examine que el revestimiento exterior de la cabina no presente corrosión, grietas, abolladuras ni remaches faltantes.",
+              "short": "Examinar revestimiento exterior.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los agujeros de drene del revestimiento inferior de la cabina no presenten obstrucción.",
+              "short": "Comprobar drenes inferiores.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las cubiertas de los conectores externos ICS estén en su lugar.",
+              "short": "Comprobar cubiertas de conectores ICS.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el receptáculo de potencia externa no presente pines quemados (lado derecho únicamente). Compruebe que la cubierta cierre de forma segura.",
+              "short": "Comprobar receptáculo de energía externa.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.15",
+          "title": "(ESSS) Inspeccione el ESSS MWO-50-78 como sigue:",
+          "short": "Inspeccionar ESSS exterior.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Remueva carenados superiores e inferiores de raíz de ala HSS, carenados delantero y trasero del Pilón de Depósitos Verticales (VSP), borde de salida y ensamble de montura.",
+              "short": "Remover carenados HSS/VSP.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los carenados no presenten grietas, abolladuras ni daños.",
+              "short": "Comprobar carenados.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los herrajes de unión al fuselaje estén asegurados y no presenten grietas.",
+              "short": "Comprobar herrajes al fuselaje.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que todos los pines expandibles estén asegurados y que las arandelas no presenten grietas. Asegúrese de que las manijas estén firmemente encajadas sobre el extremo de los pines y que los anillos de bloqueo estén completamente visibles y expandidos.",
+              "short": "Comprobar pines expandibles.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los puentes de unión de los pines expandibles estén asegurados y no presenten corrosión.",
+              "short": "Comprobar puentes de unión.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Si los tanques externos de combustible están instalados, compruebe que los tanques tengan instalación adecuada, no presenten fugas ni daños.",
+              "short": "Comprobar tanques externos.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Si los tanques externos de combustible están instalados, efectúe comprobación de torque de las tuercas de bloqueo de la abrazadera de balanceo (sway brace). Si la tuerca se desliza, vuelva a aplicar torque a los tornillos y tuercas de bloqueo.",
+              "short": "Comprobar torque de sway brace.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Si los tanques externos de combustible están instalados, compruebe que los arneses y conectores eléctricos estén asegurados y no presenten rozaduras.",
+              "short": "Comprobar arneses de tanques externos.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los arneses y conectores eléctricos de raíz a fuselaje estén asegurados y no presenten rozaduras.",
+              "short": "Comprobar arneses raíz-fuselaje.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los cordones de ruptura estén correctamente instalados y asegurados.",
+              "short": "Comprobar cordones de ruptura.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras de combustible de raíz a fuselaje estén aseguradas, no presenten rozaduras, daños ni señales de fuga.",
+              "short": "Comprobar mangueras de combustible raíz-fuselaje.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras neumáticas de raíz a fuselaje estén aseguradas, no presenten rozaduras, daños ni señales de fuga.",
+              "short": "Comprobar mangueras neumáticas raíz-fuselaje.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras de combustible HSS, ensambles de tubos de combustible y uniones tipo T de combustible estén aseguradas, no presenten rozaduras, daños ni fugas.",
+              "short": "Comprobar líneas de combustible HSS.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras neumáticas HSS y la válvula check neumática estén aseguradas, no presenten rozaduras, daños ni fugas.",
+              "short": "Comprobar neumáticas HSS.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras neumáticas y codos del VSP estén asegurados, no presenten rozaduras, daños ni fugas.",
+              "short": "Comprobar neumáticas VSP.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras de combustible, tubos de combustible y válvulas check de aislamiento del VSP estén aseguradas, no presenten rozaduras, daños ni señales de fuga.",
+              "short": "Comprobar combustible VSP.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los montantes de soporte estén asegurados, no presenten grietas, delaminación ni astillado. Compruebe que las contratuercas de horquilla estén aseguradas.",
+              "short": "Comprobar montantes de soporte.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los puentes de unión de los montantes de soporte estén asegurados y no presenten corrosión.",
+              "short": "Comprobar puentes de montantes.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe visualmente que las superficies superior e inferior del HSS no presenten grietas, astillado ni delaminación.",
+              "short": "Inspeccionar superficies del HSS.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los carenados de borde de ataque y borde de salida no presenten grietas, abolladuras ni daños.",
+              "short": "Comprobar carenados de bordes.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el VSP esté asegurado.",
+              "short": "Comprobar seguridad del VSP.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Asegúrese de que los pines de bloqueo de los pernos expandibles estén firmemente encajados en las lengüetas y que los anillos de bloqueo estén completamente visibles y expandidos.",
+              "short": "Comprobar pines de bloqueo expandibles.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las válvulas de corte de combustible estén aseguradas y no presenten fugas.",
+              "short": "Comprobar válvulas de corte.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Instale los carenados de ala HSS.",
+              "short": "Instalar carenados HSS.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "title": "¡Nota!",
+          "warning": true,
+          "applicable": false,
+          "text": "(ESSS) El siguiente procedimiento es requerido cuando se opera en ambiente seco, polvoso y/o arenoso."
+        },
+        {
+          "code": "2.16",
+          "title": "(ESSS) Limpie las válvulas check neumáticas del Soporte Horizontal de Depósitos (HSS).",
+          "short": "Limpiar válvulas check neumáticas HSS.",
+          "applicable": false,
+          "required": true
+        },
+        {
+          "code": "2.17",
+          "title": "Inspeccione la grúa externa de rescate, si está instalado, como sigue:",
+          "short": "Inspeccionar grúa externa de rescate.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Remueva los carenados del brazo de soporte.",
+              "short": "Remover carenados de brazo.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la grúa de rescate no presente grietas, corrosión y esté asegurado.",
+              "short": "Inspeccionar grúa de rescate.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el protector amortiguador del cable de la grúa no presente grietas, desgaste, corrosión y esté asegurado.",
+              "short": "Comprobar protector de cable.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el soporte de la grúa no presente grietas, corrosión, daños y esté asegurado.",
+              "short": "Comprobar soporte de la grúa.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las cubiertas y carenados de la grúa no presenten daños y estén asegurados.",
+              "short": "Comprobar cubiertas y carenados.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las cabezas de los tornillos no presenten corrosión.",
+              "short": "Inspeccionar tornillos.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el ensamble del gancho gire libremente y esté asegurado.",
+              "short": "Comprobar gancho.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que la virola del amortiguador de resorte esté asegurado.",
+              "short": "Comprobar grommet.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los conectores eléctricos y cableado estén asegurados, no presenten daños ni rozaduras.",
+              "short": "Comprobar conectores y cableado.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los paneles de control RESCUE HOIST en cabina estén asegurados, que los controles e interruptores no se atoren y que los rótulos sean legibles.",
+              "short": "Comprobar paneles RESCUE HOIST.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los herrajes de las líneas hidráulicas de la grúa no presenten señales de fugas.",
+              "short": "Comprobar herrajes hidráulicos.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Instale los carenados del brazo de soporte.",
+              "short": "Instalar carenados de brazo.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el protector amortiguador del cable de la grúa no presente grietas, desgaste, corrosión y esté asegurado.",
+              "short": "Comprobar protector de cable.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.18",
+          "title": "Inspeccione la grúa interna, si está instalado, como sigue:",
+          "short": "Inspeccionar grúa interna.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Inspeccione que no presente grietas, corrosión y que esté asegurado.",
+              "short": "Inspeccionar condición y seguridad.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los montantes de piso y cielo de la grúa no presenten grietas, corrosión, daños y estén asegurados.",
+              "short": "Comprobar montantes de la grúa.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el protector amortiguador del cable de la grúa no presente grietas, desgaste, corrosión y esté asegurado.",
+              "short": "Comprobar protector de cable.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el ensamble del gancho gire libremente y esté asegurado.",
+              "short": "Comprobar gancho.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que la virola del amortiguador de resorte esté asegurado.",
+              "short": "Comprobar virola.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los conectores eléctricos y cableado estén asegurados, no presenten daños ni rozaduras.",
+              "short": "Comprobar conectores y cableado.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los paneles de control RESCUE HOIST en cabina estén asegurados, que los controles e interruptores no se atoren y que los rótulos sean legibles.",
+              "short": "Comprobar paneles RESCUE HOIST.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "2.19",
+          "title": "Inspeccione que todas las antenas del Área No. 2 no presenten grietas, abolladuras, rayones ni piezas de fijación faltantes, y que se encuentren limpias.",
+          "short": "Inspeccionar antenas Área No. 2.",
+          "required": true
+        },
+        {
+          "code": "2.20",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 3 - Transición",
+      "items": [
+        {
+          "code": "3.1",
+          "title": "Inspeccione como sigue:",
+          "short": "Inspeccionar sección de transición.",
+          "subitems": [
+            {
+              "title": "Remueva los paneles de aislamiento acústico de la estructura divisoria trasera y cielo posterior de cabina; red de carga y paneles de cierre de combustible.",
+              "short": "Remover paneles acústicos, red y paneles de combustible.",
+              "required": true
+            },
+            {
+              "title": "(ESSS) Compruebe que el panel del sensor de flujo esté asegurado y no presente fugas.",
+              "short": "Comprobar panel de sensor de flujo ESSS.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que las mangueras de combustible, arneses eléctricos y puentes de unión presenten conexión adecuada, estén asegurados y no presenten rozaduras.",
+              "short": "Comprobar mangueras, arneses y puentes.",
+              "required": true
+            },
+            {
+              "title": "Instale los paneles de cierre de líneas de combustible, red de carga y paneles de aislamiento acústico.",
+              "short": "Instalar paneles, red y aislamiento.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "3.2",
+          "title": "Inspeccione el conector externo de arranque neumático del lado izquierdo como sigue:",
+          "short": "Inspeccionar conector de arranque neumático.",
+          "subitems": [
+            {
+              "title": "Inspeccione que el conector esté asegurado.",
+              "short": "Inspeccionar conector.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la válvula flapper se mueva libremente.",
+              "short": "Comprobar válvula flapper.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la cubierta de acceso cierre de forma segura.",
+              "short": "Comprobar cubierta de acceso.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "3.3",
+          "title": "Inspeccione que los puertos de salida de líneas de drene y ventilación debajo del helicóptero no presenten obstrucción.",
+          "short": "Inspeccionar puertos de drene y ventilación.",
+          "subitems": [
+            {
+              "title": "Compruebe que no exista agua u otra contaminación en ambos tanques de combustible usando el kit de muestra por sifón o drenando 1 pinta (473 ml) de combustible de ambos drenes de sumidero.",
+              "short": "Comprobar contaminación en tanques.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "3.4",
+          "title": "Inspeccione visualmente el exterior de los paneles de acceso al drene de sumidero y el área circundante por señales de fugas de combustible. Compruebe que los drenes del área de transición no presenten obstrucciones.",
+          "short": "Inspeccionar paneles de sumidero y drenes.",
+          "required": true
+        },
+        {
+          "code": "3.5",
+          "title": "Inspeccione que el revestimiento de la sección de transición no presente corrosión, grietas, abolladuras ni remaches faltantes.",
+          "short": "Inspeccionar revestimiento de transición.",
+          "required": true
+        },
+        {
+          "code": "3.6",
+          "title": "En helicópteros equipados con compuerta de acceso al compartimiento de aviónica, inspeccione el compartimiento de aviónica de la sección de transición como sigue:",
+          "short": "Inspeccionar compartimiento aviónica transición.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Abra la compuerta de acceso.",
+              "short": "Abrir compuerta de acceso.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione la condición de la compuerta de acceso y paneles de acceso, y que no presenten daños. Inspeccione que los sellos estén limpios y no presenten deterioro. Inspeccione que las bisagras de la compuerta de acceso no presenten grietas.",
+              "short": "Inspeccionar compuerta, paneles, sellos y bisagras.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la envoltura espiral de los arneses del sensor AN/AAR-57 no esté desenrollada y que los arneses se encuentren asegurados.",
+              "short": "Inspeccionar arnés AN/AAR-57.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los componentes de aviónica, conectores eléctricos y cableado no presenten desgaste excesivo, estén asegurados y no tengan daños.",
+              "short": "Inspeccionar componentes, conectores y cableado.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione la condición interior del cono de cola.",
+              "short": "Inspeccionar interior del cono de cola.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Cierre la compuerta de acceso. Compruebe que el enganche esté asegurado.",
+              "short": "Cerrar compuerta y comprobar enganche.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "3.7",
+          "title": "Inspeccione que todas las antenas del Área No. 3 no presenten grietas, abolladuras, rayones ni piezas de fijación faltantes, y que se encuentren limpias. Inspeccione que el sensor EOMS esté asegurado y no presente grietas, roturas o lente sucio.",
+          "short": "Inspeccionar antenas Área No. 3 y sensor EOMS.",
+          "required": true
+        },
+        {
+          "code": "3.8",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 4 - Cono de cola",
+      "items": [
+        {
+          "code": "4.1",
+          "title": "Inspeccione la llanta del tren de aterrizaje de cola por desgaste, cortes y grietas. Compruebe la presión de la llanta con un manómetro. Dé servicio según sea necesario.",
+          "short": "Inspeccionar llanta del tren de cola.",
+          "required": true
+        },
+        {
+          "code": "4.2",
+          "title": "Inspeccione el amortiguador del tren de aterrizaje de cola y el área de horquilla como sigue:",
+          "short": "Inspeccionar amortiguador y horquilla de cola.",
+          "subitems": [
+            {
+              "title": "Compruebe que el deflector corta-cables esté asegurado y no presente daños.",
+              "short": "Comprobar deflector corta-cables.",
+              "required": true
+            },
+            {
+              "title": "Remueva el panel de acceso del lado derecho o izquierdo del cono de cola.",
+              "short": "Remover panel de acceso del cono de cola.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione el herraje del escalón del pilón.",
+              "short": "Inspeccionar herraje de escalón.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione la guía de cable.",
+              "short": "Inspeccionar guía de cable.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el amortiguador no presente fugas, suciedad, corrosión ni bajo inflado.",
+              "short": "Inspeccionar amortiguador.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione los puntos de unión del amortiguador por rozaduras, daños, grietas y seguridad.",
+              "short": "Inspeccionar puntos de unión.",
+              "required": true
+            },
+            {
+              "title": "Con especial atención, limpie y lubrique las porciones expuestas de los pistones del amortiguador.",
+              "short": "Limpiar y lubricar pistones.",
+              "required": true
+            },
+            {
+              "title": "Instale el panel de acceso.",
+              "short": "Instalar panel de acceso.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "4.3",
+          "title": "Inspeccione el exterior del cono de cola como sigue:",
+          "short": "Inspeccionar exterior del cono de cola.",
+          "subitems": [
+            {
+              "title": "Inspeccione que el revestimiento no presente corrosión, abolladuras, grietas ni remaches faltantes.",
+              "short": "Inspeccionar revestimiento.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el agujero de drene del revestimiento no presente obstrucción.",
+              "short": "Comprobar agujero de drene.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la luz anti-colisión inferior esté asegurada. Compruebe que el lente no presente grietas, roturas y esté limpio.",
+              "short": "Inspeccionar luz anti-colisión inferior.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los módulos de carga del dispensador de bengalas y contra medidas electrónicas, y sus montajes estén en condición, asegurados, sin corrosión y limpios.",
+              "short": "Comprobar dispensador bengalas y contramedidas electrónicas.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "4.4",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 5 - Pilón del rotor de cola",
+      "items": [
+        {
+          "code": "5.1",
+          "title": "Inspeccione la caja de engranes intermedia como sigue:",
+          "short": "Inspeccionar caja de engranes intermedia.",
+          "subitems": [
+            {
+              "title": "Remueva la cubierta.",
+              "short": "Remover cubierta.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la carcasa, pies de montaje y pads de montaje al fuselaje no presenten grietas, abolladuras, muescas, corrosión y que estén asegurados.",
+              "short": "Inspeccionar carcasa y montajes.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el conector eléctrico del detector de partículas esté asegurado.",
+              "short": "Comprobar conector del detector de partículas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los agujeros de drene no presenten obstrucción.",
+              "short": "Inspeccionar agujeros de drene.",
+              "required": true
+            },
+            {
+              "title": "Instale la cubierta.",
+              "short": "Instalar cubierta.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "5.2",
+          "title": "Inspeccione el área del pilón del rotor de cola como sigue:",
+          "short": "Inspeccionar pilón del rotor de cola.",
+          "subitems": [
+            {
+              "title": "Abra la cubierta del eje de transmisión.",
+              "short": "Abrir cubierta del eje de transmisión.",
+              "required": true
+            },
+            {
+              "title": "Examine que el revestimiento del pilón no presente corrosión, abolladuras ni remaches faltantes.",
+              "short": "Examinar revestimiento del pilón.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la envoltura espiral de los arneses del sensor AN/AAR-57 no esté desenrollada y que los arneses se encuentren asegurados.",
+              "short": "Inspeccionar arnés AN/AAR-57.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe la condición y seguridad del cableado eléctrico.",
+              "short": "Comprobar cableado eléctrico.",
+              "required": true
+            },
+            {
+              "title": "Cierre la cubierta del eje de transmisión.",
+              "short": "Cerrar cubierta del eje de transmisión.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la luz anti-colisión y luz de posición estén aseguradas y que el lente no presente grietas, roturas o suciedad.",
+              "short": "Inspeccionar luces del pilón.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "5.3",
+          "title": "Inspeccione el sistema anti-hielo del rotor de cola como sigue:",
+          "short": "Inspeccionar anti-hielo rotor de cola.",
+          "subitems": [
+            {
+              "title": "Compruebe que el escudo ambiental del anillo deslizante anti-hielo, arnés de cables y conectores no presenten rozaduras o aislamiento dañado, y estén asegurados.",
+              "short": "Comprobar anillo deslizante y arnés.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los agujeros de drene en rotor y estator no estén bloqueados.",
+              "short": "Comprobar drenes de rotor y estator.",
+              "required": true
+            },
+            {
+              "title": "Compruebe el desgaste de las escobillas del anti-hielo.",
+              "short": "Comprobar escobillas anti-hielo.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los soportes del cable anti-hielo no presenten grietas.",
+              "short": "Comprobar soportes de cable anti-hielo.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "5.4",
+          "title": "Inspeccione las varillas de control de paso del rotor de cola con rodamientos esféricos como sigue:",
+          "short": "Inspeccionar varillas de paso rotor de cola.",
+          "subitems": [
+            {
+              "title": "Inspeccione desgaste en los rodamientos de extremo de varilla de control de paso del rotor de cola usando el lado de 0.010 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos con 0.010 inch.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Efectúe las siguientes inspecciones cada 15 horas de vuelo únicamente en rodamientos que hayan fallado la inspección con calibrador de 0.010 inch."
+            },
+            {
+              "title": "Inspeccione desgaste en los rodamientos de extremo de varilla de control de paso del rotor de cola usando el lado de 0.015 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos con 0.015 inch.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "5.5",
+          "title": "Inspeccione el estabilizador como sigue:",
+          "short": "Inspeccionar estabilizador.",
+          "subitems": [
+            {
+              "title": "Remueva los paneles de inspección.",
+              "short": "Remover paneles de inspección.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione el larguero por grietas usando una linterna y espejo.",
+              "short": "Inspeccionar larguero.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los puntos de unión del actuador del estabilizador no presenten grietas, corrosión, juego y estén asegurados.",
+              "short": "Comprobar unión del actuador.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la fijación del interruptor limitador esté asegurada y no presente corrosión.",
+              "short": "Comprobar interruptor limitador.",
+              "required": true
+            },
+            {
+              "title": "Limpie y lubrique las porciones expuestas del actuador del estabilizador.",
+              "short": "Limpiar y lubricar actuador.",
+              "required": true
+            },
+            {
+              "title": "Instale los paneles de inspección.",
+              "short": "Instalar paneles de inspección.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las lineas de descarga estática estén aseguradas y en condición general.",
+              "short": "Comprobar mechas de descarga estática.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "5.6",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 6 - Pilón del rotor principal",
+      "items": [
+        {
+          "code": "6.1",
+          "title": "Inspeccione la cubierta deslizante del pilón del rotor principal como sigue:",
+          "short": "Inspeccionar cubierta deslizante del pilón.",
+          "subitems": [
+            {
+              "title": "Abra la cubierta deslizante.",
+              "short": "Abrir cubierta deslizante.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la cubierta no presente grietas ni distorsión.",
+              "short": "Inspeccionar cubierta.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los rodillos y rieles no presenten daños ni desgaste.",
+              "short": "Inspeccionar rodillos y rieles.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la malla de la cubierta no presente obstrucciones.",
+              "short": "Comprobar malla de cubierta.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las guías corta-cables y cortadores estén asegurados y no presenten daños ni corrosión.",
+              "short": "Inspeccionar guías y cortadores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los receptores de pines, estructura de soporte, revestimiento, largueros e intercostales en las estaciones 247.0 y 267.0 no presenten grietas.",
+              "short": "Inspeccionar estructura 247/267.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.2",
+          "title": "Inspeccione los tubos pitot-estática como sigue:",
+          "short": "Inspeccionar tubos pitot-estática.",
+          "subitems": [
+            {
+              "title": "Inspeccione que las aberturas no presenten obstrucciones, como tierra o insectos.",
+              "short": "Inspeccionar aberturas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione por decoloración más allá de la causada normalmente por el calentador pitot.",
+              "short": "Inspeccionar decoloración.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.3",
+          "title": "Inspeccione el motor de la bomba hidráulica de respaldo como sigue:",
+          "short": "Inspeccionar motor de la bomba hidráulica de respaldo.",
+          "subitems": [
+            {
+              "title": "Inspeccione seguridad general, condición general y condición de los conectores eléctricos.",
+              "short": "Inspeccionar seguridad y conectores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione la seguridad de la caja de relevadores eléctricos en la parte superior del motor.",
+              "short": "Inspeccionar caja de relevadores.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la cubierta y malla de residuos de la cubierta estén aseguradas, sin obstrucciones ni agujeros.",
+              "short": "Inspeccionar cubierta y malla.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.4",
+          "title": "Inspeccione controles de vuelo y sistema de calefacción/ventilación como sigue:",
+          "short": "Inspeccionar controles de vuelo y calefacción.",
+          "subitems": [
+            {
+              "title": "Inspeccione visualmente que todos los ensambles de varillas de control de vuelo no presenten corrosión externa.",
+              "short": "Inspeccionar varillas de control.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que varillas de control de vuelo, contratuercas, levas y soportes no presenten grietas, desgaste, distorsión y que las uniones estén aseguradas.",
+              "short": "Inspeccionar varillas, contratuercas y soportes.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione holgura entre los cuerpos de los tubos de control y las contratuercas moviendo el ensamble de varilla de control en cualquier dirección.",
+              "short": "Inspeccionar holgura de tubos de control.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el mezclador de controles de vuelo no presente grietas, desgaste, distorsión y que esté asegurado.",
+              "short": "Inspeccionar mezclador de controles.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los tubos de aire sangrado de calefacción no presenten grietas ni daños.",
+              "short": "Inspeccionar tubos de aire sangrado.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el soplador de ventilación y la válvula mezcladora del calefactor no presenten daños.",
+              "short": "Comprobar soplador y válvula mezcladora.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el tubo sensor de temperatura hacia la válvula mezcladora del calefactor esté asegurado y no presente grietas.",
+              "short": "Comprobar tubo sensor de temperatura.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.5",
+          "title": "Inspeccione servos primarios, guiñada, servos boost de colectivo, ensamble trim de cabeceo, ensamble de alabeo y actuadores SAS como sigue:",
+          "short": "Inspeccionar servos y actuadores SAS.",
+          "subitems": [
+            {
+              "title": "Compruebe que no presenten fugas. Preste especial atención a las superficies superiores e inferiores de los eslabones de salida.",
+              "short": "Comprobar fugas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que todos los actuadores SAS no presenten rayaduras profundas o daños por contacto con cables de seguridad o alambre instalado entre la carcasa del actuador y la tuerca retenedora del pistón de salida.",
+              "short": "Comprobar actuadores SAS.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los tres servos primarios no presenten daños y estén asegurados en su montaje. Preste especial atención al área de rebaje de rosca de todas las varillas de pistón del servo en el eje inmediatamente adyacente a la horquilla de salida. Inspeccione que los ensambles de manivela de entrada estén asegurados, sin desgaste ni daños.",
+              "short": "Inspeccionar servos primarios.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el ensamble trim de cabeceo y el ensamble de alabeo no presenten daños y estén asegurados en su montaje.",
+              "short": "Inspeccionar trim de cabeceo y alabeo.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que ambos extremos del servo boost de colectivo no presenten grietas en los extremos del cilindro ni en los ejes del pistón de potencia. Preste especial atención al área de rebaje de rosca de las varillas de pistón del servo en el eje inmediatamente adyacente a la horquilla de salida.",
+              "short": "Inspeccionar servo boost colectivo.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione ambos extremos del servo boost de guiñada por grietas en los extremos del cilindro y en los ejes del pistón de potencia. Preste especial atención al área de rebaje de rosca de las varillas de pistón del servo en el eje inmediatamente adyacente a la horquilla de salida.",
+              "short": "Inspeccionar servo boost guiñada.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los actuadores SAS boost de guiñada, trim de cabeceo y ensamble de alabeo no presenten daños y estén asegurados.",
+              "short": "Inspeccionar SAS guiñada/cabeceo/alabeo.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.6",
+          "title": "Inspeccione el módulo de accesorios por filtración de aceite, prestando atención particular al área alrededor del generador principal.",
+          "short": "Inspeccionar filtración de aceite módulo de accesorios.",
+          "required": true
+        },
+        {
+          "code": "6.7",
+          "title": "Inspeccione las carcasas del módulo de entrada y de accesorios por decoloración de pintura de gris aluminizado a café.",
+          "short": "Inspeccionar decoloración de carcasas.",
+          "required": true
+        },
+        {
+          "code": "6.8",
+          "title": "Inspeccione que los conectores eléctricos del detector de partículas del módulo de accesorios, sensor de velocidad Nr y sensor de baja presión de aceite estén asegurados. Cierre la cubierta deslizante",
+          "short": "Inspeccionar conectores eléctricos.",
+          "required": true
+        },
+        {
+          "code": "6.9",
+          "title": "Inspeccione los rodamientos esféricos de las varillas de control de paso del rotor principal como sigue:",
+          "short": "Inspeccionar rodamientos esféricos.",
+          "subitems": [
+            {
+              "title": "Inspeccione desgaste en los rodamientos superiores de extremo de varilla de control de paso de la cabeza del rotor principal usando el lado de 0.010 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos superiores con 0.010 inch.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione desgaste en el rodamiento inferior de extremo de varilla de control de paso de la cabeza del rotor principal usando el lado de 0.010 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamiento inferior con 0.010 inch.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione las varillas de control de paso del rotor principal por daños o deformación evidente.",
+              "short": "Inspeccionar varillas de control de paso.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Efectúe las siguientes inspecciones cada 15 horas de vuelo únicamente en rodamientos que hayan fallado la inspección con calibrador de 0.010 inch."
+            },
+            {
+              "title": "Inspeccione desgaste en los rodamientos superiores de extremo de varilla de control de paso de la cabeza del rotor principal usando el lado de 0.015 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos superiores con 0.015 inch.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione desgaste en el rodamiento inferior de extremo de varilla de control de paso de la cabeza del rotor principal usando el lado de 0.015 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamiento inferior con 0.015 inch.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.10",
+          "title": "Inspeccione los rodamientos elastoméricos de las varillas de control de paso del rotor principal como sigue:",
+          "short": "Inspeccionar rodamientos elastoméricos de paso.",
+          "subitems": [
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "El calibrador plástico de espesores para rodamiento elastomérico de extremo de varilla debe usarse únicamente si existe posible separación con base en la inspección visual de la superficie del rodamiento."
+            },
+            {
+              "title": "Inspeccione los rodamientos superiores e inferiores de extremo de varilla de control de paso de la cabeza del rotor principal por grietas o separación elastomérica, si existe concentración o acumulación de desgaste tipo borrador, si se detecta una extrusión, o si se sospecha agrietamiento o despegue del elastómero del miembro interior o exterior de la lámina. Compruebe visualmente señales de separación del miembro interior usando fuerza manual y agitando la varilla de control.",
+              "short": "Inspeccionar grietas o separación elastomérica.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que no existan separaciones o grietas en áreas distintas a las separaciones fabricadas de las láminas.",
+              "short": "Comprobar separaciones o grietas.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.11",
+          "title": "Inspeccione el sistema anti-hielo del rotor principal como sigue:",
+          "short": "Inspeccionar anti-hielo rotor principal.",
+          "subitems": [
+            {
+              "title": "Compruebe que el escudo ambiental del anillo deslizante del anti-hielo, arnés de cables y conectores no presenten rozaduras o aislamiento dañado, y estén asegurados.",
+              "short": "Comprobar anillo deslizante y arnés.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los soportes del cable anti-hielo no presenten grietas y estén asegurados.",
+              "short": "Comprobar soportes de cable anti-hielo.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.12",
+          "title": "Inspeccione el cubo y muñón del rotor principal como sigue:",
+          "short": "Inspeccionar cubo y muñón.",
+          "subitems": [
+            {
+              "title": "Inspeccione que el cubo no presente grietas ni daños.",
+              "short": "Inspeccionar cubo.",
+              "required": true
+            },
+            {
+              "title": "Compruebe visualmente que el tubo termorretráctil del eje del muñón no presente evidencia de holgura o movimiento.",
+              "short": "Comprobar termorretráctil del muñón.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la marca de corrimiento de la pista interior no presente movimiento.",
+              "short": "Comprobar marca de corrimiento.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.13",
+          "title": "Inspeccione los rodamientos de los dampers de la cabeza del rotor principal y herrajes de fijación",
+          "short": "Inspeccionar dampers del rotor principal.",
+          "subitems": [
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "No se requiere remover el ensamble damper para la inspección con calibrador de espesores."
+            },
+            {
+              "title": "Inspeccione desgaste en los rodamientos de extremo de varilla interiores y exteriores del damper de la cabeza del rotor principal usando el lado de 0.010 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos damper con 0.010 inch.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Efectúe la siguiente inspección cada 15 horas de vuelo únicamente en rodamientos que hayan fallado la inspección con calibrador de 0.010 inch."
+            },
+            {
+              "title": "Inspeccione desgaste en los rodamientos de extremo de varilla interiores y exteriores del damper de la cabeza del rotor principal usando el lado de 0.015 inch. del calibrador plástico de espesores fabricado localmente.",
+              "short": "Inspeccionar rodamientos damper con 0.015 inch.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "La comprobación lead/lag se efectúa con la pala del rotor principal ubicada en la posición de las 12 en punto con el seguro de ráfaga (gust lock) aplicado."
+            },
+            {
+              "title": "El Mecánico A se posiciona en la punta de la pala para efectuar lead/lag de la pala del rotor principal. El Mecánico B se posiciona en la aeronave para observar el ensamble damper del rotor principal.",
+              "short": "Posicionar mecánicos para lead/lag.",
+              "required": true
+            },
+            {
+              "title": "Efectúe la comprobación lead/lag mientras observa montajes, pernos y rodamientos del ensamble damper del rotor principal por condición y seguridad.",
+              "short": "Efectuar comprobación lead/lag.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.14",
+          "title": "Inspeccione los topes de caída como sigue:",
+          "short": "Inspeccionar topes de caída.",
+          "subitems": [
+            {
+              "title": "Compruebe que las orejas de los topes de caída no presenten grietas.",
+              "short": "Comprobar orejas de os topes de caída.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que la tuerca anular de los topes de caída no estén flojas y que el buje de manga (pista interior) no presente grietas, en los ensambles spindle 70070-10030-041, 70070-10030-042, 70070-10030-045, 70070-10030-046, 70102-08200-041 a 70102-08200-044 y 70102-08200-063.",
+              "short": "Comprobar tuerca anular y buje.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el soporte de los topes de caída no presente grietas. Inspeccione visualmente que el soporte de los topes de caída no presenten grietas en las ranuras superior e inferior del extractor.",
+              "short": "Comprobar soporte de los topes de caída.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los topes de caída y el pin retenedor del buje de los topes de caída no presenten daños y estén asegurados.",
+              "short": "Comprobar bujes y pin retenedor.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente resortes y herrajes de fijación por señales de corrosión.",
+              "short": "Inspeccionar resortes y herrajes.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.15",
+          "title": "Inspeccione los ensambles anti-flapeo como sigue:",
+          "short": "Inspeccionar ensambles anti-flapeo.",
+          "subitems": [
+            {
+              "title": "Compruebe que no presenten daños, estén asegurados y tengan libertad de operación.",
+              "short": "Comprobar condición y operación.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente que no exista interferencia o contacto entre la leva anti-flapeo y la placa de tope.",
+              "short": "Inspeccionar leva anti-flapeo.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente que no exista contacto entre la leva de los topes de caída y los pernos de unión del cuerno.",
+              "short": "Inspeccionar contacto topes de caída/cuerno.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.16",
+          "title": "Inspeccione los rodamientos elastoméricos del muñón del rotor principal como sigue:",
+          "short": "Inspeccionar rodamientos elastoméricos del spindle.",
+          "subitems": [
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "El rodamiento elastomérico del spindle consta de un rodamiento esférico y un rodamiento de empuje. El desgaste de cualquiera de los rodamientos es un proceso gradual que tomará varios cientos de horas desde la primera detección de daño en el hule hasta el punto en que el rodamiento deba reemplazarse. La comparación visual de los rodamientos en el manual técnico aplicable es el criterio de aceptación o rechazo. Una sustancia blanca similar a cera sobre las superficies de hule es normal y no debe removerse."
+            },
+            {
+              "title": "Usando linterna y espejo, inspeccione visualmente la superficie interior y exterior de los rodamientos esféricos a través del agujero de inspección de 2 pulgadas de diámetro por desgaste, separaciones de laminado y láminas agrietadas.",
+              "short": "Inspeccionar rodamientos esféricos.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "No remueva el muñón para inspeccionar la superficie interior del rodamiento de empuje."
+            },
+            {
+              "title": "Usando linterna y espejo, inspeccione visualmente la superficie exterior del rodamiento de empuje por extrusiones elastoméricas, prestando atención particular a la posición de las 6 en punto y a las áreas de superficie más hacia adentro. Reemplace el rodamiento de empuje dentro de las siguientes 40 horas de vuelo si se encuentra cualquier extrusión.",
+              "short": "Inspeccionar rodamiento de empuje.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los rodamientos de empuje no presenten separaciones de laminado ni láminas agrietadas. Las grietas aparecerán en el borde de las láminas metálicas. No se permiten ninguna grietas.",
+              "short": "Inspeccionar laminado y láminas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los rodamientos elastoméricos no presenten agrietamiento superficial o agrietamiento del hule. Pequeñas grietas superficiales tipo capilar o agrietamiento del hule son aceptables.",
+              "short": "Comprobar agrietamiento superficial.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.17",
+          "title": "Inspeccione el ensamble bifilar como sigue:",
+          "short": "Inspeccionar ensamble bifilar.",
+          "subitems": [
+            {
+              "title": "Inspeccione que el bifilar no presente grietas, daños visibles, desgaste y que esté asegurado.",
+              "short": "Inspeccionar bifilar.",
+              "required": true
+            },
+            {
+              "title": "Limpie arandelas cónicas, bujes y pines del bifilar.",
+              "short": "Limpiar arandelas, bujes y pines.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente que las arandelas cónicas del bifilar no presenten desgaste ni daños.",
+              "short": "Inspeccionar arandelas cónicas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los pesos no presenten grietas entre y adyacentes a los diámetros del buje en las superficies superior e inferior.",
+              "short": "Inspeccionar pesos.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las uniones adheridas superior e inferior de los pesos no presenten grietas.",
+              "short": "Inspeccionar uniones adheridas.",
+              "required": true
+            },
+            {
+              "title": "Lubrique arandelas, pines y bujes.",
+              "short": "Lubricar arandelas, pines y bujes.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.18",
+          "title": "Inspeccione los pesos bifilares como sigue:",
+          "short": "Inspeccionar pesos bifilares.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los pesos no presenten muescas, cortes ni grietas en las Áreas A, B y C.",
+              "short": "Inspeccionar pesos Áreas A/B/C.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Pintura agrietada en el Área C de pesos marcados con \"UT\" en el área del número de parte es aceptable."
+            },
+            {
+              "title": "Inspeccione que las Áreas A y B de pesos marcados con \"UT\" cerca del número de parte no presenten grietas de pintura.",
+              "short": "Inspeccionar pesos marcados UT.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los pesos sin marca \"UT\" en el área del número de parte no presenten grietas de pintura en las Áreas A, B y C.",
+              "short": "Inspeccionar pesos sin marca UT.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.19",
+          "title": "Pruebe los indicadores de presión de las palas del rotor principal.",
+          "short": "Probar indicadores de presión de palas.",
+          "required": true
+        },
+        {
+          "code": "6.20",
+          "title": "Inspeccione los pines de las palas del rotor principal como sigue:",
+          "short": "Inspeccionar pines de palas rotor principal.",
+          "subitems": [
+            {
+              "title": "Compruebe la condición, seguridad e instalación de chavetas en pines sólidos de pala.",
+              "short": "Comprobar pines sólidos.",
+              "required": true
+            },
+            {
+              "title": "Compruebe la seguridad y condición de los pines expandibles. Verifique la tensión del pin como sigue:",
+              "short": "Comprobar pines expandibles.",
+              "required": true
+            },
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "No debe existir ningún atascamiento del pin expandible por la pala del rotor principal cuando se compruebe la tensión. Las palas del rotor principal y los pines de pala no tienen que removerse para esta inspección."
+            },
+            {
+              "title": "Use el conjunto de abrazadera de pala, grúa, eslinga de grúa y adaptador según sea necesario para levantar la pala del rotor principal y remover cualquier atascamiento de los pines expandibles.",
+              "short": "Levantar pala y liberar pines.",
+              "required": true
+            },
+            {
+              "title": "Libere la manija del pin expandible de la tuerca inferior y abra la manija.",
+              "short": "Liberar manija del pin.",
+              "required": true
+            },
+            {
+              "title": "Jale el pin lo suficiente para que los dos segmentos expandibles superiores sean visibles sobre el cuff de la pala. Verifique que el pin no esté fracturado observando movimiento correspondiente del extremo inferior del pin núcleo. ¡NO REMUEVA COMPLETAMENTE EL PIN!.",
+              "short": "Verificar pin expandible.",
+              "required": true
+            },
+            {
+              "title": "Si el pin no está defectuoso, instale y compruebe la tensión de cierre en la manija.",
+              "short": "Instalar y comprobar tensión de cierre.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.21",
+          "title": "Inspeccione el plato oscilante como sigue:",
+          "short": "Inspeccionar plato oscilante.",
+          "subitems": [
+            {
+              "title": "Inspeccione que el plato oscilante y ensambles de tijeras no presenten grietas, abolladuras, distorsión, corrosión y que estén asegurados.",
+              "short": "Inspeccionar plato y tijeras.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el uniball del plato oscilante esté limpio.",
+              "short": "Inspeccionar uniball.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.22",
+          "title": "Inspeccione que los ensambles de eslabones del plato oscilante no presenten grietas.",
+          "short": "Inspeccionar eslabones del plato oscilante.",
+          "required": true
+        },
+        {
+          "code": "6.23",
+          "title": "Inspeccione las tijeras del rotor principal como sigue:",
+          "short": "Inspeccionar tijeras del rotor principal.",
+          "subitems": [
+            {
+              "title": "Usando un indicador de cuadrante (dial indicator), inspeccione juego radial y axial en los rodamientos de unión de tijeras en el plato oscilante.",
+              "short": "Inspeccionar rodamientos de tijeras en plato.",
+              "required": true
+            },
+            {
+              "title": "Usando un indicador de cuadrante (dial indicator), inspeccione juego radial y axial en los rodamientos superiores de tijeras rotativas.",
+              "short": "Inspeccionar rodamientos superiores.",
+              "required": true
+            },
+            {
+              "title": "Usando un indicador de cuadrante (dial indicator), inspeccione juego radial y axial en los rodamientos inferiores de tijeras rotativas.",
+              "short": "Inspeccionar rodamientos inferiores.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.24",
+          "title": "Inspeccione la transmisión principal como sigue:",
+          "short": "Inspeccionar transmisión principal.",
+          "subitems": [
+            {
+              "title": "Inspeccione que las orejas de montaje no presenten grietas, abolladuras, muescas, corrosión y estén aseguradas.",
+              "short": "Inspeccionar orejas de montaje.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que el área del sello de entrada del motor no presente fugas de aceite.",
+              "short": "Comprobar sello de entrada.",
+              "required": true
+            },
+            {
+              "title": "(MWO-50-43) Inspeccione que el dowel pin y ángulos retenedores no presenten deformación y estén asegurados.",
+              "short": "Inspeccionar dowel pin.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los dowel pins no presenten señales de juego axial o rotacional en la caja de transmisión principal usando la marca de corrimiento.",
+              "short": "Inspeccionar dowel pins.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el compuesto sellador que cubre los dowel pins no presente abultamiento, ampollas ni grietas.",
+              "short": "Inspeccionar compuesto sellador.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.25",
+          "title": "Inspeccione el seguro de ráfaga (gust lock) como sigue:",
+          "short": "Inspeccionar gust lock.",
+          "subitems": [
+            {
+              "title": "Aplique el seguro de ráfaga (gust lock).",
+              "short": "Aplicar gust lock.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el seguro de ráfaga (gust lock) no presente daños, desgaste y esté asegurado.",
+              "short": "Inspeccionar gust lock.",
+              "required": true
+            },
+            {
+              "title": "Libere el seguro de ráfaga (gust lock).",
+              "short": "Liberar gust lock.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.26",
+          "title": "Inspeccione el enfriador de aceite y radiador como sigue:",
+          "short": "Inspeccionar enfriador de aceite y radiador.",
+          "subitems": [
+            {
+              "title": "Gire las palas del rotor principal según sea requerido para obtener acceso al enfriador de aceite y aplique el seguro de ráfaga (gust lock).",
+              "short": "Girar palas y aplicar gust lock.",
+              "required": true
+            },
+            {
+              "title": "Remueva la cubierta de acceso del ducto.",
+              "short": "Remover cubierta del ducto.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el eje de transmisión no presente grietas, corrosión, daños y que esté asegurado.",
+              "short": "Inspeccionar eje de transmisión.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el interior del ducto no presente residuos ni obstrucciones.",
+              "short": "Inspeccionar interior de ducto.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el ventilador no presente obstrucciones ni residuos atrapados en las cavidades entre las palas. No remueva el epóxico usado para balancear el rotor desde las cavidades.",
+              "short": "Inspeccionar ventilador.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el radiador no tenga suciedad ni residuos.",
+              "short": "Inspeccionar radiador.",
+              "required": true
+            },
+            {
+              "title": "Compruebe condición y seguridad de soportes y cableado.",
+              "short": "Comprobar soportes y cableado.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la estructura de soporte no presente grietas, particularmente en la zona soldada de la fijación del mamparo con brida.",
+              "short": "Inspeccionar estructura de soporte.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione el revestimiento exterior del fuselaje y soportes externos de los apoyos del damper viscoso del eje de transmisión por grietas.",
+              "short": "Inspeccionar apoyos del damper viscoso.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los soportes de rodamientos del eje de transmisión no presenten grietas y estén asegurados.",
+              "short": "Inspeccionar soportes de rodamientos.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.27",
+          "title": "Inspeccione que las válvulas de alimentación cruzada de combustible y válvulas breakaway tipo T presenten línea amarilla visible alrededor del centro de la válvula.",
+          "short": "Inspeccionar válvulas crossfeed y breakaway.",
+          "required": true
+        },
+        {
+          "code": "6.28",
+          "title": "Inspeccione el rodamiento del damper viscoso del enfriador de aceite por residuos, daños o sobrecalentamiento como sigue:",
+          "short": "Inspeccionar rodamiento damper viscoso.",
+          "subitems": [
+            {
+              "title": "¡Nota!",
+              "warning": true,
+              "text": "Movimiento o purga de grasa del ensamble de rodamiento del damper viscoso, sin decoloración acompañante o indicación de daño al rodamiento, no es causa de reemplazo."
+            },
+            {
+              "title": "En helicópteros con adaptador de manga 70361-03011-041: remueva el panel de acceso en la parte trasera del ducto del enfriador de aceite.",
+              "short": "Remover panel con adaptador 70361-03011-041.",
+              "required": true
+            },
+            {
+              "title": "Usando espejo de inspección y linterna, inspeccione el área dentro del ducto por residuos.",
+              "short": "Inspeccionar área dentro del ducto.",
+              "required": true
+            },
+            {
+              "title": "Use boroscopio flexible para inspeccionar el área en el extremo delantero del rodamiento del damper viscoso y entre el ensamble del rodamiento del damper viscoso y el ducto.",
+              "short": "Inspeccionar con boroscopio flexible.",
+              "required": true
+            },
+            {
+              "title": "En helicópteros con adaptador de manga 70361-03011-105: inspeccione las ranuras del adaptador de manga por obstrucciones y residuos ubicados en el extremo delantero del rodamiento del damper viscoso y entre el ensamble del rodamiento del damper viscoso y el ducto.",
+              "short": "Inspeccionar adaptador 70361-03011-105.",
+              "required": true
+            },
+            {
+              "title": "Si hay residuos en el extremo delantero del rodamiento o entre el rodamiento y el ducto, limpie de acuerdo con el manual de mantenimiento aplicable.",
+              "short": "Limpiar residuos si están presentes.",
+              "required": true
+            },
+            {
+              "title": "Compruebe el rodamiento por evidencia de sobrecalentamiento (decoloración por temperatura) y daño por residuos. Preste atención particular al sello del rodamiento.",
+              "short": "Comprobar sobrecalentamiento y sello.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione el ensamble de rodamiento viscoso por nivel adecuado de fluido, indicado por burbujas en el fluido.",
+              "short": "Inspeccionar nivel de fluido.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el ensamble de rodamiento viscoso no presente fugas de fluido.",
+              "short": "Inspeccionar fugas de fluido.",
+              "required": true
+            },
+            {
+              "title": "Instale la cubierta de acceso del ducto del enfriador de aceite.",
+              "short": "Instalar cubierta del ducto.",
+              "required": true
+            },
+            {
+              "title": "Libere el seguro de ráfaga.",
+              "short": "Liberar gust lock.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.29",
+          "title": "Inspeccione el transmisor IRCM como sigue:",
+          "short": "Inspeccionar transmisor IRCM.",
+          "subitems": [
+            {
+              "title": "Inspeccione que esté asegurado, no presente rayones, grietas y se encuentre limpio.",
+              "short": "Inspeccionar seguridad y limpieza.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los cables de energía no tengan rozaduras contra la compuerta de acceso de la APU.",
+              "short": "Comprobar cables de energía.",
+              "required": true
+            },
+            {
+              "title": "Remueva la cubierta.",
+              "short": "Remover cubierta.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los soportes amortiguadores y correas de sujeción, montajes y carenado no presenten grietas ni tornillos de fijación faltantes.",
+              "short": "Inspeccionar soportes, correas de sujeción y carenado.",
+              "required": true
+            },
+            {
+              "title": "Reinstale la cubierta.",
+              "short": "Reinstalar cubierta.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.30",
+          "title": "Inspeccione el generador AC de la APU como sigue:",
+          "short": "Inspeccionar generador AC APU.",
+          "subitems": [
+            {
+              "title": "Compruebe que el montaje esté asegurado, las conexiones eléctricas estén aseguradas y no exista acumulación de suciedad o aceite excesivo.",
+              "short": "Comprobar montaje y conexiones.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la carcasa no presente grietas.",
+              "short": "Inspeccionar carcasa.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las áreas de entrada de aire y escape no presenten acumulación de objetos extraños.",
+              "short": "Comprobar entrada de aire y escape.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.31",
+          "title": "Inspeccione el ensamble APU como sigue:",
+          "short": "Inspeccionar ensamble APU.",
+          "subitems": [
+            {
+              "title": "Compruebe que el escape esté asegurado y no presente daños.",
+              "short": "Comprobar escape.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las superficies de acoplamiento del impulsor de accesorios y eje de reducción no presenten fugas de aceite.",
+              "short": "Inspeccionar superficies de acoplamiento.",
+              "required": true
+            },
+            {
+              "title": "Remueva la cubierta del cárter de control de combustible.",
+              "short": "Remover cubierta de control de combustible.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las líneas de combustible y el compartimiento de control de combustible no presenten fugas.",
+              "short": "Comprobar líneas y compartimiento de combustible.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las líneas no presenten grietas ni dobleces.",
+              "short": "Comprobar líneas.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el conjunto de tubos de combustible no presente rozaduras.",
+              "short": "Inspeccionar haz de tubos.",
+              "required": true
+            },
+            {
+              "title": "Instale la cubierta del cárter de control de combustible. Refiérase a WP 1640 para torque.",
+              "short": "Instalar cubierta y aplicar torque.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los montajes de soporte y herrajes de fijación no presenten daños y estén asegurados.",
+              "short": "Inspeccionar montajes y herrajes.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.32",
+          "title": "Inspeccione el extintor de fuego de motor/APU como sigue:",
+          "short": "Inspeccionar extintor motor/APU.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los indicadores de los contenedores del extintor presenten lecturas de presión correctas compensadas por temperatura.",
+              "short": "Inspeccionar indicadores de presión.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las líneas y herrajes no estén flojos, no presenten grietas y estén asegurados.",
+              "short": "Comprobar líneas y herrajes.",
+              "required": true
+            },
+            {
+              "title": "Compruebe manualmente que la válvula de control direccional se mueva libremente. Cuando se libere la pestaña, debe regresar por resorte a su posición original.",
+              "short": "Comprobar valvula direccional.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los conectores eléctricos y cableado del contenedor del extintor no presenten daños.",
+              "short": "Comprobar conectores y cableado.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.33",
+          "title": "Inspeccione que la válvula direccional del extintor de fuego de APU presente libre movimiento.",
+          "short": "Inspeccionar válvula direccional extintor APU.",
+          "subitems": [
+            {
+              "title": "Configure los interruptores de cabina como sigue:",
+              "short": "Configurar interruptores de cabina.",
+              "required": true
+            },
+            {
+              "title": "Fire Extinguisher: OFF. \nBattery: ON.",
+              "short": "Fire Extinguisher: OFF. \nBattery: ON.",
+              "required": true
+            },
+            {
+              "title": "Jale la manija T de APU. La válvula direccional debe rotar.",
+              "short": "Jalar manija T APU.",
+              "required": true
+            },
+            {
+              "title": "Empuje la manija T de APU. La válvula debe rotar de regreso.",
+              "short": "Empujar manija T APU.",
+              "required": true
+            },
+            {
+              "title": "Restablezca el interruptor Battery de cabina a OFF.",
+              "short": "Restablecer Battery OFF.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.34",
+          "title": "Inspeccione las áreas de motor como sigue:",
+          "short": "Inspeccionar áreas de motor.",
+          "subitems": [
+            {
+              "title": "Abra las cubiertas de motor.",
+              "short": "Abrir cubiertas de motor.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las costillas de bisagra delantera y trasera de las cubiertas de motor no presenten grietas, capas de fibra de vidrio dañadas ni sujetadores sueltos o faltantes.",
+              "short": "Inspeccionar bisagras de cubiertas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los pestillos de las cubiertas de motor no presenten grietas, tengan enganche positivo y cierre seguro.",
+              "short": "Comprobar pestillos de cubiertas.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que las entradas de aire del motor no presenten daños, sujetadores faltantes ni objetos extraños.",
+              "short": "Comprobar entradas de aire.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los sellos del módulo de entrada no presenten fugas de aceite.",
+              "short": "Inspeccionar sellos del módulo de entrada.",
+              "required": true
+            },
+            {
+              "title": "Gimbal elastomérico 70361-08001-101: inspeccione que no presente separación ni pernos rotos.",
+              "short": "Inspeccionar Gimbal elastomérico.",
+              "required": true
+            },
+            {
+              "title": "Compruebe que los ocho pernos Allen se encuentren apretados usando únicamente presión de dedo.",
+              "short": "Comprobar pernos Allen.",
+              "required": true
+            },
+            {
+              "title": "Si 1 a 4 pernos están flojos, inspeccione separación de unión usando calibrador de espesores de 0.005 inch.",
+              "short": "Inspeccionar separación con 0.005 inch.",
+              "required": true
+            },
+            {
+              "title": "Si más de 4 pernos están flojos, reemplace el Gimbal.",
+              "short": "Reemplazar Gimbal si aplica.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione el sello del módulo de entrada por evidencia de fuga de aceite.",
+              "short": "Inspeccionar evidencia de fuga.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que la marcha serie 3505300 cuente con nivel adecuado de aceite y no presente fugas. El aceite debe estar entre el rebose y el escalón maquinado en el puerto de llenado.",
+              "short": "Inspeccionar marcha.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los sellos del módulo de entrada no presenten fugas de aceite.",
+              "short": "Inspeccionar sellos del módulo de entrada.",
+              "required": true
+            },
+            {
+              "title": "Asegure las cubiertas de motor.",
+              "short": "Asegurar cubiertas de motor.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.35",
+          "title": "Inspeccione que los carenados superior y trasero del pilón del rotor principal no presenten grietas ni sujetadores faltantes.",
+          "short": "Inspeccionar carenados del pilón principal.",
+          "required": true
+        },
+        {
+          "code": "6.36",
+          "title": "(UES, Sistema de escape invertido) Si está instalado, inspeccione como sigue:",
+          "short": "Inspeccionar UES.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Inspeccione visualmente que la estructura del ensamble UES dentro del carenado principal no presente sujetadores sueltos, grietas u otros daños.",
+              "short": "Inspeccionar estructura UES.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que el carenado no presente daño por calor como carbonización o delaminación de capas.",
+              "short": "Comprobar daño por calor.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que la manta de aislamiento no presente rasgaduras.",
+              "short": "Comprobar manta de aislamiento.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe integridad del resorte en la puerta de lavado de motor.",
+              "short": "Comprobar resorte de puerta de lavado.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione montajes y sujetadores del ducto de escape al carenado y todas las áreas dentro del ensamble del carenado principal.",
+              "short": "Inspeccionar ducto de escape y carenado.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.37",
+          "title": "(HIRSS) Si está instalado, inspeccione como sigue:",
+          "short": "Inspeccionar HIRSS.",
+          "applicable": false,
+          "subitems": [
+            {
+              "title": "Inspeccione que los carenados y paneles traseros no presenten grietas, abolladuras y que las piezas de fijación estén aseguradas.",
+              "short": "Inspeccionar carenados y paneles.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que las nacelas no presenten grietas, abolladuras y que las piezas de fijación estén aseguradas.",
+              "short": "Inspeccionar nacelas.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los extensores de escape no presenten grietas, abolladuras y que las piezas de fijación estén aseguradas.",
+              "short": "Inspeccionar extensores de escape.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione visualmente que los núcleos y baffles no presenten deformación y verifique la condición del recubrimiento emisivo.",
+              "short": "Inspeccionar núcleos y baffles.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los ductos de desremolino (deswirl ducts) estén asegurados y no presenten daños.",
+              "short": "Inspeccionar ductos deswirl.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione la condición y seguridad de los ángulos de soporte de contrafuegos, herrajes inferiores de soporte y placas fail-safe.",
+              "short": "Inspeccionar firewall y placas fail-safe.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Compruebe que los separadores no tengan tuercas flojas o faltantes.",
+              "short": "Comprobar separadores.",
+              "applicable": false,
+              "required": true
+            },
+            {
+              "title": "Inspeccione que los pestillos y bisagras de la entrada de aire presenten operación y ajuste adecuados.",
+              "short": "Inspeccionar pestillos y bisagras de entrada de aire.",
+              "applicable": false,
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.38",
+          "title": "Si los módulos de escape estándar de motor están instalados, inspeccione como sigue:",
+          "short": "Inspeccionar escapes estándar.",
+          "subitems": [
+            {
+              "title": "Inspeccione que los carenados de escape no presenten grietas ni sujetadores faltantes.",
+              "short": "Inspeccionar carenados de escape.",
+              "required": true
+            },
+            {
+              "title": "Inspeccione que el eyector de escape no presente daños ni objetos extraños.",
+              "short": "Inspeccionar eyector de escape.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "code": "6.39",
+          "title": "Inspeccione que todas las antenas del Área No. 6 no presenten grietas, abolladuras, rayones ni piezas de fijación faltantes, y que se encuentren limpias.",
+          "short": "Inspeccionar antenas Área No. 6.",
+          "required": true
+        },
+        {
+          "code": "6.40",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Sección 7 - Comprobaciones con potencia aplicada",
+      "items": [
+        {
+          "title": "¡Nota!",
+          "warning": true,
+          "text": "El número de secuencia 7.1 aplica únicamente a helicópteros equipados con panel de prueba del sistema del estabilizador."
+        },
+        {
+          "code": "7.1",
+          "title": "Efectúe la comprobación del comparador de posición de actuadores como parte de la comprobación operacional del sistema estabilizador.",
+          "short": "Comprobar comparador de posición de actuadores.",
+          "required": true
+        },
+        {
+          "code": "7.2",
+          "title": "Inspeccione que no existan daños por objetos extraños (FOD) y asegúrese de que todos los paneles de acceso, cubiertas y puertas abiertas o removidas para esta inspección estén cerradas o instaladas.",
+          "short": "Inspeccionar FOD y cierre de paneles.",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

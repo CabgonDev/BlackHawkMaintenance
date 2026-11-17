@@ -1,0 +1,476 @@
+{
+  "title": "Inspección Pre Vuelo",
+  "meta": {
+    "matAeronaveOptions": ["1091", "1092", "1093", "1094", "1097", "1098"],
+    "grados": ["Sgto. 2/o.", "Sgto. 1/o.", "Sbtte.", "Tte."],
+    "especialidades": ["F.A.E.E.A.", "F.A.E.M.A."],
+    "defaults": {
+      "grado": "Sgto. 2/o.",
+      "especialidad": "F.A.E.E.A."
+    }
+  },
+  "sections": [
+    {
+      "title": "Antes de comenzar",
+      "items": [
+        {
+          "title": "¡Advertencia!",
+          "warning": true,
+          "text": "No hacer prevuelo hasta que los sistemas de armamento estén asegurados, interruptores apagados, pasadores de seguridad instalados y palancas de seguridad en posición asegurada."
+        },
+        {
+          "title": "Revisar bitácora de aeronave.",
+          "short": "Bitácora revisada",
+          "required": true
+        },
+        {
+          "title": "Remover y asegurar cubiertas, dispositivos de cierre, amarres y cables de tierra.",
+          "short": "Retirar cubiertas / amarres",
+          "required": true
+        },
+        {
+          "title": "Chequear cantidad de combustible según requerido.",
+          "short": "Nivel de combustible",
+          "required": true,
+          "photo": true
+        },
+        {
+          "title": "Drenar combustible (primer vuelo del día) y checar por contaminación.",
+          "short": "Drenaje / contaminación",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Exterior",
+      "items": [
+        {
+          "title": "Chequeo exterior",
+          "info": true,
+          "text": "Ver diagrama de chequeo exterior."
+        }
+      ]
+    },
+    {
+      "title": "Área 1 - Sección de nariz",
+      "items": [
+        {
+          "title": "¡Precaución!",
+          "warning": true,
+          "text": "No flexionar las puntas de las palas del rotor principal más de 6 pulgadas por debajo de la posición normal de caída al fijar los amarres. No amarrar por debajo de la posición normal de caída."
+        },
+        {
+          "title": "Chequear palas del rotor principal.",
+          "short": "Palas rotor principal",
+          "required": true
+        },
+        {
+          "title": "Chequear área de nariz.",
+          "short": "Área de nariz",
+          "subitems": [
+            {
+              "title": "Chequear parabrisas y limpiaparabrisas.",
+              "short": "Parabrisas / limpiaparabrisas",
+              "required": true
+            },
+            {
+              "title": "Chequear sensor OAT.",
+              "short": "Sensor OAT"
+            },
+            {
+              "title": "Chequear el equipo del compartimiento de aviónica según sea requerido y asegurar la puerta.",
+              "short": "Aviónica / puerta asegurada",
+              "required": true
+            },
+            {
+              "title": "Chequear antenas.",
+              "short": "Antenas"
+            },
+            {
+              "title": "Chequear luces de búsqueda y aterrizaje.",
+              "short": "Luces búsqueda / aterrizaje",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Área 2 - Cabina de mando lado izquierdo",
+      "items": [
+        {
+          "title": "Chequear cabina de mando.",
+          "short": "Cabina de mando (izq.)",
+          "subitems": [
+            {
+              "title": "Chequear puerta de la cabina de mando.",
+              "short": "Puerta cabina",
+              "required": true
+            },
+            {
+              "title": "Chequear asiento, cinturones y arnés del copiloto.",
+              "short": "Asiento / cinturón copiloto",
+              "required": true
+            },
+            {
+              "title": "Chequear cubierta del soporte del tren de aterrizaje y escalón.",
+              "short": "Cubierta tren / escalón"
+            },
+            {
+              "title": "Chequear luz de posición.",
+              "short": "Luz de posición"
+            },
+            {
+              "title": "Chequear tren de aterrizaje principal.",
+              "short": "Tren principal",
+              "required": true
+            },
+            {
+              "title": "Chequear ventana del artillero.",
+              "short": "Ventana artillero"
+            },
+            {
+              "title": "Chequear orificio del sensor ambiental.",
+              "short": "Sensor ambiental"
+            }
+          ]
+        },
+        {
+          "title": "Chequear nivel de aceite del motor izquierdo.",
+          "short": "Aceite motor izquierdo",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Área 3 - Techo de cabina",
+      "items": [
+        {
+          "title": "Chequear techo de cabina.",
+          "short": "Techo de cabina",
+          "subitems": [
+            {
+              "title": "Chequear toma de entrada del motor izquierdo.",
+              "short": "Toma motor izq.",
+              "required": true
+            },
+            {
+              "title": "Chequear tubo pitot izquierdo.",
+              "short": "Pitot izq.",
+              "required": true
+            },
+            {
+              "title": "Abrir cubierta y chequear controles de vuelo, reservorios hidráulicos e indicadores de filtros; etiquetas termosensibles por indicación segura y seguridad. Chequear área.",
+              "short": "Controles / hidráulicos / filtros",
+              "required": true,
+              "photo": true
+            },
+            {
+              "title": "Cerrar y asegurar cubierta.",
+              "short": "Cubierta asegurada",
+              "required": true
+            },
+            {
+              "title": "Chequear tubo pitot derecho.",
+              "short": "Pitot der.",
+              "required": true
+            },
+            {
+              "title": "Chequear toma de entrada del motor derecho.",
+              "short": "Toma motor der.",
+              "required": true
+            }
+          ]
+        },
+        {
+          "title": "Chequear nivel de aceite del A.P.U., usar la varilla medidora.",
+          "short": "Aceite APU",
+          "required": true
+        },
+        {
+          "title": "Chequear el compartimiento del A.P.U. por escombros y F.O.D.",
+          "short": "Compart. APU / FOD",
+          "required": true
+        },
+        {
+          "title": "Chequear separador de partículas.",
+          "short": "Separador de partículas",
+          "required": true
+        },
+        {
+          "title": "Chequear nivel de aceite de la transmisión, usar la varilla medidora.",
+          "short": "Aceite transmisión",
+          "required": true
+        },
+        {
+          "title": "Chequear sistema del rotor principal.",
+          "short": "Sistema rotor principal",
+          "subitems": [
+            {
+              "title": "Chequear controles, amortiguadores, cabezal y palas.",
+              "short": "Controles / amortiguadores / cabezal",
+              "required": true
+            },
+            {
+              "title": "Chequear indicadores BIM por indicación segura (color amarillo).",
+              "short": "Indicadores BIM (amarillo)",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Área 4 - Interior de la cabina",
+      "items": [
+        {
+          "title": "Chequear interior de cabina.",
+          "short": "Interior de cabina",
+          "subitems": [
+            {
+              "title": "Chequear extintores de incendios.",
+              "short": "Extintores",
+              "required": true
+            },
+            {
+              "title": "Chequear botiquín de primeros auxilios.",
+              "short": "Botiquín",
+              "required": true
+            },
+            {
+              "title": "Chequear palancas de inclinación del asiento del piloto y copiloto estén aseguradas.",
+              "short": "Palancas asiento seguras",
+              "required": true
+            },
+            {
+              "title": "Chequear seguridad del equipo almacenado (correcta sujeción).",
+              "short": "Equipo almacenado seguro",
+              "required": true
+            },
+            {
+              "title": "Chequear asientos y cinturones de cabina.",
+              "short": "Asientos / cinturones cabina",
+              "required": true
+            }
+          ]
+        },
+        {
+          "title": "Chequear mínimo 2,800 psi en el indicador de presión del acumulador de la A.P.U.",
+          "short": "Acumulador APU (≥ 2,800 psi)",
+          "required": true
+        },
+        {
+          "title": "Chequear indicador de desvío inminente del filtro de aceite de la transmisión.",
+          "short": "Filtro aceite transmisión",
+          "required": true
+        },
+        {
+          "title": "Chequear gancho de carga.",
+          "short": "Gancho de carga",
+          "subitems": [
+            {
+              "title": "Chequear condición general y seguridad.",
+              "short": "Condición / seguridad gancho",
+              "required": true
+            },
+            {
+              "title": "Chequear condición y seguridad de conexiones eléctricas.",
+              "short": "Conexiones eléctricas gancho",
+              "required": true
+            }
+          ]
+        },
+        {
+          "title": "Chequear según sea requerido el equipo de supervivencia y de misión.",
+          "short": "Equipo supervivencia / misión"
+        }
+      ]
+    },
+    {
+      "title": "Área 5 - Fuselaje lado izquierdo",
+      "items": [
+        {
+          "title": "Chequear fuselaje.",
+          "short": "Fuselaje (lado izquierdo)",
+          "subitems": [
+            {
+              "title": "Chequear puerta de cabina.",
+              "short": "Puerta cabina",
+              "required": true
+            },
+            {
+              "title": "Chequear tapa y puerta asegurada de orificios de abastecimiento del tanque de combustible.",
+              "short": "Tapa combustible",
+              "required": true
+            },
+            {
+              "title": "Chequear puerta asegurada de orificio externo de entrada neumática.",
+              "short": "Entrada neumática",
+              "required": true
+            },
+            {
+              "title": "Chequear escape del motor.",
+              "short": "Escape motor",
+              "required": true
+            },
+            {
+              "title": "Chequear escape del A.P.U.",
+              "short": "Escape APU",
+              "required": true
+            },
+            {
+              "title": "Chequear luz anticolisión inferior.",
+              "short": "Luz anticolisión"
+            },
+            {
+              "title": "Chequear antenas.",
+              "short": "Antenas"
+            }
+          ]
+        },
+        {
+          "title": "Chequear nivel de aceite de la caja de engranajes intermedia.",
+          "short": "Aceite caja intermedia",
+          "required": true
+        },
+        {
+          "title": "Chequear tren de aterrizaje de cola.",
+          "short": "Tren de cola",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Área 6 - Pilón de cola",
+      "items": [
+        {
+          "title": "Chequear pilón de cola.",
+          "short": "Pilón de cola",
+          "subitems": [
+            {
+              "title": "Chequear estabilizador.",
+              "short": "Estabilizador",
+              "required": true
+            },
+            {
+              "title": "Chequear luz de posición.",
+              "short": "Luz de posición"
+            }
+          ]
+        },
+        {
+          "title": "Chequear rotor de cola.",
+          "short": "Rotor de cola",
+          "required": true
+        },
+        {
+          "title": "Chequear nivel de aceite de la caja de engranajes del rotor de cola.",
+          "short": "Aceite caja rotor cola",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Área 7 - Fuselaje lado derecho",
+      "items": [
+        {
+          "title": "Chequear fuselaje.",
+          "short": "Fuselaje (lado derecho)",
+          "subitems": [
+            {
+              "title": "Chequear antenas.",
+              "short": "Antenas"
+            },
+            {
+              "title": "Chequear tapón térmico de los contenedores de los extintores de incendio.",
+              "short": "Tapón térmico extintores",
+              "required": true
+            },
+            {
+              "title": "Chequear escape del motor.",
+              "short": "Escape motor",
+              "required": true
+            },
+            {
+              "title": "Chequear tapa y puerta asegurada de orificio de abastecimiento por gravedad del tanque de combustible.",
+              "short": "Tapa gravedad combustible",
+              "required": true
+            },
+            {
+              "title": "Chequear puerta de la cabina.",
+              "short": "Puerta cabina",
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Área 8 - Cabina de mando lado derecho",
+      "items": [
+        {
+          "title": "Chequear nivel de aceite del motor derecho.",
+          "short": "Aceite motor derecho",
+          "required": true
+        },
+        {
+          "title": "Chequear área de cabina de mando.",
+          "short": "Cabina de mando (der.)",
+          "subitems": [
+            {
+              "title": "Chequear detector de hielo.",
+              "short": "Detector de hielo",
+              "required": true
+            },
+            {
+              "title": "Chequear orificio de sensor ambiental.",
+              "short": "Sensor ambiental"
+            },
+            {
+              "title": "Chequear ventana del artillero.",
+              "short": "Ventana artillero"
+            },
+            {
+              "title": "Chequear puerta asegurada del receptáculo de potencia eléctrica externa.",
+              "short": "Potencia eléctrica externa",
+              "required": true
+            },
+            {
+              "title": "Chequear tren de aterrizaje principal.",
+              "short": "Tren principal",
+              "required": true
+            },
+            {
+              "title": "Chequear luz de posición.",
+              "short": "Luz de posición"
+            },
+            {
+              "title": "Chequear carenado y escalón de soporte del tren de aterrizaje.",
+              "short": "Carenado / escalón tren",
+              "required": true
+            },
+            {
+              "title": "Chequear puerta de la cabina de mando.",
+              "short": "Puerta cabina mando",
+              "required": true
+            },
+            {
+              "title": "Chequear asiento, cinturón y arnés del piloto.",
+              "short": "Asiento piloto",
+              "required": true
+            }
+          ]
+        },
+        {
+          "title": "Cerciorarse que todas las cubiertas de acceso y plataformas de mantenimiento estén cerradas y chequeadas.",
+          "short": "Cubiertas / plataformas aseguradas",
+          "required": true
+        },
+        {
+          "title": "Según sea requerido, orientación e información de tripulación y pasajeros.",
+          "short": "Info tripulación / pasajeros"
+        }
+      ]
+    }
+  ]
+}
