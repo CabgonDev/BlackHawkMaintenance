@@ -4,7 +4,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 ## Reglas de ejecución
 
-- Cada versión termina con un commit y, cuando corresponda, un tag con el mismo identificador (`v0.0.1`, `v0.1.0`, etc.).
+- Cada entrega termina con un commit. Crear un tag `v5.x.y` solo cuando el artefacto de la app de esa versión pase sus gates; los cambios exclusivamente documentales o de CI no requieren incrementar la versión de la app.
+- La versión actual de producto es `5.0.1` (`versionCode` `501`). La siguiente versión de producto propuesta es `5.0.2`; nunca reutilizar ni disminuir `versionCode`.
+- La secuencia `v0.0.1` del tag Git existente es únicamente el bootstrap del repositorio y no representa una versión de la app.
 - No se abre la siguiente versión hasta cumplir el gate de la anterior.
 - Cada casilla cerrada debe registrar archivo y líneas afectadas, comando ejecutado, resultado, versión probada, artefacto generado y procedimiento de rollback.
 - Las pruebas de Android se ejecutan con `.\gradlew.bat check lint test --no-daemon` y el build release se repite con secretos válidos en un entorno protegido.
@@ -22,14 +24,14 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 | `minSdk` / `targetSdk` / `compileSdk` | `28` / `37` / `37` |
 | Java / Kotlin | JVM 17 / Kotlin 2.4.20 |
 | Firebase project | `blackhawk-maintenance` (`.firebaserc`) |
-| Estado Git inicial | Sin `.git` local antes de esta preparación |
+| Estado Git inicial | Sin `.git` local antes de esta preparación; ahora versionado en `master` |
 | Remoto | `https://github.com/CabgonDev/BlackHawkMaintenance.git` |
 | Rama remota | `master`, con 22 commits históricos y el árbol final vacío |
 | Pruebas existentes reutilizables | `LoginBiometricStateTest`, `LoginFlowPolicyTest`, `RegisterViewModelTest`, `DownloadedFileCommitTest`, `DownloadProgressTrackerTest` |
 
-## v0.0.1 — Línea base, respaldo y repositorio seguro
+## App v5.0.1 — Línea base actual y repositorio seguro
 
-**Esfuerzo estimado:** 0.5–1 día. **Commit sugerido:** `chore(v0.0.1): establish safe audit baseline`. **Gate:** el snapshot es recuperable y `git add --dry-run` no incluye secretos ni artefactos.
+**Estado:** versión actual, `versionCode` 501. **Esfuerzo de control Git:** 0.5–1 día. **Commit de bootstrap:** `b1823df` (`chore(v0.0.1): establish safe audit baseline`); el tag `v0.0.1` es del repositorio, no de la app. **Gate:** el snapshot es recuperable y `git add --dry-run` no incluye secretos ni artefactos.
 
 - [ ] Confirmar que todo destino de edición está bajo `C:\Users\t-he-\AndroidStudioProjects\BlackHawkMaintenance`.
 - [ ] Conservar un snapshot previo en `C:\Users\t-he-\OneDrive\Desktop\BHM Codex\backups\` con fecha, lista de archivos y checksum del documento auditado.
@@ -39,16 +41,16 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - [ ] Revisar `.gitignore` y excluir `keystore.properties`, `*.jks`, `*.keystore`, `google-services.json`, `app/release/`, APK/AAB, `mapping.txt`, `native-debug-symbols.zip`, `output-metadata.json`, `hs_err_pid*.log`, `replay_pid*.log`, `deps_*.txt`, `project_tree.txt`, `.kotlin/`, `.cxx/`, `.externalNativeBuild/` y `functions/node_modules/`.
 - [ ] Ejecutar `git add --dry-run .` y revisar manualmente cada archivo propuesto antes del primer `git add`.
 - [ ] Escanear el conjunto staged en busca de contraseñas, tokens, claves privadas, PII y documentos de inspección.
-- [ ] Inicializar `main`, conservar el historial remoto `master` mediante `fetch` y evitar cualquier reset destructivo.
+- [ ] Conservar la rama principal remota `master` y su historial mediante `fetch`; evitar cualquier reset destructivo.
 - [ ] Configurar `origin` como `https://github.com/CabgonDev/BlackHawkMaintenance.git` y registrar el SHA remoto observado.
-- [ ] Crear el commit inicial con solo fuentes, configuración no secreta, índices necesarios y documentación.
+- [x] Crear el commit inicial con solo fuentes, configuración no secreta, índices necesarios y documentación (`b1823df`, publicado en `master`).
 - [ ] Decidir si los PDFs ignorados por `app/src/main/assets/**/*.pdf` se distribuyen desde otro almacén o deben versionarse para conservar la experiencia offline; no quitar la exclusión sin revisar tamaño y licencias.
 
 **Evidencia:** snapshot recuperable, salida de `git status --short --branch`, lista de archivos staged y SHA del commit. **Rollback:** restaurar el snapshot y eliminar únicamente el `.git` local si la selección contiene secretos.
 
-## v0.1.0 — Contención de firma y secretos
+## App v5.0.2 — Contención de firma y secretos
 
-**Esfuerzo estimado:** 1–3 días más coordinación con Play Console. **Commit sugerido:** `security(v0.1.0): move release signing to protected secrets`. **Gate:** release firmada con el certificado correcto y sin credenciales en árbol, historial, backups compartidos ni artefactos.
+**Esfuerzo estimado:** 1–3 días más coordinación con Play Console. **Commit sugerido:** `security(v5.0.2): move release signing to protected secrets`. **Gate:** release firmada con el certificado correcto y sin credenciales en árbol, historial, backups compartidos ni artefactos.
 
 - [ ] Confirmar si Google Play App Signing está activo antes de revocar o rotar la clave.
 - [ ] Inventariar y sanear `keystore.properties`, `app/keystore/bhm.jks`, backups, APK, mapping, símbolos y el historial remoto; revocar solo después de confirmar el plan de recuperación.
@@ -60,9 +62,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** fingerprint antes/después, build release protegido y prueba de actualización. **Rollback:** usar la clave de recuperación de Play y revertir solo la configuración de CI, nunca publicar una firma distinta.
 
-## v0.2.0 — Artefactos y reproducibilidad
+## App v5.0.3 — Artefactos y reproducibilidad
 
-**Esfuerzo estimado:** 1–2 días. **Commit sugerido:** `build(v0.2.0): make builds reproducible and clean`. **Gate:** un checkout limpio no contiene salidas generadas y reproduce `check` con el entorno documentado.
+**Esfuerzo estimado:** 1–2 días. **Commit sugerido:** `build(v5.0.3): make builds reproducible and clean`. **Gate:** un checkout limpio no contiene salidas generadas y reproduce `check` con el entorno documentado.
 
 - [ ] Retirar del árbol versionable `app/release/app-release.apk`, `mapping.txt`, `native-debug-symbols.zip` y metadatos generados; conservarlos solo en el almacén protegido de artefactos.
 - [ ] Ignorar `hs_err_pid*.log`, `replay_pid*.log`, `deps_debugRuntime.txt`, `deps_releaseRuntime.txt` y `project_tree.txt`.
@@ -77,9 +79,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** build desde checkout limpio, SBOM, lockfiles, checksum del wrapper y explicación del OOM. **Rollback:** revertir el ajuste de toolchain o memoria conservando el lockfile anterior.
 
-## v0.3.0 — Assets, índices y contenido local
+## App v5.1.0 — Assets, índices y contenido local
 
-**Esfuerzo estimado:** 1–3 días, condicionado a disponibilidad del contenido. **Commit sugerido:** `content(v0.3.0): validate inspection assets and indexes`. **Gate:** no se publica una inspección vacía y las búsquedas locales tienen una ruta de recuperación verificable.
+**Esfuerzo estimado:** 1–3 días, condicionado a disponibilidad del contenido. **Commit sugerido:** `content(v5.1.0): validate inspection assets and indexes`. **Gate:** no se publica una inspección vacía y las búsquedas locales tienen una ruta de recuperación verificable.
 
 - [ ] Decidir con el responsable de producto si `app/src/main/assets/checklists/inspection_120h.json` y `inspection_480h.json` vacíos son intencionales; si no hay contenido válido, bloquear su publicación.
 - [ ] Completar esos assets o marcar explícitamente los módulos como incompletos en la UI y documentación.
@@ -94,9 +96,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** manifest de assets, checksums, conteos, prueba FTS y APK limpio. **Rollback:** restaurar el asset anterior o bloquear la feature mediante una bandera de contenido.
 
-## v0.4.0 — Ciclo de vida, diálogos y estabilidad de UI
+## App v5.2.0 — Ciclo de vida, diálogos y estabilidad de UI
 
-**Esfuerzo estimado:** 3–5 días. **Commit sugerido:** `fix(v0.4.0): harden lifecycle and recreatable UI flows`. **Gate:** rotación, muerte de proceso, back, picker, cámara y generación de PDF no producen crash, callback a vista destruida ni fuga observable.
+**Esfuerzo estimado:** 3–5 días. **Commit sugerido:** `fix(v5.2.0): harden lifecycle and recreatable UI flows`. **Gate:** rotación, muerte de proceso, back, picker, cámara y generación de PDF no producen crash, callback a vista destruida ni fuga observable.
 
 - [ ] Cambiar `Fragment.lifecycleScope` por `viewLifecycleOwner.lifecycleScope` o `repeatOnLifecycle` en `GeneralitiesFragment.kt`, `GeneralitiesSectionFragment.kt`, `AdminGeneralities*`, `AdminFrequenciesFragment.kt`, `AdminAuditLogFragment.kt` y `AdminEnRutaFragment.kt`.
 - [ ] Cancelar listeners, jobs y callbacks en `onDestroyView`; proteger callbacks de `app/src/main/java/com/cabgon/blackhawk/ui/gallery/GalleryUploadBottomSheet.kt`.
@@ -114,9 +116,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** pruebas de recreación, logcat sin excepciones y prueba manual reproducible. **Rollback:** revertir cada extracción en commits pequeños, conservando los tests que detectaron el fallo.
 
-## v0.5.0 — Compatibilidad, accesibilidad, red y diagnóstico
+## App v5.3.0 — Compatibilidad, accesibilidad, red y diagnóstico
 
-**Esfuerzo estimado:** 3–5 días. **Commit sugerido:** `compat(v0.5.0): standardize insets accessibility and diagnostics`. **Gate:** lint limpio, smoke test en API 28 y API actual, y logs release sin secretos ni PII.
+**Esfuerzo estimado:** 3–5 días. **Commit sugerido:** `compat(v5.3.0): standardize insets accessibility and diagnostics`. **Gate:** lint limpio, smoke test en API 28 y API actual, y logs release sin secretos ni PII.
 
 - [ ] Definir una política global de edge-to-edge para `targetSdk 37`, aplicar `WindowInsets` consistentemente y retirar usos incorrectos de `fitsSystemWindows`.
 - [ ] Probar API 28 y Android actual con rotación, teclado, barras transparentes y modo inmersivo.
@@ -132,9 +134,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** `lint`, matriz API 28/actual, prueba de permisos, TalkBack y captura de logs redactados. **Rollback:** desactivar pinning o cambios visuales mediante un commit separado, sin reabrir cleartext en producción.
 
-## v0.6.0 — OTA y almacenamiento fiable
+## App v5.4.0 — OTA y almacenamiento fiable
 
-**Esfuerzo estimado:** 4–7 días. **Commit sugerido:** `security(v0.6.0): make content updates atomic and verifiable`. **Gate:** una descarga truncada, con hash incorrecto, ruta inválida, downgrade o red perdida no deja contenido corrupto ni borra datos válidos.
+**Esfuerzo estimado:** 4–7 días. **Commit sugerido:** `security(v5.4.0): make content updates atomic and verifiable`. **Gate:** una descarga truncada, con hash incorrecto, ruta inválida, downgrade o red perdida no deja contenido corrupto ni borra datos válidos.
 
 - [ ] Exigir SHA-256 y tamaño para AI, manuales, generalidades y frecuencias.
 - [ ] Permitir únicamente prefijos Storage aprobados y rechazar `..`, separadores inesperados y rutas arbitrarias.
@@ -149,9 +151,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** pruebas automatizadas de commit/rollback, matriz de fallos y estado final de Storage/Firestore. **Rollback:** restaurar `.bak` y repetir la operación con el mismo identificador idempotente.
 
-## v0.7.0 — Sesión, privacidad y vinculación de dispositivo
+## App v5.5.0 — Sesión, privacidad y vinculación de dispositivo
 
-**Esfuerzo estimado:** 4–7 días más decisiones de política. **Commit sugerido:** `security(v0.7.0): harden session and device binding`. **Gate:** logout, cambio de usuario, biometría, proceso eliminado e intents externos no permiten acceso cruzado ni rutas privilegiadas.
+**Esfuerzo estimado:** 4–7 días más decisiones de política. **Commit sugerido:** `security(v5.5.0): harden session and device binding`. **Gate:** logout, cambio de usuario, biometría, proceso eliminado e intents externos no permiten acceso cruzado ni rutas privilegiadas.
 
 - [ ] No confiar en `EXTRA_ACCESS_ALREADY_VALIDATED` ni extras equivalentes recibidos desde otra aplicación en `StartupActivity.kt`.
 - [ ] Usar estado interno de sesión o permiso firmado para rutas privilegiadas.
@@ -170,9 +172,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** tests de sesión/dispositivo, matriz de procesos y registro del ADR. **Rollback:** conservar el marcador pendiente y restaurar la ruta anterior solo para instalaciones no vinculadas.
 
-## v0.8.0 — Room, migraciones y aislamiento multiusuario
+## App v5.6.0 — Room, migraciones y aislamiento multiusuario
 
-**Esfuerzo estimado:** 5–8 días. **Commit sugerido:** `data(v0.8.0): preserve local data and isolate owners`. **Gate:** migraciones desde cada versión publicada conservan datos y dos cuentas consecutivas nunca comparten filas ni sincronizaciones pendientes.
+**Esfuerzo estimado:** 5–8 días. **Commit sugerido:** `data(v5.6.0): preserve local data and isolate owners`. **Gate:** migraciones desde cada versión publicada conservan datos y dos cuentas consecutivas nunca comparten filas ni sincronizaciones pendientes.
 
 - [ ] Eliminar `fallbackToDestructiveMigration(dropAllTables = true)` de `app/src/main/java/com/cabgon/blackhawk/data/db/AppDbProvider.kt` y `app/src/main/java/com/cabgon/blackhawk/data/DbProvider.kt`.
 - [ ] Documentar versiones y esquemas de `app/src/main/java/com/cabgon/blackhawk/data/db/AppDatabase.kt` y `app/src/main/java/com/cabgon/blackhawk/data/preflight/PreflightDb.kt`.
@@ -188,9 +190,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** schemas, tests de migración por versión, prueba de dos cuentas y exportación de recuperación. **Rollback:** restaurar el snapshot de Room y detener la migración antes de borrar datos.
 
-## v0.9.0 — Firebase Rules, Functions y autorización server-side
+## App v5.7.0 — Firebase Rules, Functions y autorización server-side
 
-**Esfuerzo estimado:** 5–10 días más acceso a Firebase Console. **Commit sugerido:** `security(v0.9.0): enforce server-side authorization contracts`. **Gate:** Emulator Suite, callable Android y Functions bloquean toda operación no autorizada.
+**Esfuerzo estimado:** 5–10 días más acceso a Firebase Console. **Commit sugerido:** `security(v5.7.0): enforce server-side authorization contracts`. **Gate:** Emulator Suite, callable Android y Functions bloquean toda operación no autorizada.
 
 - [ ] Obtener desde Firebase Console un snapshot fechado de Firestore Rules y Storage Rules solo si existe acceso; no inventar ni desplegar `firestore.rules`/`storage.rules` locales como sustituto.
 - [ ] Exigir `request.auth.uid == uid` al crear documentos de usuario y bloquear cambios de `role`, `status`, `uid` y campos administrativos desde el cliente.
@@ -206,9 +208,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** snapshot cloud fechado, reglas/Functions en Emulator Suite, pruebas callable y logs sin datos sensibles. **Rollback:** revertir Functions mediante versión anterior y mantener el snapshot de consola para restauración controlada.
 
-## v0.10.0 — Memoria, rendimiento y límites de Firestore
+## App v5.8.0 — Memoria, rendimiento y límites de Firestore
 
-**Esfuerzo estimado:** 5–8 días. **Commit sugerido:** `perf(v0.10.0): bound memory and batch workloads`. **Gate:** generación de PDF y cargas grandes funcionan en memoria baja, y ningún `WriteBatch` supera el límite de Firestore.
+**Esfuerzo estimado:** 5–8 días. **Commit sugerido:** `perf(v5.8.0): bound memory and batch workloads`. **Gate:** generación de PDF y cargas grandes funcionan en memoria baja, y ningún `WriteBatch` supera el límite de Firestore.
 
 - [ ] Mover imágenes grandes de `app/src/main/res/drawable/` a `drawable-nodpi` o reducirlas a dimensiones de uso real/WebP.
 - [ ] Ajustar `safeDecode()` en `app/src/main/java/com/cabgon/blackhawk/ui/pdf/BaseInspectionPdfExporter.kt` y `PdfExporter.kt` con `inSampleSize`, `inScaled=false` cuando corresponda y liberación segura.
@@ -222,9 +224,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** perfiles de heap/CPU, prueba >500 ítems, tiempos de arranque y ausencia de OOM. **Rollback:** mantener la ruta de batch anterior detrás de una bandera si el nuevo particionado falla.
 
-## v0.11.0 — Mantenibilidad y contratos externos
+## App v5.9.0 — Mantenibilidad y contratos externos
 
-**Esfuerzo estimado:** 1–2 semanas. **Commit sugerido:** `refactor(v0.11.0): isolate app flows and external contracts`. **Gate:** cada extracción conserva comportamiento, tiene pruebas y el contrato externo versionado.
+**Esfuerzo estimado:** 1–2 semanas. **Commit sugerido:** `refactor(v5.9.0): isolate app flows and external contracts`. **Gate:** cada extracción conserva comportamiento, tiene pruebas y el contrato externo versionado.
 
 - [ ] Extraer gradualmente lógica de `StartupActivity.kt` y `LoginActivity.kt` a ViewModels/use cases, separando migración de sesión, red, navegación y autenticación.
 - [ ] Mantener cada extracción en un commit pequeño cubierto por pruebas; no hacer una reescritura masiva.
@@ -239,9 +241,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 **Evidencia:** matriz de contratos, tests de compatibilidad, build con R8 y diff por extracción. **Rollback:** revertir el commit de extracción aislado sin mezclar cambios de seguridad o datos.
 
-## v1.0.0 — CI, variantes y liberación controlada
+## App v5.10.0 — CI, variantes y liberación controlada
 
-**Esfuerzo estimado:** 1–3 semanas. **Commit sugerido:** `release(v1.0.0): enforce CI and release gates`. **Gate:** todos los criterios finales de liberación están verdes y existe rollback documentado.
+**Esfuerzo estimado:** 1–3 semanas. **Commit sugerido:** `release(v5.10.0): enforce CI and release gates`. **Gate:** todos los criterios finales de liberación están verdes y existe rollback documentado.
 
 - [ ] Separar flavors `dev`, `staging` y `prod`.
 - [ ] Usar `google-services.json` distinto por flavor y bloquear debug contra producción.
@@ -285,15 +287,15 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 
 | Secciones de `AUDIT_CHECKLIST.md` | Entregas |
 |---|---|
-| Fase 0, P0 firma y secretos | v0.0.1, v0.1.0 |
-| Persistencia, aislamiento entre cuentas | v0.8.0 |
-| Autorización Firebase y Backend/Functions | v0.9.0 |
-| OTA, galería y almacenamiento | v0.6.0 |
-| Ciclo de vida, DialogFragments, foreground service | v0.4.0 |
-| Sesión, privacidad e intents | v0.7.0 |
-| Edge-to-edge, red, permisos, logs y accesibilidad | v0.5.0 |
-| Pruebas obligatorias | v0.4.0–v1.0.0, según el flujo probado |
-| Build, dependencias, suministro y artefactos | v0.2.0, v1.0.0 |
-| Assets, índices y contenido | v0.3.0 |
-| Memoria, Firestore y rendimiento UI | v0.10.0 |
-| Mantenibilidad, contratos y tamaño del APK | v0.11.0, v1.0.0 |
+| Fase 0, P0 firma y secretos | Baseline v5.0.1, siguiente release v5.0.2 |
+| Persistencia, aislamiento entre cuentas | v5.6.0 |
+| Autorización Firebase y Backend/Functions | v5.7.0 |
+| OTA, galería y almacenamiento | v5.4.0 |
+| Ciclo de vida, DialogFragments, foreground service | v5.2.0 |
+| Sesión, privacidad e intents | v5.5.0 |
+| Edge-to-edge, red, permisos, logs y accesibilidad | v5.3.0 |
+| Pruebas obligatorias | v5.2.0–v5.10.0, según el flujo probado |
+| Build, dependencias, suministro y artefactos | v5.0.3, v5.10.0 |
+| Assets, índices y contenido | v5.1.0 |
+| Memoria, Firestore y rendimiento UI | v5.8.0 |
+| Mantenibilidad, contratos y tamaño del APK | v5.9.0, v5.10.0 |
