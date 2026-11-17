@@ -1,6 +1,6 @@
 # Checklist versionado de remediación — BlackHawk Maintenance
 
-Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST.md) en entregas que se pueden revisar, probar y publicar una por una. El orden va de menor complejidad y tiempo a mayor riesgo, coordinación y duración. La checklist original se conserva como fuente de hallazgos; este archivo es el plan ejecutable.
+Este es el checklist único de remediación de BlackHawk Maintenance. Organiza los hallazgos de auditoría en entregas que se pueden revisar, probar y publicar una por una, desde la versión actual 5.0.1. El orden va de menor complejidad y tiempo a mayor riesgo, coordinación y duración.
 
 ## Reglas de ejecución
 
@@ -296,9 +296,9 @@ Este documento convierte los hallazgos de [`AUDIT_CHECKLIST.md`](AUDIT_CHECKLIST
 - [ ] APK firmado con el certificado esperado, hash validado y origen de distribución autorizado.
 - [ ] Plan de rollback y recuperación documentado y probado.
 
-## Mapa de cobertura del documento fuente
+## Mapa de cobertura por área
 
-| Secciones de `AUDIT_CHECKLIST.md` | Entregas |
+| Área de auditoría | Entregas |
 |---|---|
 | Fase 0, P0 firma y secretos | Baseline v5.0.1, siguiente release v5.0.2 |
 | Persistencia, aislamiento entre cuentas | v5.6.0 |
