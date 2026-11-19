@@ -60,6 +60,12 @@ service cloud.firestore {
         && request.resource.data.lastEditorName != '';
     }
 
+    function hasCurrentEditorAttribution() {
+      return hasValidEditorAttribution()
+        && request.resource.data.lastEditorGrade == userDoc().data.grado
+        && request.resource.data.lastEditorName == userDoc().data.nombre;
+    }
+
     function editorAttributionFields() {
       return ['lastEditorProfileUid', 'lastEditorGrade', 'lastEditorName'];
     }
@@ -78,11 +84,11 @@ service cloud.firestore {
       allow read: if isApproved();
       allow update: if isApproved()
         && request.resource.data.lastEditorUserId == request.auth.uid
-        && (hasValidEditorAttribution()
+        && (hasCurrentEditorAttribution()
           || !request.resource.data.diff(resource.data).affectedKeys().hasAny(editorAttributionFields()));
       allow create: if isAtLeastModerator()
         && request.resource.data.lastEditorUserId == request.auth.uid
-        && (hasValidEditorAttribution()
+        && (hasCurrentEditorAttribution()
           || !request.resource.data.keys().hasAny(editorAttributionFields()));
       allow delete: if isAtLeastModerator();
     }
