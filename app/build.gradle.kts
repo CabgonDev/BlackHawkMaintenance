@@ -70,8 +70,8 @@ android {
         minSdk = 28
         targetSdk = 37
 
-        versionCode = 502
-        versionName = "5.0.2 (Hawk)"
+        versionCode = 503
+        versionName = "5.0.3 (Hawk)"
 
         vectorDrawables.useSupportLibrary = true
 

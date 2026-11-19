@@ -53,11 +53,15 @@ service cloud.firestore {
     }
 
     function hasValidEditorAttribution() {
-      return request.resource.data.lastEditorUserId == request.auth.uid
+      return request.resource.data.get('lastEditorProfileUid', null) == request.auth.uid
         && request.resource.data.lastEditorGrade is string
         && request.resource.data.lastEditorName is string
-        && request.resource.data.lastEditorGrade == userDoc().data.grado
-        && request.resource.data.lastEditorName == userDoc().data.nombre;
+        && request.resource.data.lastEditorGrade != ''
+        && request.resource.data.lastEditorName != '';
+    }
+
+    function editorAttributionFields() {
+      return ['lastEditorProfileUid', 'lastEditorGrade', 'lastEditorName'];
     }
 
     match /ai_ota/channels {
@@ -72,12 +76,18 @@ service cloud.firestore {
 
     match /en_ruta/{docId} {
       allow read: if isApproved();
-      allow update: if isApproved() && hasValidEditorAttribution();
-      allow create: if isAtLeastModerator() && hasValidEditorAttribution();
+      allow update: if isApproved()
+        && request.resource.data.lastEditorUserId == request.auth.uid
+        && (hasValidEditorAttribution()
+          || !request.resource.data.diff(resource.data).affectedKeys().hasAny(editorAttributionFields()));
+      allow create: if isAtLeastModerator()
+        && request.resource.data.lastEditorUserId == request.auth.uid
+        && (hasValidEditorAttribution()
+          || !request.resource.data.keys().hasAny(editorAttributionFields()));
       allow delete: if isAtLeastModerator();
     }
 
-    match /en_ruta/{docId}/{subpath=**} {
+    match /en_ruta/{docId}/{subcollection}/{subpath=**} {
       allow read: if isApproved();
       allow update: if isApproved();
       allow create, delete: if isAtLeastModerator();

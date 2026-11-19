@@ -17,6 +17,7 @@ fun EnRutaStatusEntity.toFirestoreMap(): Map<String, Any?> =
         "lastEditDate" to lastEditDate,
         "lastEditTimestamp" to lastEditTimestamp,
         "lastEditorUserId" to lastEditorUserId,
+        "lastEditorProfileUid" to lastEditorUserId,
         "lastEditorGrade" to lastEditorGrade,
         "lastEditorName" to lastEditorName,
 
@@ -69,6 +70,8 @@ fun DocumentSnapshot.toEnRutaStatusEntity(
     if (!exists()) return null
 
     val mat = getString("matAeronave") ?: id // fallback al docId por si acaso
+    val editorUid = getString("lastEditorUserId")
+    val hasBoundEditor = !editorUid.isNullOrBlank() && editorUid == getString("lastEditorProfileUid")
 
     return EnRutaStatusEntity(
         id = localId ?: 0L,
@@ -76,9 +79,9 @@ fun DocumentSnapshot.toEnRutaStatusEntity(
 
         lastEditDate = getString("lastEditDate") ?: "",
         lastEditTimestamp = getLong("lastEditTimestamp") ?: 0L,
-        lastEditorUserId = getString("lastEditorUserId"),
-        lastEditorGrade = getString("lastEditorGrade"),
-        lastEditorName = getString("lastEditorName"),
+        lastEditorUserId = editorUid,
+        lastEditorGrade = if (hasBoundEditor) getString("lastEditorGrade") else null,
+        lastEditorName = if (hasBoundEditor) getString("lastEditorName") else null,
 
         categoria = getString("categoria") ?: "",
         ubicacion = getString("ubicacion") ?: "",

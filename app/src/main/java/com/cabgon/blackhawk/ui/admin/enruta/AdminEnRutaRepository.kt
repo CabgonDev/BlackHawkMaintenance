@@ -49,6 +49,7 @@ class AdminEnRutaRepository {
                     "lastEditDate" to lastEditDate,
                     "lastEditTimestamp" to now,
                     "lastEditorUserId" to actorUid,
+                    "lastEditorProfileUid" to actorUid,
                     "lastEditorGrade" to actorGrade,
                     "lastEditorName" to actorName,
 

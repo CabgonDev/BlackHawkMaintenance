@@ -45,6 +45,15 @@ interface EnRutaDao {
     @Update
     suspend fun updateStatus(entity: EnRutaStatusEntity)
 
+    @Query(
+        """
+        UPDATE en_ruta_status
+        SET lastEditorGrade = :grade, lastEditorName = :name
+        WHERE id = :id AND isDirty = 0 AND lastEditTimestamp = :editedAt AND lastEditorUserId IS :uid
+        """
+    )
+    suspend fun updateSyncedEditor(id: Long, editedAt: Long, uid: String?, grade: String?, name: String?)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecarga(recarga: EnRutaRecargaEntity): Long
 

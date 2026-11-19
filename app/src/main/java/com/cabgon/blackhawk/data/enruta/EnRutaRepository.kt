@@ -236,6 +236,19 @@ class EnRutaRepository(
                                         dao.deleteRecargasForEnRutaId(enRutaId)
                                         dao.insertRecargas(recargasEntities)
                                     } catch (_: Throwable) { }
+                                } else if (!local.isDirty &&
+                                    normalizedRemote.lastEditTimestamp == local.lastEditTimestamp &&
+                                    normalizedRemote.lastEditorUserId == local.lastEditorUserId &&
+                                    (normalizedRemote.lastEditorGrade != local.lastEditorGrade ||
+                                        normalizedRemote.lastEditorName != local.lastEditorName)
+                                ) {
+                                    dao.updateSyncedEditor(
+                                        id = local.id,
+                                        editedAt = local.lastEditTimestamp,
+                                        uid = local.lastEditorUserId,
+                                        grade = normalizedRemote.lastEditorGrade,
+                                        name = normalizedRemote.lastEditorName
+                                    )
                                 }
                             }
                         }
