@@ -21,12 +21,15 @@ these environment secrets:
 - `RELEASE_STORE_PASSWORD`
 - `RELEASE_KEY_ALIAS`
 - `RELEASE_KEY_PASSWORD`
+- `GOOGLE_SERVICES_JSON_BASE64`
 
 The workflow is manual, checks out the fixed `master` ref, and materializes
 the keystore and a temporary `keystore.properties` under `RUNNER_TEMP`, then
 passes that file through `releaseSigningPropertiesFile`, verifies the public
 certificate fingerprint, and removes the temporary directory in an `always()`
-cleanup step. It has read-only repository permissions.
+cleanup step. The protected Google services configuration is decoded into the
+ignored `app/google-services.json` only for the build and is removed during the
+same cleanup. It has read-only repository permissions.
 
 The historical `app/google-services.json` objects remain in Git history. The
 mitigation is to preserve commit history, inspect the Firebase/Google Cloud
@@ -37,6 +40,9 @@ rewriting is not automatic and is outside this delivery.
 ## Consequences
 
 - CI can build a release without placing signing material in the checkout.
+- CI requires the protected Google services configuration because the Gradle
+  Google Services plugin cannot build without it; the file is removed after the
+  job.
 - A release workflow run fails when any protected input is absent.
 - The workflow does not publish an APK or print signing values.
 - Cloud console access is required to complete API-key restriction/rotation and

@@ -38,12 +38,13 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
         shell: bash
         run: |
           set -euo pipefail
           umask 077
 
-          for value in RELEASE_KEYSTORE_BASE64 RELEASE_STORE_PASSWORD RELEASE_KEY_ALIAS RELEASE_KEY_PASSWORD; do
+          for value in RELEASE_KEYSTORE_BASE64 RELEASE_STORE_PASSWORD RELEASE_KEY_ALIAS RELEASE_KEY_PASSWORD GOOGLE_SERVICES_JSON_BASE64; do
             if [[ -z "${!value}" ]]; then
               echo "::error::Missing protected signing secret: $value"
               exit 1
@@ -60,6 +61,12 @@ jobs:
           keyPassword=$RELEASE_KEY_PASSWORD
           EOF
           chmod 600 "$signing_dir/bhm.jks" "$signing_dir/keystore.properties"
+
+          google_services_dir="$RUNNER_TEMP/bhm-google-services"
+          mkdir -p "$google_services_dir"
+          printf '%s' "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > "$google_services_dir/google-services.json"
+          cp "$google_services_dir/google-services.json" app/google-services.json
+          chmod 600 "$google_services_dir/google-services.json" app/google-services.json
 
       - name: Build release APK
         shell: bash
@@ -84,4 +91,6 @@ jobs:
       - name: Remove protected signing inputs
         if: ${{ always() }}
         shell: bash
-        run: rm -rf "$RUNNER_TEMP/bhm-release-signing"
+        run: |
+          rm -rf "$RUNNER_TEMP/bhm-release-signing" "$RUNNER_TEMP/bhm-google-services"
+          rm -f app/google-services.json
