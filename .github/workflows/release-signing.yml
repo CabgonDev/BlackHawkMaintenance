@@ -1,0 +1,83 @@
+name: Protected release build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    name: Build and verify signed APK
+    runs-on: ubuntu-latest
+    environment: protected-release
+
+    steps:
+      - name: Check out protected release ref
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Materialize protected signing inputs outside the checkout
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+
+          for value in RELEASE_KEYSTORE_BASE64 RELEASE_STORE_PASSWORD RELEASE_KEY_ALIAS RELEASE_KEY_PASSWORD; do
+            if [[ -z "${!value}" ]]; then
+              echo "::error::Missing protected signing secret: $value"
+              exit 1
+            fi
+          done
+
+          signing_dir="$RUNNER_TEMP/bhm-release-signing"
+          mkdir -p "$signing_dir"
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 --decode > "$signing_dir/bhm.jks"
+          cat > "$signing_dir/keystore.properties" <<EOF
+          storeFile=$signing_dir/bhm.jks
+          storePassword=$RELEASE_STORE_PASSWORD
+          keyAlias=$RELEASE_KEY_ALIAS
+          keyPassword=$RELEASE_KEY_PASSWORD
+          EOF
+          chmod 600 "$signing_dir/bhm.jks" "$signing_dir/keystore.properties"
+
+      - name: Build release APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew :app:assembleRelease --no-daemon \
+            -PreleaseSigningPropertiesFile="$RUNNER_TEMP/bhm-release-signing/keystore.properties"
+
+      - name: Verify release certificate and metadata
+        shell: bash
+        env:
+          EXPECTED_CERT_SHA256: 024db26301133f4ac627a26f89169d11d0000ca535e631e1d9965ee3c8ec1b28
+        run: |
+          set -euo pipefail
+          apk="app/build/outputs/apk/release/app-release.apk"
+          apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          actual="$("$apksigner" verify --print-certs "$apk" | awk '/SHA-256 digest/ {print $NF}')"
+          test "$actual" = "$EXPECTED_CERT_SHA256"
+          echo "Certificate SHA-256 verified: $actual"
+          sha256sum "$apk"
+
+      - name: Remove protected signing inputs
+        if: ${{ always() }}
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/bhm-release-signing"
