@@ -47,7 +47,7 @@ import com.cabgon.blackhawk.data.preflight.PreflightItem
         EnRutaRecargaEntity::class,
 
     ],
-    version = 10,
+    version = 11,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -31,7 +31,14 @@ class AdminEnRutaRepository {
         }
     }
 
-    suspend fun createDefault(mat: String, actorUid: String, now: Long, lastEditDate: String): Boolean =
+    suspend fun createDefault(
+        mat: String,
+        actorUid: String,
+        actorGrade: String,
+        actorName: String,
+        now: Long,
+        lastEditDate: String
+    ): Boolean =
         withContext(Dispatchers.IO) {
             runCatching {
                 val doc = col.document(mat)
@@ -42,6 +49,8 @@ class AdminEnRutaRepository {
                     "lastEditDate" to lastEditDate,
                     "lastEditTimestamp" to now,
                     "lastEditorUserId" to actorUid,
+                    "lastEditorGrade" to actorGrade,
+                    "lastEditorName" to actorName,
 
                     "categoria" to "A",
                     "ubicacion" to "",

@@ -6,7 +6,7 @@ import com.cabgon.blackhawk.data.enruta.EnRutaRepository
 
 class EnRutaViewModelFactory(
     private val repo: EnRutaRepository,
-    private val currentUserIdProvider: () -> String?
+    private val currentEditorProvider: () -> EnRutaViewModel.EditorIdentity?
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -14,7 +14,7 @@ class EnRutaViewModelFactory(
         if (modelClass.isAssignableFrom(EnRutaViewModel::class.java)) {
             return EnRutaViewModel(
                 repository = repo,
-                currentUserIdProvider = currentUserIdProvider
+                currentEditorProvider = currentEditorProvider
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

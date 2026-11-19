@@ -1,0 +1,105 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userExists() {
+      return isSignedIn() && firestore.exists(
+        /databases/(default)/documents/users/$(request.auth.uid)
+      );
+    }
+
+    function userDoc() {
+      return firestore.get(
+        /databases/(default)/documents/users/$(request.auth.uid)
+      );
+    }
+
+    function hasValidUserProfile() {
+      return userExists() && userDoc().data.uid == request.auth.uid;
+    }
+
+    function role() {
+      return hasValidUserProfile() && userDoc().data.role != null
+        ? userDoc().data.role : "";
+    }
+
+    function status() {
+      return hasValidUserProfile() && userDoc().data.status != null
+        ? userDoc().data.status : "";
+    }
+
+    function isApproved() {
+      return hasValidUserProfile() && status() == "approved";
+    }
+
+    function isAtLeastModerator() {
+      return isApproved() && (
+        role() == "moderator" || role() == "admin" || role() == "developer"
+      );
+    }
+
+    function isAtLeastAdmin() {
+      return isApproved() && (role() == "admin" || role() == "developer");
+    }
+
+    function isDeveloper() {
+      return isApproved() && role() == "developer";
+    }
+
+    function isAllowedGalleryContentType() {
+      return request.resource.contentType.matches("image/.*")
+        || request.resource.contentType.matches("video/.*");
+    }
+
+    function isAllowedGalleryImageType() {
+      return request.resource.contentType.matches("image/.*");
+    }
+
+    match /ai/{allPaths=**} {
+      allow read: if isApproved();
+      allow write: if false;
+    }
+
+    match /content/{allPaths=**} {
+      allow read: if isApproved();
+      allow write: if isDeveloper();
+    }
+
+    match /{pkg}/{folder}/{allPaths=**} {
+      allow read: if isApproved() && folder == "manuals";
+      allow write: if isDeveloper() && folder == "manuals";
+    }
+
+    match /gallery/originals/{fileName} {
+      allow read: if isApproved() || isAtLeastModerator();
+      allow create, update: if isApproved()
+        && isAllowedGalleryContentType()
+        && request.resource.size < 40 * 1024 * 1024;
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /gallery/thumbs/{fileName} {
+      allow read: if isApproved() || isAtLeastModerator();
+      allow create, update: if isApproved()
+        && isAllowedGalleryImageType()
+        && request.resource.size < 2 * 1024 * 1024;
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /gallery/display/{fileName} {
+      allow read: if isApproved() || isAtLeastModerator();
+      allow create, update: if isApproved()
+        && isAllowedGalleryImageType()
+        && request.resource.size < 8 * 1024 * 1024;
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

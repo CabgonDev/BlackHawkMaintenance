@@ -1,0 +1,220 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function hasUserProfile() {
+      return isSignedIn() && exists(
+        /databases/$(database)/documents/users/$(request.auth.uid)
+      );
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function role() {
+      return hasUserProfile() && userDoc().data.role != null
+        ? userDoc().data.role : "";
+    }
+
+    function status() {
+      return hasUserProfile() && userDoc().data.status != null
+        ? userDoc().data.status : "";
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isNotSuspended() {
+      return hasUserProfile() && status() != "suspended";
+    }
+
+    function isApproved() {
+      return hasUserProfile() && status() == "approved";
+    }
+
+    function isAtLeastModerator() {
+      return isApproved() && (
+        role() == "moderator" || role() == "admin" || role() == "developer"
+      );
+    }
+
+    function isAtLeastAdmin() {
+      return isApproved() && (role() == "admin" || role() == "developer");
+    }
+
+    function isDeveloper() {
+      return isApproved() && role() == "developer";
+    }
+
+    function hasValidEditorAttribution() {
+      return request.resource.data.lastEditorUserId == request.auth.uid
+        && request.resource.data.lastEditorGrade is string
+        && request.resource.data.lastEditorName is string
+        && request.resource.data.lastEditorGrade == userDoc().data.grado
+        && request.resource.data.lastEditorName == userDoc().data.nombre;
+    }
+
+    match /ai_ota/channels {
+      allow read: if isApproved();
+      allow write: if false;
+    }
+
+    match /content_ota/channels {
+      allow read: if isApproved();
+      allow write: if isDeveloper();
+    }
+
+    match /en_ruta/{docId} {
+      allow read: if isApproved();
+      allow update: if isApproved() && hasValidEditorAttribution();
+      allow create: if isAtLeastModerator() && hasValidEditorAttribution();
+      allow delete: if isAtLeastModerator();
+    }
+
+    match /en_ruta/{docId}/{subpath=**} {
+      allow read: if isApproved();
+      allow update: if isApproved();
+      allow create, delete: if isAtLeastModerator();
+    }
+
+    match /preflight_inspections/{inspectionId} {
+      allow create: if isApproved()
+        && request.resource.data.userId == request.auth.uid;
+      allow read, delete: if isApproved()
+        && resource.data.userId == request.auth.uid;
+      allow update: if isApproved()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /content_admin/frequencies_draft/items/{docId} {
+      allow read: if isAtLeastModerator();
+      allow create, update, delete: if isDeveloper();
+    }
+
+    match /content_admin/generalities_draft/sections/{docId} {
+      allow read: if isAtLeastModerator();
+      allow create, update, delete: if isDeveloper();
+    }
+
+    match /content_admin/audit_root/audit_logs/{docId} {
+      allow read: if isAtLeastModerator();
+      allow create: if isDeveloper();
+      allow update, delete: if false;
+    }
+
+    match /content_admin/locks_root/locks/{lockId} {
+      allow read: if isAtLeastModerator();
+      allow create, update, delete: if isDeveloper();
+    }
+
+    match /users/{uid} {
+      allow get: if (isOwner(uid) && isNotSuspended()) || isAtLeastModerator();
+      allow list: if isAtLeastAdmin();
+      allow create: if isOwner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.role == "user"
+        && request.resource.data.status == "pending"
+        && !request.resource.data.keys().hasAny([
+          "deviceKeyId", "devicePublicKey", "deviceClaimedAt", "deviceLastSeenAt"
+        ]);
+      allow update: if isOwner(uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.status == resource.data.status
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "email", "grado", "nombre", "matricula", "especialidad"
+        ]);
+      allow update: if isAtLeastAdmin()
+        && request.resource.data.uid == resource.data.uid
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          "deviceKeyId", "devicePublicKey", "deviceClaimedAt", "deviceLastSeenAt"
+        ]);
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /gallery_posts/{postId} {
+      allow read: if isAtLeastModerator() || (isApproved() && (
+        resource.data.status == "approved" || resource.data.uploaderUid == request.auth.uid
+      ));
+      allow create: if isApproved()
+        && request.resource.data.uploaderUid == request.auth.uid
+        && request.resource.data.isDeleted == false
+        && (request.resource.data.mediaType == "image"
+          || request.resource.data.mediaType == "video")
+        && ((request.resource.data.status == "pending_moderator" && role() == "user")
+          || (request.resource.data.status == "pending_admin" && role() == "moderator")
+          || (request.resource.data.status == "approved"
+            && (role() == "admin" || role() == "developer")));
+      allow update: if isAtLeastModerator();
+      allow delete: if isAtLeastAdmin();
+    }
+
+    function canCreateCollaborativeInspection() { return isApproved(); }
+    function canReadCollaborativeInspection() { return isApproved(); }
+    function canUpdateCollaborativeInspection() { return isApproved(); }
+    function canDeleteCollaborativeInspection() {
+      return isAtLeastModerator() || (isApproved()
+        && resource.data.createdByUid == request.auth.uid);
+    }
+    function canCreateCollaborativeInspectionItem() { return isApproved(); }
+    function canUpdateCollaborativeInspectionItem() { return isApproved(); }
+    function canDeleteCollaborativeInspectionItem() { return isAtLeastModerator(); }
+
+    match /inspection_40h/{inspectionId} {
+      allow create: if canCreateCollaborativeInspection();
+      allow read: if canReadCollaborativeInspection();
+      allow update: if canUpdateCollaborativeInspection();
+      allow delete: if canDeleteCollaborativeInspection();
+      match /items/{itemId} {
+        allow read: if canReadCollaborativeInspection();
+        allow create: if canCreateCollaborativeInspectionItem();
+        allow update: if canUpdateCollaborativeInspectionItem();
+        allow delete: if canDeleteCollaborativeInspectionItem();
+      }
+    }
+
+    match /inspection_120h/{inspectionId} {
+      allow create: if canCreateCollaborativeInspection();
+      allow read: if canReadCollaborativeInspection();
+      allow update: if canUpdateCollaborativeInspection();
+      allow delete: if canDeleteCollaborativeInspection();
+      match /items/{itemId} {
+        allow read: if canReadCollaborativeInspection();
+        allow create: if canCreateCollaborativeInspectionItem();
+        allow update: if canUpdateCollaborativeInspectionItem();
+        allow delete: if canDeleteCollaborativeInspectionItem();
+      }
+    }
+
+    match /inspection_480h/{inspectionId} {
+      allow create: if canCreateCollaborativeInspection();
+      allow read: if canReadCollaborativeInspection();
+      allow update: if canUpdateCollaborativeInspection();
+      allow delete: if canDeleteCollaborativeInspection();
+      match /items/{itemId} {
+        allow read: if canReadCollaborativeInspection();
+        allow create: if canCreateCollaborativeInspectionItem();
+        allow update: if canUpdateCollaborativeInspectionItem();
+        allow delete: if canDeleteCollaborativeInspectionItem();
+      }
+    }
+
+    match /feedback/{docId} {
+      allow create: if isApproved();
+      allow read: if isAtLeastModerator();
+      allow update: if isAtLeastModerator();
+      allow delete: if isAtLeastAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

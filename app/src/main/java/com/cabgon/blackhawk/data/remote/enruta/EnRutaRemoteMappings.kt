@@ -17,6 +17,8 @@ fun EnRutaStatusEntity.toFirestoreMap(): Map<String, Any?> =
         "lastEditDate" to lastEditDate,
         "lastEditTimestamp" to lastEditTimestamp,
         "lastEditorUserId" to lastEditorUserId,
+        "lastEditorGrade" to lastEditorGrade,
+        "lastEditorName" to lastEditorName,
 
         "categoria" to categoria,
         "ubicacion" to ubicacion,
@@ -75,6 +77,8 @@ fun DocumentSnapshot.toEnRutaStatusEntity(
         lastEditDate = getString("lastEditDate") ?: "",
         lastEditTimestamp = getLong("lastEditTimestamp") ?: 0L,
         lastEditorUserId = getString("lastEditorUserId"),
+        lastEditorGrade = getString("lastEditorGrade"),
+        lastEditorName = getString("lastEditorName"),
 
         categoria = getString("categoria") ?: "",
         ubicacion = getString("ubicacion") ?: "",

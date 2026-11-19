@@ -35,8 +35,10 @@ class EnRutaListFragment : Fragment() {
                 dao = AppDbProvider.get(requireContext()).enRutaDao(),
                 firestore = FirebaseFirestore.getInstance()
             ),
-            currentUserIdProvider = {
-                UserSessionStore(requireContext()).getProfile()?.uid
+            currentEditorProvider = {
+                UserSessionStore(requireContext()).getProfile()?.let { profile ->
+                    EnRutaViewModel.EditorIdentity(profile.uid, profile.grado, profile.nombre)
+                }
             }
         )
     }

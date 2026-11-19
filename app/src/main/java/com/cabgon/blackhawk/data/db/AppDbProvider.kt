@@ -29,7 +29,7 @@ object AppDbProvider {
             AppDatabase::class.java,
             "blackhawk.db"          // nombre único para la BD central
         )
-            .addMigrations(MIGRATION_9_10)
+            .addMigrations(MIGRATION_9_10, MIGRATION_10_11)
             .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
@@ -40,6 +40,13 @@ object AppDbProvider {
             db.execSQL("DROP TABLE IF EXISTS `chat_sources`")
             db.execSQL("DROP TABLE IF EXISTS `chat_messages`")
             db.execSQL("DROP TABLE IF EXISTS `chat_sessions`")
+        }
+    }
+
+    private val MIGRATION_10_11 = object : Migration(10, 11) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE `en_ruta_status` ADD COLUMN `lastEditorGrade` TEXT")
+            db.execSQL("ALTER TABLE `en_ruta_status` ADD COLUMN `lastEditorName` TEXT")
         }
     }
 }

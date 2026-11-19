@@ -14,6 +14,8 @@ data class EnRutaStatusEntity(
     val lastEditDate: String,                // "09/12/2025" para mostrar
     val lastEditTimestamp: Long,             // System.currentTimeMillis()
     val lastEditorUserId: String?,           // UID del técnico que editó
+    val lastEditorGrade: String? = null,     // grado del editor
+    val lastEditorName: String? = null,      // nombre del editor
 
     // Info general
     val categoria: String,                   // "A" o "B"

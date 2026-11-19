@@ -6,15 +6,14 @@ import com.cabgon.blackhawk.data.enruta.EnRutaRepository
 import com.cabgon.blackhawk.data.local.enruta.EnRutaRecargaEntity
 import com.cabgon.blackhawk.data.local.enruta.EnRutaStatusEntity
 import com.cabgon.blackhawk.data.local.enruta.EnRutaWithRecargas
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -26,7 +25,7 @@ import java.util.Locale
 
 class EnRutaViewModel(
     private val repository: EnRutaRepository,
-    private val currentUserIdProvider: () -> String?
+    private val currentEditorProvider: () -> EditorIdentity?
 ) : ViewModel() {
 
     // ---------- MODELOS DE UI ----------
@@ -40,6 +39,12 @@ class EnRutaViewModel(
         val horasTotalesLabel: String,
         val lastEditDate: String,
         val tecnicoLabel: String
+    )
+
+    data class EditorIdentity(
+        val uid: String,
+        val grade: String,
+        val name: String
     )
 
     data class RecargaUi(
@@ -58,6 +63,8 @@ class EnRutaViewModel(
         val matAeronave: String = "",
         val lastEditDate: String = "",
         val lastEditorUserId: String? = null,
+        val lastEditorGrade: String? = null,
+        val lastEditorName: String? = null,
         val tecnicoLabel: String = "—",
 
         val categoria: String = "A",
@@ -91,13 +98,6 @@ class EnRutaViewModel(
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     private fun nowString(): String = dateFormatter.format(Date())
 
-    // ---------- FIRESTORE: users/{uid} ----------
-    private val firestore = FirebaseFirestore.getInstance()
-    private val usersCollection = "users"
-
-    private data class TechInfo(val grado: String, val primerApellido: String)
-    private val techCache = MutableStateFlow<Map<String, TechInfo>>(emptyMap())
-
     private fun primerApellido(nombreCompleto: String): String {
         val parts = nombreCompleto.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
         return when {
@@ -107,33 +107,19 @@ class EnRutaViewModel(
         }
     }
 
-    private fun fetchMissingTechInfo(uids: Set<String>) {
-        val current = techCache.value
-        val missing = uids.filter { it.isNotBlank() && !current.containsKey(it) }.toSet()
-        if (missing.isEmpty()) return
-
-        missing.forEach { uid ->
-            firestore.collection(usersCollection).document(uid).get()
-                .addOnSuccessListener { doc ->
-                    if (!doc.exists()) return@addOnSuccessListener
-                    val grado = doc.getString("grado").orEmpty()
-                    val nombre = doc.getString("nombre").orEmpty()
-                    val ap1 = primerApellido(nombre)
-
-                    techCache.update { old ->
-                        old + (uid to TechInfo(grado = grado, primerApellido = ap1))
-                    }
-                }
-        }
-    }
-
-    private fun buildTecnicoLabel(uid: String?, cache: Map<String, TechInfo>): String {
-        val key = uid.orEmpty()
-        val tech = cache[key] ?: return "—"
-        return listOf(tech.grado, tech.primerApellido)
+    private fun buildTecnicoLabel(
+        uid: String?,
+        grade: String?,
+        name: String?
+    ): String {
+        val editorName = name.orEmpty().trim()
+        val editorGrade = grade.orEmpty().trim()
+        val label = listOf(editorGrade, primerApellido(editorName))
             .filter { it.isNotBlank() }
             .joinToString(" ")
-            .ifBlank { "—" }
+        return label.ifBlank {
+            uid?.takeIf { it.isNotBlank() }?.let { "UID $it" } ?: "—"
+        }
     }
 
     // ---------- PULL TO REFRESH ----------
@@ -155,13 +141,13 @@ class EnRutaViewModel(
 
     // ---------- LISTA "EN RUTA" ----------
     val enRutaListUi: StateFlow<List<EnRutaListItemUi>> =
-        combine(repository.observeEnRutaList(), techCache) { list, cache ->
-
-            val uids = list.mapNotNull { it.lastEditorUserId }.toSet()
-            fetchMissingTechInfo(uids)
-
+        repository.observeEnRutaList().map { list ->
             list.map { entity ->
-                val tecnicoLabel = buildTecnicoLabel(entity.lastEditorUserId, cache)
+                val tecnicoLabel = buildTecnicoLabel(
+                    entity.lastEditorUserId,
+                    entity.lastEditorGrade,
+                    entity.lastEditorName
+                )
 
                 val lastEdit = if (entity.lastEditTimestamp > 0L)
                     dateFormatter.format(Date(entity.lastEditTimestamp))
@@ -183,10 +169,7 @@ class EnRutaViewModel(
     // ---------- DETALLE "EN RUTA" ----------
     private val _detailState = MutableStateFlow(EnRutaDetailUiState())
 
-    val detailState: StateFlow<EnRutaDetailUiState> =
-        combine(_detailState, techCache) { state, cache ->
-            state.copy(tecnicoLabel = buildTecnicoLabel(state.lastEditorUserId, cache))
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), EnRutaDetailUiState())
+    val detailState: StateFlow<EnRutaDetailUiState> = _detailState.asStateFlow()
 
     private var detailObserverJob: Job? = null
 
@@ -206,8 +189,6 @@ class EnRutaViewModel(
             }
             .onEach { data ->
                 if (data != null) {
-                    val uid = data.status.lastEditorUserId
-                    if (!uid.isNullOrBlank()) fetchMissingTechInfo(setOf(uid))
                     applyDetailFromEntity(data)
                 }
             }
@@ -222,7 +203,8 @@ class EnRutaViewModel(
             val existing = repository.getEnRutaWithRecargasByMat(matAeronave)
             if (existing != null) return@launch
 
-            val uid = currentUserIdProvider() ?: "DESCONOCIDO"
+            val editor = currentEditorProvider() ?: EditorIdentity("DESCONOCIDO", "", "")
+            val uid = editor.uid
             val now = System.currentTimeMillis()
 
             val newStatus = EnRutaStatusEntity(
@@ -231,6 +213,8 @@ class EnRutaViewModel(
                 lastEditDate = nowString(),
                 lastEditTimestamp = now,
                 lastEditorUserId = uid,
+                lastEditorGrade = editor.grade,
+                lastEditorName = editor.name,
 
                 categoria = "A",
                 ubicacion = "",
@@ -261,7 +245,6 @@ class EnRutaViewModel(
 
             try {
                 repository.saveLocalAndSync(newStatus, emptyList())
-                fetchMissingTechInfo(setOf(uid))
             } catch (e: Exception) {
                 _detailState.update {
                     it.copy(isLoading = false, errorMessage = "Error al crear registro En Ruta: ${e.message}")
@@ -295,6 +278,13 @@ class EnRutaViewModel(
                 matAeronave = status.matAeronave,
                 lastEditDate = lastEdit,
                 lastEditorUserId = status.lastEditorUserId,
+                lastEditorGrade = status.lastEditorGrade,
+                lastEditorName = status.lastEditorName,
+                tecnicoLabel = buildTecnicoLabel(
+                    status.lastEditorUserId,
+                    status.lastEditorGrade,
+                    status.lastEditorName
+                ),
 
                 categoria = status.categoria,
                 ubicacion = status.ubicacion,
@@ -410,7 +400,8 @@ class EnRutaViewModel(
             _detailState.update { it.copy(isSaving = true, errorMessage = null, saveSuccess = null) }
 
             // ✅ los sacamos del try para poder usarlos en catch también
-            val uid = currentUserIdProvider() ?: "DESCONOCIDO"
+            val editor = currentEditorProvider() ?: EditorIdentity("DESCONOCIDO", "", "")
+            val uid = editor.uid
             val now = System.currentTimeMillis()
 
             try {
@@ -423,6 +414,8 @@ class EnRutaViewModel(
                     lastEditDate = nowString(),
                     lastEditTimestamp = now,
                     lastEditorUserId = uid,
+                    lastEditorGrade = editor.grade,
+                    lastEditorName = editor.name,
 
                     categoria = state.categoria,
                     ubicacion = state.ubicacion,
@@ -465,14 +458,15 @@ class EnRutaViewModel(
 
                 repository.saveLocalAndSync(status, recargasEntities)
 
-                fetchMissingTechInfo(setOf(uid))
-
                 _detailState.update {
                     it.copy(
                         isSaving = false,
                         saveSuccess = true,
                         lastEditDate = nowString(),
-                        lastEditorUserId = uid
+                        lastEditorUserId = uid,
+                        lastEditorGrade = editor.grade,
+                        lastEditorName = editor.name,
+                        tecnicoLabel = buildTecnicoLabel(uid, editor.grade, editor.name)
                     )
                 }
             } catch (e: Exception) {
@@ -497,7 +491,12 @@ class EnRutaViewModel(
                             "Error al guardar cambios: $msg",
                         // opcional pero útil: actualizamos estos 2 si fue guardado local
                         lastEditDate = if (isLikelyRemote) nowString() else it.lastEditDate,
-                        lastEditorUserId = if (isLikelyRemote) uid else it.lastEditorUserId
+                        lastEditorUserId = if (isLikelyRemote) uid else it.lastEditorUserId,
+                        lastEditorGrade = if (isLikelyRemote) editor.grade else it.lastEditorGrade,
+                        lastEditorName = if (isLikelyRemote) editor.name else it.lastEditorName,
+                        tecnicoLabel = if (isLikelyRemote) {
+                            buildTecnicoLabel(uid, editor.grade, editor.name)
+                        } else it.tecnicoLabel
                     )
                 }
             }

@@ -39,7 +39,8 @@ class AdminEnRutaFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        role = Roles.normalize(UserSessionStore(requireContext()).getProfile()?.role)
+        val currentProfile = UserSessionStore(requireContext()).getProfile()
+        role = Roles.normalize(currentProfile?.role)
         canCreateDelete = Roles.isAtLeast(role, Roles.MODERATOR)
 
         b.txtRole.text = "Rol: $role"
@@ -92,13 +93,21 @@ class AdminEnRutaFragment : Fragment() {
                     return@setPositiveButton
                 }
 
-                val uid = FirebaseAuth.getInstance().currentUser?.uid ?: "unknown"
+                val profile = UserSessionStore(requireContext()).getProfile()
+                val uid = FirebaseAuth.getInstance().currentUser?.uid ?: profile?.uid ?: "unknown"
                 val now = System.currentTimeMillis()
                 val lastEditDate = DateFormat.format("dd/MM/yyyy HH:mm", Date(now)).toString()
 
                 lifecycleScope.launch {
                     b.progress.isVisible = true
-                    val ok = repo.createDefault(mat, uid, now, lastEditDate)
+                    val ok = repo.createDefault(
+                        mat = mat,
+                        actorUid = uid,
+                        actorGrade = profile?.grado.orEmpty(),
+                        actorName = profile?.nombre.orEmpty(),
+                        now = now,
+                        lastEditDate = lastEditDate
+                    )
                     b.progress.isVisible = false
                     if (ok) Toast.makeText(requireContext(), "Creado: $mat", Toast.LENGTH_LONG).show()
                     else Toast.makeText(requireContext(), "No se pudo crear (revisa rules).", Toast.LENGTH_LONG).show()
