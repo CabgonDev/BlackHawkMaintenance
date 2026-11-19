@@ -1,4 +1,3 @@
-
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
@@ -8,10 +7,41 @@ plugins {
     alias(libs.plugins.google.services)
 }
 
-val keystorePropsFile = rootProject.file("keystore.properties")
+val signingPropertiesPath = providers.gradleProperty("releaseSigningPropertiesFile").orNull
+    ?: providers.environmentVariable("RELEASE_SIGNING_PROPERTIES_FILE").orNull
+    ?: "keystore.properties"
+val keystorePropsFile = rootProject.file(signingPropertiesPath)
 val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) {
         keystorePropsFile.inputStream().use { load(it) }
+    }
+}
+
+val releaseSigningPropertyNames = listOf(
+    "storeFile",
+    "storePassword",
+    "keyAlias",
+    "keyPassword"
+)
+val missingReleaseSigningProperties = releaseSigningPropertyNames.filter { name ->
+    keystoreProps.getProperty(name)?.trim().isNullOrEmpty()
+}
+val releasePackagingRequested = gradle.startParameter.taskNames.any { taskName ->
+    taskName.substringAfterLast(':').contains("release", ignoreCase = true) &&
+        taskName.substringAfterLast(':').contains(
+            Regex("assemble|bundle|package|install", RegexOption.IGNORE_CASE)
+        )
+}
+
+if (releasePackagingRequested) {
+    require(keystorePropsFile.isFile) {
+        "Release signing properties are unavailable. Configure releaseSigningPropertiesFile or RELEASE_SIGNING_PROPERTIES_FILE."
+    }
+    require(missingReleaseSigningProperties.isEmpty()) {
+        "Release signing configuration is incomplete. Missing properties: ${missingReleaseSigningProperties.joinToString()}"
+    }
+    require(file(keystoreProps.getProperty("storeFile").trim()).isFile) {
+        "Release signing keystore file is missing or unreadable."
     }
 }
 

@@ -97,7 +97,10 @@ Este es el checklist único de remediación de BlackHawk Maintenance. Organiza l
 - [ ] Si la clave está comprometida, documentar antes de rotarla un camino compatible de migración de firma y recuperación para las instalaciones existentes; no asumir que una nueva clave puede actualizar la instalación actual.
 - [ ] Rotar contraseñas o credenciales expuestas y conservar protegida la clave que mantiene la continuidad de instalación.
 - [ ] Migrar firma release a secretos protegidos de CI o un gestor de secretos.
-- [ ] Hacer fallar el release si faltan `storeFile`, `storePassword`, `keyAlias` o `keyPassword`; nunca sustituirlos por valores vacíos.
+- [x] Hacer fallar el release si faltan `storeFile`, `storePassword`, `keyAlias` o `keyPassword`; nunca sustituirlos por valores vacíos.
+  - **Evidencia (archivos y líneas):** `app/build.gradle.kts:11-53` valida `storeFile`, `storePassword`, `keyAlias` y `keyPassword` solo al solicitar tareas de empaquetado release; acepta un archivo protegido mediante `releaseSigningPropertiesFile` o `RELEASE_SIGNING_PROPERTIES_FILE` y no imprime valores; `docs/adr/0001-release-signing-properties.md` documenta la decisión y el rollback.
+  - **Comando y resultado:** `./gradlew.bat :app:assembleRelease -PreleaseSigningPropertiesFile=C:/__bhm_missing_v502_signing__.properties --no-daemon` → falla durante la configuración con `Release signing properties are unavailable`; archivo temporal con solo `storeFile` → falla con `Missing properties: storePassword, keyAlias, keyPassword`; ninguna salida contiene contraseñas, alias ni rutas de secretos. La configuración de tareas Debug llegó a enumerar `assembleDebug` sin exigir propiedades release; la compilación completa quedó bloqueada por el `sdk.dir` inexistente y el informe de problemas de Gradle sin permisos de escritura.
+  - **Versión / artefacto / rollback:** App `5.0.1 (Hawk)` (`versionCode` `501`); no se generó APK release por el bloqueo del SDK. **Rollback:** revertir `app/build.gradle.kts` y `docs/adr/0001-release-signing-properties.md`, conservando la clave de continuidad protegida.
 - [ ] Verificar el certificado del APK con `apksigner` y probar instalación limpia y actualización directa desde 5.0.1 conservando datos.
 - [ ] Auditar que ningún secreto vuelva a aparecer en la historia Git, artefactos, logs o respaldos publicados.
 
