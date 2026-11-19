@@ -14,7 +14,9 @@ must stay outside the checkout. The Git history also contains older copies of
 
 GitHub Actions uses a protected environment named `protected-release`. The
 environment must restrict deployments to `master` and require the designated
-release reviewers before secrets are made available. The workflow receives
+release reviewers before secrets are made available. `CabgonDev` is the current
+custodian and required reviewer; a second contingency reviewer is not yet
+available and is tracked as an operational follow-up. The workflow receives
 these environment secrets:
 
 - `RELEASE_KEYSTORE_BASE64`
@@ -41,6 +43,12 @@ and protected CI secret now use it. The previous key remains restricted for
 5.0.1 rollback until migration adoption is confirmed. History rewriting is
 not automatic and is outside this delivery.
 
+Signing recovery is documented in
+`docs/adr/0003-signing-recovery-and-compromise-migration.md`. The DPAPI
+recovery backup is outside the repository and contains no plaintext signing
+files; its decrypt round-trip and SHA-256 checks are recorded in the v5.0.2
+checklist.
+
 ## Consequences
 
 - CI can build a release without placing signing material in the checkout.
@@ -49,9 +57,9 @@ not automatic and is outside this delivery.
   job.
 - A release workflow run fails when any protected input is absent.
 - The workflow does not publish an APK or print signing values.
-- Cloud console access is still required to revoke the previous restricted key
-  after 5.0.1 migration adoption and to complete the final historical-backup
-  audit.
+- The previous restricted Android API key remains available for 5.0.1 rollback
+  until the migration adoption gate is met; it must not be deleted solely
+  because the new key is active.
 
 ## Rollback
 
